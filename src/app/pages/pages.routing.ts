@@ -11,9 +11,9 @@ const routes: Routes = [
         path:'home', 
         component:PagesComponent,
         children: [
-          {path: '', component:HomeComponent},
-          {path: 'nuevo-pedido', component:NuevopedidoComponent},
-          {path: 'consulta-pedidos', component:ConsultapedidosComponent}
+          {path: '', component:HomeComponent, data:{titulo: 'Principal'}},
+          {path: 'nuevo-pedido', component:NuevopedidoComponent, data: {titulo: 'Nuevo Pedido'}},
+          {path: 'consulta-pedidos', component:ConsultapedidosComponent,data: {titulo: 'Consulta Pedidos'}}
         ]
       },
       
