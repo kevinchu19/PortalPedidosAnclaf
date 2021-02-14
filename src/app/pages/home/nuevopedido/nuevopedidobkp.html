@@ -1,0 +1,188 @@
+<div class="card-body">
+    <form class="form-horizontal" role="form">
+        <div class="form-body">
+            <h3 class="box-title">Datos de facturación</h3>
+            <hr class="m-t-0 m-b-40">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="control-label text-right col-md-6">Razón Social:</label>
+                        <div class="col-md-6">
+                            <p class="form-control-static"> PINTURERIAS VINTAGE S.R.L </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="control-label text-right col-md-6">CUIT:</label>
+                        <div class="col-md-6">
+                            <p class="form-control-static"> 30712124563 </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="control-label text-right col-md-6">Dirección:</label>
+                        <div class="col-md-6">
+                            <p class="form-control-static"> Av del libertador 1125 </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="control-label text-right col-md-6">Provincia:</label>
+                        <div class="col-md-6">
+                            <p class="form-control-static"> Capital Federal </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="control-label text-right col-md-6">Código Postal:</label>
+                        <div class="col-md-6">
+                            <p class="form-control-static"> 1418</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<div class="card-body">
+    <form action="#">
+        <div class="form-body">
+            <h3 class="card-title">Datos de entrega</h3>
+            <hr>
+            <div class="row p-t-20">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Dirección</label>
+                        <input type="text" id="direccionEntrega" class="form-control">
+                        <small class="form-control-feedback"> Ingrese dirección de entrega indicando calle y número</small> </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">Provincia</label>
+                        <input type="text" id="provincia" class="form-control">
+
+                    </div>
+                </div>
+                <!--/span-->
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Código Postal</label>
+                        <input type="text" id="codigoPostal" class="form-control">
+
+                    </div>
+                </div>
+                <!--/span-->
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Confirmar datos</button>
+        </div>
+    </form>
+</div>
+
+<div class="card-body">
+    <h3 class="card-title">Productos</h3>
+    <hr>
+    <div class="table-responsive">
+        <div id="add-contact" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="myModalLabel">Nuevo producto</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal form-material">
+                            <div class="form-group">
+                                <div class="col-md-12 m-b-20">
+                                    <input type="text" class="form-control" placeholder="Producto"> </div>
+                                <div class="col-md-12 m-b-20">
+                                    <input type="text" class="form-control" placeholder="Email"> </div>
+                                <div class="col-md-12 m-b-20">
+                                    <input type="text" class="form-control" placeholder="Phone"> </div>
+                                <div class="col-md-12 m-b-20">
+                                    <input type="text" class="form-control" placeholder="Designation"> </div>
+                                <div class="col-md-12 m-b-20">
+                                    <input type="text" class="form-control" placeholder="Age"> </div>
+                                <div class="col-md-12 m-b-20">
+                                    <input type="text" class="form-control" placeholder="Date of joining"> </div>
+                                <div class="col-md-12 m-b-20">
+                                    <input type="text" class="form-control" placeholder="Salary"> </div>
+                                <div class="col-md-12 m-b-20">
+                                    <div class="fileupload btn btn-danger btn-rounded waves-effect waves-light"><span><i class="ion-upload m-r-5"></i>Upload Contact Image</span>
+                                        <input type="file" class="upload"> </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Save</button>
+                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <table id="demo-foo-addrow" class="table m-t-30 table-hover contact-list footable-loaded footable" data-page-size="10">
+            <thead>
+                <tr>
+                    <th class="footable-sortable">Codigo de producto<span class="footable-sort-indicator"></span></th>
+                    <th class="footable-sortable footable-sorted">Descripción<span class="footable-sort-indicator"></span></th>
+                    <th class="footable-sortable">Cantidad<span class="footable-sort-indicator"></span></th>
+                    <th class="footable-sortable">Precio<span class="footable-sort-indicator"></span></th>
+                    <th class="footable-sortable">Total<span class="footable-sort-indicator"></span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="footable-even" style="">
+                    <td>
+                        <app-typehead></app-typehead>
+                    </td>
+                    <td>Enduido Interior Pradera x 10 l</td>
+                    <td><input type="number" class="form-control"> </td>
+                    <td>$1200</td>
+                    <td>$24000</td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete"><i class="ti-close" aria-hidden="true"></i></button>
+                    </td>
+                </tr>
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">
+                        <button type="button" class="btn btn-info btn-rounded" data-toggle="modal" data-target="#add-contact">Agregar producto</button>
+                    </td>
+
+                    <td colspan="7">
+                        <div class="text-right">
+                            <ul class="pagination">
+                                <li class="footable-page-arrow disabled"><a data-page="first" href="#first">«</a></li>
+                                <li class="footable-page-arrow disabled"><a data-page="prev" href="#prev">‹</a></li>
+                                <li class="footable-page active"><a data-page="0" href="#">1</a></li>
+                                <li class="footable-page"><a data-page="1" href="#">2</a></li>
+                                <li class="footable-page-arrow"><a data-page="next" href="#next">›</a></li>
+                                <li class="footable-page-arrow"><a data-page="last" href="#last">»</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

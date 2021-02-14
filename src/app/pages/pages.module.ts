@@ -5,6 +5,7 @@ import { SharedModule } from '../shared/shared.module';
 import { NuevopedidoComponent } from './home/nuevopedido/nuevopedido.component';
 import { ConsultapedidosComponent } from './home/consultapedidos/consultapedidos.component';
 import { AppRoutingModule } from '../app-routing.module';
+import { TypeheadComponent } from './components/typehead/typehead.component';
 
 
 
@@ -12,7 +13,8 @@ import { AppRoutingModule } from '../app-routing.module';
   declarations: [
     PagesComponent,
     NuevopedidoComponent,
-    ConsultapedidosComponent 
+    ConsultapedidosComponent,
+    TypeheadComponent 
   ],
   exports: [
     PagesComponent 

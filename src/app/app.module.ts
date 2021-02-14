@@ -10,6 +10,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { NopagefoundComponent } from './404/nopagefound/nopagefound.component';
 import { HomeComponent } from './pages/home/home.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { HomeComponent } from './pages/home/home.component';
   imports: [
     PagesModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NoopAnimationsModule
   ],
   bootstrap: [AppComponent]
 })

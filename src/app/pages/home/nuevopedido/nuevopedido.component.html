@@ -1,1 +1,278 @@
-<p>nuevopedido works!</p>
+<!-- Validation wizard -->
+<div class="row" id="validation">
+    <div class="col-12">
+        <div class="card wizard-content">
+            <div class="card-body">
+                <h4 class="card-title">Step wizard with validation</h4>
+                <h6 class="card-subtitle">You can us the validation like what we did</h6>
+                <form class="validation-wizard wizard-circle wizard clearfix" role="application" id="steps-uid-2" novalidate="novalidate">
+                    <div class="steps clearfix">
+                        <ul role="tablist">
+                            <!--<li role="tab" class="done" aria-disabled="false" aria-selected="true">-->
+                            <li role="tab" [ngClass]="{'first':true, 'current':currentStep == 1,'done': currentStep > 1, 'disabled': currentStep < 1}" aria-disabled="false" aria-selected="true">
+                                <a id="steps-uid-2-t-0" href="#steps-uid-2-h-0" aria-controls="steps-uid-2-p-0">
+                                    <span class="current-info audible">current step: </span>
+                                    <span class="step">1</span> Productos
+                                </a>
+                            </li>
+                            <li role="tab" [ngClass]="{'current':currentStep == 2,'done': currentStep > 2, 'disabled': currentStep < 2}" aria-disabled="false" aria-selected="false">
+                                <a id="steps-uid-2-t-1" href="#steps-uid-2-h-1" aria-controls="steps-uid-2-p-1">
+                                    <span class="step">2</span> Datos de entrega
+                                </a>
+                            </li>
+                            <li role="tab" [ngClass]="{'current':currentStep == 3,'done': currentStep > 3, 'disabled': currentStep < 3}" aria-disabled=" true ">
+                                <a id="steps-uid-2-t-2 " href="#steps-uid-2-h-2 " aria-controls="steps-uid-2-p-2 ">
+                                    <span class="step ">3</span> Datos de facturación
+                                </a>
+                            </li>
+                            <li role="tab " [ngClass]="{ 'last':true, 'current':currentStep==4 , 'done': currentStep> 4, 'disabled': currentStep < 4}" aria-disabled="true">
+                                <a id="steps-uid-2-t-3" href="#steps-uid-2-h-3" aria-controls="steps-uid-2-p-3">
+                                    <span class="step">4</span> Pedido confirmado
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="content clearfix">
+                        <!-- Step 1 -->
+                        <h6 id="steps-uid-2-h-0" tabindex="-1" class="title current">Step 1</h6>
+                        <section *ngIf="currentStep==1" id="steps-uid-2-p-0" role="tabpanel" aria-labelledby="steps-uid-2-h-0" class="body current">
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <div id="add-contact" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                    <h4 class="modal-title" id="myModalLabel">Nuevo producto</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form class="form-horizontal form-material">
+                                                        <div class="form-group">
+                                                            <div class="col-md-12 m-b-20">
+                                                                <input type="text" class="form-control" placeholder="Producto"> </div>
+                                                            <div class="col-md-12 m-b-20">
+                                                                <input type="text" class="form-control" placeholder="Email"> </div>
+                                                            <div class="col-md-12 m-b-20">
+                                                                <input type="text" class="form-control" placeholder="Phone"> </div>
+                                                            <div class="col-md-12 m-b-20">
+                                                                <input type="text" class="form-control" placeholder="Designation"> </div>
+                                                            <div class="col-md-12 m-b-20">
+                                                                <input type="text" class="form-control" placeholder="Age"> </div>
+                                                            <div class="col-md-12 m-b-20">
+                                                                <input type="text" class="form-control" placeholder="Date of joining"> </div>
+                                                            <div class="col-md-12 m-b-20">
+                                                                <input type="text" class="form-control" placeholder="Salary"> </div>
+                                                            <div class="col-md-12 m-b-20">
+                                                                <div class="fileupload btn btn-danger btn-rounded waves-effect waves-light"><span><i class="ion-upload m-r-5"></i>Upload Contact Image</span>
+                                                                    <input type="file" class="upload"> </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Save</button>
+                                                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cancel</button>
+                                                </div>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
+                                    </div>
+                                    <table id="demo-foo-addrow" class="table m-t-30 table-hover contact-list footable-loaded footable" data-page-size="10">
+                                        <thead>
+                                            <tr>
+                                                <th class="footable-sortable">Codigo de producto<span class="footable-sort-indicator"></span></th>
+                                                <th class="footable-sortable footable-sorted">Descripción<span class="footable-sort-indicator"></span></th>
+                                                <th class="footable-sortable">Cantidad<span class="footable-sort-indicator"></span></th>
+                                                <th class="footable-sortable">Precio<span class="footable-sort-indicator"></span></th>
+                                                <th class="footable-sortable">Total<span class="footable-sort-indicator"></span></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="footable-even" style="">
+                                                <td>
+                                                    <app-typehead></app-typehead>
+                                                </td>
+                                                <td>Enduido Interior Pradera x 10 l</td>
+                                                <td><input type="number" class="form-control"> </td>
+                                                <td>$1200</td>
+                                                <td>$24000</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete"><i class="ti-close" aria-hidden="true"></i></button>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <button type="button" class="btn btn-info btn-rounded" data-toggle="modal" data-target="#add-contact">Agregar producto</button>
+                                                </td>
+
+                                                <td colspan="7">
+                                                    <div class="text-right">
+                                                        <ul class="pagination">
+                                                            <li class="footable-page-arrow disabled"><a data-page="first" href="#first">«</a></li>
+                                                            <li class="footable-page-arrow disabled"><a data-page="prev" href="#prev">‹</a></li>
+                                                            <li class="footable-page active"><a data-page="0" href="#">1</a></li>
+                                                            <li class="footable-page"><a data-page="1" href="#">2</a></li>
+                                                            <li class="footable-page-arrow"><a data-page="next" href="#next">›</a></li>
+                                                            <li class="footable-page-arrow"><a data-page="last" href="#last">»</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Step 2 -->
+                        <h6 id="steps-uid-2-h-1" tabindex="-1" class="title">Step 2</h6>
+                        <section *ngIf="currentStep==2" id="steps-uid-2-p-1" role="tabpanel" aria-labelledby="steps-uid-2-h-1" class="body" aria-hidden="true">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="jobTitle2">Company Name :</label>
+                                        <input type="text" class="form-control required" id="jobTitle2" aria-required="true"><label id="jobTitle2-error" class="text-danger" for="jobTitle2" style="display: none;"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="webUrl3">Company URL :</label>
+                                        <input type="url" class="form-control required" id="webUrl3" name="webUrl3" aria-required="true"><label id="webUrl3-error" class="text-danger" for="webUrl3" style="display: none;"></label> </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="shortDescription3">Short Description :</label>
+                                        <textarea name="shortDescription" id="shortDescription3" rows="6" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Step 3 -->
+                        <h6 id="steps-uid-2-h-2" tabindex="-1" class="title">Step 3</h6>
+                        <section *ngIf="currentStep==3" id="steps-uid-2-p-2" role="tabpanel" aria-labelledby="steps-uid-2-h-2" class="body" aria-hidden="true">
+                            <br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="control-label text-right col-md-6">Razón Social:</label>
+                                        <div class="col-md-6">
+                                            <p class="form-control-static"> PINTURERIAS VINTAGE S.R.L </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="control-label text-right col-md-6">CUIT:</label>
+                                        <div class="col-md-6">
+                                            <p class="form-control-static"> 30712124563 </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="control-label text-right col-md-6">Dirección:</label>
+                                        <div class="col-md-6">
+                                            <p class="form-control-static"> Av del libertador 1125 </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="control-label text-right col-md-6">Provincia:</label>
+                                        <div class="col-md-6">
+                                            <p class="form-control-static"> Capital Federal </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="control-label text-right col-md-6">Código Postal:</label>
+                                        <div class="col-md-6">
+                                            <p class="form-control-static"> 1418</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Step 4 -->
+                        <h6 id="steps-uid-2-h-3" tabindex="-1" class="title">Step 4</h6>
+                        <section *ngIf="currentStep==4" id="steps-uid-2-p-3" role="tabpanel" aria-labelledby="steps-uid-2-h-3" class="body" aria-hidden="true">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="behName1">Behaviour :</label>
+                                        <input type="text" class="form-control required" id="behName1" aria-required="true">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="participants1">Confidance</label>
+                                        <input type="text" class="form-control required" id="participants1" aria-required="true">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="participants1">Result</label>
+                                        <select class="custom-select form-control required" id="participants1" name="location" aria-required="true">
+                        <option value="">Select Result</option>
+                        <option value="Selected">Selected</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Call Second-time">Call Second-time</option>
+                    </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="decisions1">Comments</label>
+                                        <textarea name="decisions" id="decisions1" rows="4" class="form-control"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Rate Interviwer :</label>
+                                        <div class="c-inputs-stacked">
+                                            <label class="inline custom-control custom-checkbox block">
+                            <input type="checkbox" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description ml-0">1 star</span> </label>
+                                            <label class="inline custom-control custom-checkbox block">
+                            <input type="checkbox" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description ml-0">2 star</span> </label>
+                                            <label class="inline custom-control custom-checkbox block">
+                            <input type="checkbox" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description ml-0">3 star</span> </label>
+                                            <label class="inline custom-control custom-checkbox block">
+                            <input type="checkbox" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description ml-0">4 star</span> </label>
+                                            <label class="inline custom-control custom-checkbox block">
+                            <input type="checkbox" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description ml-0">5 star</span> </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="actions clearfix">
+                        <ul role="menu" aria-label="Pagination">
+                            <li class="disabled" aria-disabled="true">
+                                <button *ngIf="currentStep != 1 && currentStep < 4" (click)="siguientePaso(-1)" class="btn btn-warning" type="button" role="menuitem">
+                                    Anterior
+                                </button>
+                            </li>
+                            <li *ngIf="currentStep < 3" aria-hidden="false" aria-disabled="false">
+                                <button (click)="siguientePaso(+1)" class="btn btn-warning" type="button" role="menuitem">
+                                    Siguiente
+                                </button>
+                            </li>
+                            <li *ngIf="currentStep == 3" aria-hidden="true">
+                                <button (click)="siguientePaso(+1)" class="btn btn-danger" type="button" role="menuitem">
+                                <i class = "fa fa-check"></i>Confirmar
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
