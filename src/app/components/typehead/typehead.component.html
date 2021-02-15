@@ -1,0 +1,29 @@
+<div id="the-basics">
+    <span class="twitter-typeahead" style="position: relative; display: inline-block;">
+        <input class="typeahead form-control tt-input" 
+               [(ngModel)]="terminoInput"
+               (ngModelChange) = "filtroArray()"
+               (keyup)=keyUp($event)
+               type="text" 
+               placeholder="Producto" 
+               autocomplete="off" 
+               spellcheck="false" 
+               dir="auto" 
+               style="position: relative; vertical-align: top; background-color: transparent;">
+        <pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: Montserrat, sans-serif; 
+        font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; 
+        text-rendering: auto; text-transform: none;">
+        </pre>
+        <div *ngIf="arrayMostrado.length > 0" class="tt-menu tt-open" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: block;">
+            <div class="tt-dataset">
+                <div *ngFor="let item of arrayMostrado" 
+                      [ngClass]="{'tt-suggestion': true, 'tt-selectable':true, 'tt-cursor': item.mouseOver}"
+                      (click)="seleccionaValor(itemMouseOver)"
+                      (mouseover) = "mouseOver(item)"
+                      (keyup)=keyUp($event)>
+                    {{item.descripcion}}
+                </div>
+            </div>
+        </div>
+    </span>
+</div>

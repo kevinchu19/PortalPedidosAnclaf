@@ -1,11 +1,18 @@
+//Modulos angular
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PagesComponent } from './pages.component';
+import { FormsModule } from '@angular/forms';
+
+//Modulos KT
 import { SharedModule } from '../shared/shared.module';
+import { AppRoutingModule } from '../app-routing.module';
+import { ComponentsModule } from '../components/components.module';
+
+//Paginas
+import { PagesComponent } from './pages.component';
 import { NuevopedidoComponent } from './home/nuevopedido/nuevopedido.component';
 import { ConsultapedidosComponent } from './home/consultapedidos/consultapedidos.component';
-import { AppRoutingModule } from '../app-routing.module';
-import { TypeheadComponent } from './components/typehead/typehead.component';
+
 
 
 
@@ -13,8 +20,7 @@ import { TypeheadComponent } from './components/typehead/typehead.component';
   declarations: [
     PagesComponent,
     NuevopedidoComponent,
-    ConsultapedidosComponent,
-    TypeheadComponent 
+    ConsultapedidosComponent
   ],
   exports: [
     PagesComponent 
@@ -22,7 +28,9 @@ import { TypeheadComponent } from './components/typehead/typehead.component';
   imports: [
     CommonModule,
     SharedModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    ComponentsModule
   ]
 })
 export class PagesModule { }
