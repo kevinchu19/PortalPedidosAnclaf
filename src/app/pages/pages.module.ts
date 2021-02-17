@@ -1,7 +1,8 @@
 //Modulos angular
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from "@angular/common/http";
 
 //Modulos KT
 import { SharedModule } from '../shared/shared.module';
@@ -30,7 +31,9 @@ import { ConsultapedidosComponent } from './home/consultapedidos/consultapedidos
     SharedModule,
     AppRoutingModule,
     FormsModule,
-    ComponentsModule
+    ComponentsModule,
+    HttpClientModule,
+    ReactiveFormsModule
   ]
 })
 export class PagesModule { }

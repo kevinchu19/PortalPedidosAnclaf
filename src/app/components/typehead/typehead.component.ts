@@ -15,8 +15,9 @@ import { product } from 'src/app/pages/models/product.model';
 })
 export class TypeheadComponent implements OnInit {
   
+  @Input() keyParameterValue:string;
   @Input() resource:string;
-  @Output() valorSeleccionado: EventEmitter<string> = new EventEmitter();
+  @Output() valorSeleccionado: EventEmitter<typeheadArray> = new EventEmitter();
   
   
   public terminoInput:string = "";
@@ -34,7 +35,7 @@ export class TypeheadComponent implements OnInit {
 
     if (this.terminoInput != '') {
       
-      this._typeheadService.GetValues(this.resource, this.terminoInput.toUpperCase())
+      this._typeheadService.GetValues(this.resource, this.terminoInput.toUpperCase(), this.keyParameterValue)
                     .subscribe((resp:any[]) => 
                                 {                                 
                                   this.arrayMostrado = [];
@@ -57,10 +58,9 @@ export class TypeheadComponent implements OnInit {
   }
 
   seleccionaValor(item:number){
-    console.log(item);
-    
-    this.terminoInput = this.arrayMostrado[item].descripcion;
-    this.valorSeleccionado.emit(this.terminoInput);
+        
+    this.terminoInput = this.arrayMostrado[item].codigo;
+    this.valorSeleccionado.emit(this.arrayMostrado[item]);
     this.arrayMostrado = [];
   }
 

@@ -12,6 +12,7 @@ export class order {
     codigoPostalEntrega: string;
     provinciaEntrega: string;
     listaPrecios: string;
+    numeroDocumento:string;
     items: [{
         producto: product;
         cantidad: number;

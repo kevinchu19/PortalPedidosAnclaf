@@ -49,16 +49,17 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let item of order.items" class="footable-even" style="">
+                                            <tr *ngFor="let item of order.items; let itemActual=index" class="footable-even" style="">
                                                 <td>
-                                                    <app-typehead (valorSeleccionado)="muestroDatosProducto($event)" [resource]='"producto"'></app-typehead>
+                                                    <app-typehead (valorSeleccionado)="muestroDatosProducto($event, itemActual)" [resource]='"producto"'></app-typehead>
                                                 </td>
                                                 <td>{{item.producto.descripcion}}</td>
-                                                <td><input type="number" class="form-control"> </td>
+                                                <td><input type="number" class="form-control" placeholder="Producto" autocomplete="off" spellcheck="false" dir="auto" name="cantidad" [(ngModel)]="item.cantidad" (focusout)="cantidadChange(itemActual)">
+                                                </td>
                                                 <td>${{item.producto.precio}}</td>
-                                                <td>${{item.producto.precio}}</td>
+                                                <td>${{item.producto.precio * item.cantidad}}</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete"><i class="ti-close" aria-hidden="true"></i></button>
+                                                    <button type="button" class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete" (click)="borraItem(itemActual)"><i class="ti-close" aria-hidden="true"></i></button>
                                                 </td>
                                             </tr>
 
@@ -67,19 +68,6 @@
                                             <tr>
                                                 <td colspan="2">
                                                     <button type="button" (click)="agregaProducto()" class="btn btn-info btn-rounded">Agregar producto</button>
-                                                </td>
-
-                                                <td colspan="7">
-                                                    <div class="text-right">
-                                                        <ul class="pagination">
-                                                            <li class="footable-page-arrow disabled"><a data-page="first" href="#first">«</a></li>
-                                                            <li class="footable-page-arrow disabled"><a data-page="prev" href="#prev">‹</a></li>
-                                                            <li class="footable-page active"><a data-page="0" href="#">1</a></li>
-                                                            <li class="footable-page"><a data-page="1" href="#">2</a></li>
-                                                            <li class="footable-page-arrow"><a data-page="next" href="#next">›</a></li>
-                                                            <li class="footable-page-arrow"><a data-page="last" href="#last">»</a></li>
-                                                        </ul>
-                                                    </div>
                                                 </td>
                                             </tr>
                                         </tfoot>
@@ -90,25 +78,41 @@
                         <!-- Step 2 -->
                         <h6 id="steps-uid-2-h-1" tabindex="-1" class="title">Step 2</h6>
                         <section [hidden]="currentStep!=2" id="steps-uid-2-p-1" role="tabpanel" aria-labelledby="steps-uid-2-h-1" class="body" aria-hidden="true">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="jobTitle2">Company Name :</label>
-                                        <input type="text" class="form-control required" id="jobTitle2" aria-required="true"><label id="jobTitle2-error" class="text-danger" for="jobTitle2" style="display: none;"></label>
-                                    </div>
+
+                            <div class="form-group row">
+                                <label for="Cliente" class="col-2 col-form-label">Cliente</label>
+                                <div class="col-2">
+                                    <app-typehead (valorSeleccionado)="muestroDatosCliente($event)" [resource]='"cliente"'></app-typehead>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="webUrl3">Company URL :</label>
-                                        <input type="url" class="form-control required" id="webUrl3" name="webUrl3" aria-required="true"><label id="webUrl3-error" class="text-danger" for="webUrl3" style="display: none;"></label> </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="shortDescription3">Short Description :</label>
-                                        <textarea name="shortDescription" id="shortDescription3" rows="6" class="form-control"></textarea>
-                                    </div>
+                                <label class="col-8 col-form-label">{{order.razonSocial}}</label>
+                            </div>
+                            <div class="form-group row">
+                                <label for="Cliente" class="col-2 col-form-label">Codigo de entrega</label>
+                                <div class="col-10">
+                                    <app-typehead (valorSeleccionado)="muestroDatosEntrega($event)" [resource]='"clientedireccionesentrega"' [keyParameterValue]="order.numeroCliente"></app-typehead>
                                 </div>
                             </div>
+
+                            <div class="form-group row">
+                                <label for="example-search-input" class="col-2 col-form-label">Direccion Entrega</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="text" name="DireccionEntrega" [(ngModel)]="order.direccionEntrega">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="example-search-input" class="col-2 col-form-label">Codigo Postal Entrega</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="text" name="codigoPostalEntrega" [(ngModel)]="order.codigoPostalEntrega">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="example-search-input" class="col-2 col-form-label">Provincia Entrega</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="text" name="provinciaEntrega" [(ngModel)]="order.provinciaEntrega">
+                                </div>
+                            </div>
+
+
                         </section>
                         <!-- Step 3 -->
                         <h6 id="steps-uid-2-h-2" tabindex="-1" class="title">Step 3</h6>
@@ -119,7 +123,7 @@
                                     <div class="form-group row">
                                         <label class="control-label text-right col-md-6">Razón Social:</label>
                                         <div class="col-md-6">
-                                            <p class="form-control-static"> PINTURERIAS VINTAGE S.R.L </p>
+                                            <p class="form-control-static"> {{order.razonSocial}} </p>
                                         </div>
                                     </div>
                                 </div>
@@ -129,7 +133,7 @@
                                     <div class="form-group row">
                                         <label class="control-label text-right col-md-6">CUIT:</label>
                                         <div class="col-md-6">
-                                            <p class="form-control-static"> 30712124563 </p>
+                                            <p class="form-control-static"> {{order.numeroDocumento}} </p>
                                         </div>
                                     </div>
                                 </div>
@@ -139,7 +143,7 @@
                                     <div class="form-group row">
                                         <label class="control-label text-right col-md-6">Dirección:</label>
                                         <div class="col-md-6">
-                                            <p class="form-control-static"> Av del libertador 1125 </p>
+                                            <p class="form-control-static">{{order.direccionFacturacion}} </p>
                                         </div>
                                     </div>
                                 </div>
@@ -149,7 +153,7 @@
                                     <div class="form-group row">
                                         <label class="control-label text-right col-md-6">Provincia:</label>
                                         <div class="col-md-6">
-                                            <p class="form-control-static"> Capital Federal </p>
+                                            <p class="form-control-static"> {{order.provinciaFacturacion}} </p>
                                         </div>
                                     </div>
                                 </div>
@@ -159,7 +163,7 @@
                                     <div class="form-group row">
                                         <label class="control-label text-right col-md-6">Código Postal:</label>
                                         <div class="col-md-6">
-                                            <p class="form-control-static"> 1418</p>
+                                            <p class="form-control-static"> {{order.codigoPostalFacturacion}}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -168,44 +172,44 @@
                         <!-- Step 4 -->
                         <h6 id="steps-uid-2-h-3" tabindex="-1" class="title">Step 4</h6>
                         <section [hidden]="currentStep!=4" id="steps-uid-2-p-3" role="tabpanel" aria-labelledby="steps-uid-2-h-3" class="body" aria-hidden="true">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="behName1">Behaviour :</label>
-                                        <input type="text" class="form-control required" id="behName1" aria-required="true">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="participants1">Confidance</label>
-                                        <input type="text" class="form-control required" id="participants1" aria-required="true">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="participants1">Result</label>
-                                        <select class="custom-select form-control required" id="participants1" name="location" aria-required="true">
-                        <option value="">Select Result</option>
-                        <option value="Selected">Selected</option>
-                        <option value="Rejected">Rejected</option>
-                        <option value="Call Second-time">Call Second-time</option>
-                    </select>
-                                    </div>
+                            <div class="sweet-alert showSweetAlert visible" data-custom-class="" data-has-cancel-button="false" data-has-confirm-button="true" data-allow-outside-click="false" data-has-done-function="false" data-animation="pop" data-timer="null" style="display: block; margin-top: -178px;">
+                                <div class="sa-icon sa-error" style="display: none;">
+                                    <span class="sa-x-mark">
+                                  <span class="sa-line sa-left"></span>
+                                    <span class="sa-line sa-right"></span>
+                                    </span>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="decisions1">Comments</label>
-                                        <textarea name="decisions" id="decisions1" rows="4" class="form-control"></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Rate Interviwer :</label>
-                                        <div class="c-inputs-stacked">
-                                            <label class="inline custom-control custom-checkbox block">
-                            <input type="checkbox" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description ml-0">1 star</span> </label>
-                                            <label class="inline custom-control custom-checkbox block">
-                            <input type="checkbox" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description ml-0">2 star</span> </label>
-                                            <label class="inline custom-control custom-checkbox block">
-                            <input type="checkbox" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description ml-0">3 star</span> </label>
-                                            <label class="inline custom-control custom-checkbox block">
-                            <input type="checkbox" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description ml-0">4 star</span> </label>
-                                            <label class="inline custom-control custom-checkbox block">
-                            <input type="checkbox" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description ml-0">5 star</span> </label>
+                                <div class="sa-icon sa-warning" style="display: none;">
+                                    <span class="sa-body"></span>
+                                    <span class="sa-dot"></span>
+                                </div>
+                                <div class="sa-icon sa-info" style="display: none;"></div>
+                                <div class="sa-icon sa-success animate" style="display: block;">
+                                    <span class="sa-line sa-tip animateSuccessTip"></span>
+                                    <span class="sa-line sa-long animateSuccessLong"></span>
+
+                                    <div class="sa-placeholder"></div>
+                                    <div class="sa-fix"></div>
+                                </div>
+                                <div class="sa-icon sa-custom" style="display: none;"></div>
+                                <h2>Pedido creado</h2>
+                                <p style="display: block;">Pedido generado con éxito</p>
+                                <fieldset>
+                                    <input type="text" tabindex="3" placeholder="">
+                                    <div class="sa-input-error"></div>
+                                </fieldset>
+                                <div class="sa-error-container">
+                                    <div class="icon">!</div>
+                                    <p>Not valid!</p>
+                                </div>
+                                <div class="sa-button-container">
+                                    <button class="cancel" tabindex="2" style="display: none; box-shadow: none;">Cancel</button>
+                                    <div class="sa-confirm-button-container">
+                                        <button class="confirm" tabindex="1" style="display: inline-block; background-color: rgb(140, 212, 245); box-shadow: rgba(140, 212, 245, 0.8) 0px 0px 2px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px inset;">OK</button>
+                                        <div class="la-ball-fall">
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
                                         </div>
                                     </div>
                                 </div>

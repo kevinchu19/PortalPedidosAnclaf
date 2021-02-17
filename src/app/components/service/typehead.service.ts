@@ -14,12 +14,15 @@ export class TypeheadService {
 
   constructor(private http: HttpClient) { }
   
-  GetValues(resource:string,termino:string){
+  GetValues(resource:string,termino:string, keyParameterValue:string=null){
     
     let params = new HttpParams()
     params = params.append('skip', '0');
     params = params.append('take', '40');
     params = params.append('termino', termino);
+    if (keyParameterValue) {
+      params = params.append('keyParameter', keyParameterValue);
+    }
   
     
     return this.http.get( `${base_url}${ resource }`,{params: params})
