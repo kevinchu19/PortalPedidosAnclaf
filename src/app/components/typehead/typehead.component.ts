@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output,EventEmitter } from '@angular/core';
 import { typeheadArray } from '../models/typeheadArray.model';
 import { element } from 'protractor';
 
@@ -9,6 +9,10 @@ import { element } from 'protractor';
   styleUrls: ['./typehead.component.css']
 })
 export class TypeheadComponent implements OnInit {
+  
+  @Output() valorSeleccionado: EventEmitter<string> = new EventEmitter();
+  
+  
   public terminoInput:string = "";
   public arrayOriginal: typeheadArray[] = [{
     codigo: "0001",
@@ -48,11 +52,11 @@ export class TypeheadComponent implements OnInit {
     console.log(item);
     
     this.terminoInput = this.arrayMostrado[item].descripcion;
+    this.valorSeleccionado.emit(this.terminoInput);
     this.arrayMostrado = [];
   }
 
-  keyUp(e:Event){
-    
+  keyUp(e:KeyboardEvent){
     switch (e.key) {
       case "ArrowDown":
         this.sacoFocoMouse(this.itemMouseOver);
@@ -82,14 +86,10 @@ export class TypeheadComponent implements OnInit {
   }
 
   private pongoFocoMouse(item:number){
-    console.log(item);
-    
     this.arrayMostrado[item].mouseOver = true
   }
 
-  private sacoFocoMouse(item:number){
-    console.log(item);
-    
+  private sacoFocoMouse(item:number){   
     this.arrayMostrado[item].mouseOver = false
   }
 }

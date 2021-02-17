@@ -35,49 +35,9 @@
                     <div class="content clearfix">
                         <!-- Step 1 -->
                         <h6 id="steps-uid-2-h-0" tabindex="-1" class="title current">Step 1</h6>
-                        <section *ngIf="currentStep==1" id="steps-uid-2-p-0" role="tabpanel" aria-labelledby="steps-uid-2-h-0" class="body current">
+                        <section [hidden]="currentStep!=1" id="steps-uid-2-p-0" role="tabpanel" aria-labelledby="steps-uid-2-h-0" class="body current">
                             <div class="row">
                                 <div class="table-responsive">
-                                    <div id="add-contact" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                    <h4 class="modal-title" id="myModalLabel">Nuevo producto</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form class="form-horizontal form-material">
-                                                        <div class="form-group">
-                                                            <div class="col-md-12 m-b-20">
-                                                                <input type="text" class="form-control" placeholder="Producto"> </div>
-                                                            <div class="col-md-12 m-b-20">
-                                                                <input type="text" class="form-control" placeholder="Email"> </div>
-                                                            <div class="col-md-12 m-b-20">
-                                                                <input type="text" class="form-control" placeholder="Phone"> </div>
-                                                            <div class="col-md-12 m-b-20">
-                                                                <input type="text" class="form-control" placeholder="Designation"> </div>
-                                                            <div class="col-md-12 m-b-20">
-                                                                <input type="text" class="form-control" placeholder="Age"> </div>
-                                                            <div class="col-md-12 m-b-20">
-                                                                <input type="text" class="form-control" placeholder="Date of joining"> </div>
-                                                            <div class="col-md-12 m-b-20">
-                                                                <input type="text" class="form-control" placeholder="Salary"> </div>
-                                                            <div class="col-md-12 m-b-20">
-                                                                <div class="fileupload btn btn-danger btn-rounded waves-effect waves-light"><span><i class="ion-upload m-r-5"></i>Upload Contact Image</span>
-                                                                    <input type="file" class="upload"> </div>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Save</button>
-                                                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cancel</button>
-                                                </div>
-                                            </div>
-                                            <!-- /.modal-content -->
-                                        </div>
-                                        <!-- /.modal-dialog -->
-                                    </div>
                                     <table id="demo-foo-addrow" class="table m-t-30 table-hover contact-list footable-loaded footable" data-page-size="10">
                                         <thead>
                                             <tr>
@@ -89,14 +49,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="footable-even" style="">
+                                            <tr *ngFor="let item of order.items" class="footable-even" style="">
                                                 <td>
-                                                    <app-typehead></app-typehead>
+                                                    <app-typehead (valorSeleccionado)="muestroDatosProducto($event)"></app-typehead>
                                                 </td>
-                                                <td>Enduido Interior Pradera x 10 l</td>
+                                                <td>{{item.producto.descripcion}}</td>
                                                 <td><input type="number" class="form-control"> </td>
-                                                <td>$1200</td>
-                                                <td>$24000</td>
+                                                <td>${{item.producto.precio}}</td>
+                                                <td>${{item.producto.precio}}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete"><i class="ti-close" aria-hidden="true"></i></button>
                                                 </td>
@@ -106,7 +66,7 @@
                                         <tfoot>
                                             <tr>
                                                 <td colspan="2">
-                                                    <button type="button" class="btn btn-info btn-rounded" data-toggle="modal" data-target="#add-contact">Agregar producto</button>
+                                                    <button type="button" (click)="agregaProducto()" class="btn btn-info btn-rounded">Agregar producto</button>
                                                 </td>
 
                                                 <td colspan="7">
@@ -129,7 +89,7 @@
                         </section>
                         <!-- Step 2 -->
                         <h6 id="steps-uid-2-h-1" tabindex="-1" class="title">Step 2</h6>
-                        <section *ngIf="currentStep==2" id="steps-uid-2-p-1" role="tabpanel" aria-labelledby="steps-uid-2-h-1" class="body" aria-hidden="true">
+                        <section [hidden]="currentStep!=2" id="steps-uid-2-p-1" role="tabpanel" aria-labelledby="steps-uid-2-h-1" class="body" aria-hidden="true">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -152,7 +112,7 @@
                         </section>
                         <!-- Step 3 -->
                         <h6 id="steps-uid-2-h-2" tabindex="-1" class="title">Step 3</h6>
-                        <section *ngIf="currentStep==3" id="steps-uid-2-p-2" role="tabpanel" aria-labelledby="steps-uid-2-h-2" class="body" aria-hidden="true">
+                        <section [hidden]="currentStep!=3" id="steps-uid-2-p-2" role="tabpanel" aria-labelledby="steps-uid-2-h-2" class="body" aria-hidden="true">
                             <br>
                             <div class="row">
                                 <div class="col-md-12">
@@ -207,7 +167,7 @@
                         </section>
                         <!-- Step 4 -->
                         <h6 id="steps-uid-2-h-3" tabindex="-1" class="title">Step 4</h6>
-                        <section *ngIf="currentStep==4" id="steps-uid-2-p-3" role="tabpanel" aria-labelledby="steps-uid-2-h-3" class="body" aria-hidden="true">
+                        <section [hidden]="currentStep!=4" id="steps-uid-2-p-3" role="tabpanel" aria-labelledby="steps-uid-2-h-3" class="body" aria-hidden="true">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">

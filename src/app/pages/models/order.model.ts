@@ -1,4 +1,4 @@
-import { product } from './product.model';
+import { product } from "./product.model";
 
 export class order {
     numeroCliente:string;
@@ -12,8 +12,9 @@ export class order {
     codigoPostalEntrega: string;
     provinciaEntrega: string;
     listaPrecios: string;
-    item: {
+    items: [{
         producto: product;
         cantidad: number;
-    }
+        total: number;
+    }]
 }
