@@ -1,0 +1,28 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { map, debounceTime } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
+import { typeheadArray } from '../models/typeheadArray.model';
+
+const base_url = environment.base_url;
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TypeheadService {
+
+  constructor(private http: HttpClient) { }
+  
+  GetValues(resource:string,termino:string){
+    
+    let params = new HttpParams()
+    params = params.append('skip', '0');
+    params = params.append('take', '40');
+    params = params.append('termino', termino);
+  
+    
+    return this.http.get( `${base_url}${ resource }`,{params: params})
+      
+  }
+}

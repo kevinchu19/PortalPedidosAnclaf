@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from "@angular/common/http";
 
 //Componentes
 import { TypeheadComponent } from './typehead/typehead.component';
@@ -18,7 +19,8 @@ import { TypeheadComponent } from './typehead/typehead.component';
   ],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ]
 })
 export class ComponentsModule { }

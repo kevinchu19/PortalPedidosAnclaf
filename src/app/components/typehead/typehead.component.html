@@ -1,9 +1,10 @@
-<div id="the-basics">
+<div id="scrollable-dropdown-menu">
     <span class="twitter-typeahead" style="position: relative; display: inline-block;">
         <input class="typeahead form-control tt-input" 
                [(ngModel)]="terminoInput"
                (ngModelChange) = "filtroArray()"
                (keyup)=keyUp($event)
+               (focusout) = "focusOut($event)"
                type="text" 
                placeholder="Producto" 
                autocomplete="off" 

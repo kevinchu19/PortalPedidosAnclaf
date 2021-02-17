@@ -1,6 +1,11 @@
-import { Component, OnInit, Output,EventEmitter } from '@angular/core';
+
+//TODO: Implementar unsubscribe | Ver forma de scrollear lista con teclado
+import { Component, OnInit, Output,EventEmitter, Input, OnDestroy } from '@angular/core';
 import { typeheadArray } from '../models/typeheadArray.model';
 import { element } from 'protractor';
+import { TypeheadService } from '../service/typehead.service';
+import { map } from 'rxjs/operators';
+import { product } from 'src/app/pages/models/product.model';
 
 
 @Component({
@@ -10,42 +15,45 @@ import { element } from 'protractor';
 })
 export class TypeheadComponent implements OnInit {
   
+  @Input() resource:string;
   @Output() valorSeleccionado: EventEmitter<string> = new EventEmitter();
   
   
   public terminoInput:string = "";
-  public arrayOriginal: typeheadArray[] = [{
-    codigo: "0001",
-    descripcion: "Enduido x 10 litros",
-    mouseOver: false
-  },
-  {
-    codigo: "0002",
-    descripcion: "Pintura de interior x 10 litros",
-    mouseOver: false
-  },
-  {
-    codigo: "0003",
-    descripcion: "Pintura de exterior x 10 litros",
-    mouseOver: false
-  },
-  {
-    codigo: "0004",
-    descripcion: "Guantes x 6",
-    mouseOver: false
-  }
-];
+  public arrayOriginal: typeheadArray[] = [];
   public arrayMostrado: typeheadArray[] = []
   public itemMouseOver: number = 0
 
-  constructor() { }
+  constructor( private _typeheadService: TypeheadService) { }
 
   ngOnInit(): void {
   }
 
   filtroArray(){
-    this.arrayMostrado = this.arrayOriginal;
-    this.arrayMostrado = this.arrayOriginal.filter((a)=> a.descripcion.toUpperCase().includes(this.terminoInput.toUpperCase()))
+
+
+    if (this.terminoInput != '') {
+      
+      this._typeheadService.GetValues(this.resource, this.terminoInput.toUpperCase())
+                    .subscribe((resp:any[]) => 
+                                {                                 
+                                  this.arrayMostrado = [];
+                                  resp.forEach(element => {
+    
+                                    this.arrayMostrado.push({
+                                      codigo:element.id,
+                                      descripcion: element.descripcion,
+                                      mouseOver: false
+                                    })
+                                  });
+                                  this.itemMouseOver = 0;
+                                }
+    
+                               ); 
+      
+   }
+                           
+    
   }
 
   seleccionaValor(item:number){
@@ -77,7 +85,6 @@ export class TypeheadComponent implements OnInit {
       default:
         break;
     }
-    
 
     
   }
@@ -85,6 +92,9 @@ export class TypeheadComponent implements OnInit {
     this.itemMouseOver = this.arrayMostrado.indexOf(a);
   }
 
+  focusOut(e:FocusEvent){
+    this.arrayMostrado = []
+  }
   private pongoFocoMouse(item:number){
     this.arrayMostrado[item].mouseOver = true
   }
@@ -92,4 +102,6 @@ export class TypeheadComponent implements OnInit {
   private sacoFocoMouse(item:number){   
     this.arrayMostrado[item].mouseOver = false
   }
+
+  
 }

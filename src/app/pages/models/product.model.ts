@@ -1,5 +1,6 @@
 export class product {
-    codigo: string;
+    id: string;
     descripcion: string;
-    precio: number
+    precio: number;
+    bonificacion: number;
 }
