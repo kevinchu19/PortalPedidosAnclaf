@@ -1,12 +1,11 @@
-<div id="scrollable-dropdown-menu">
-    <span class="twitter-typeahead" style="position: relative; display: inline-block;">
+<div id="scrollable-dropdown-menu" class="row" [formGroup]="parentForm">
+    <span class="twitter-typeahead col-md-4" style="position: relative; display: inline-block;">
         <input class="typeahead form-control tt-input" 
-               [(ngModel)]="terminoInput"
-               (ngModelChange) = "filtroArray()"
+               [formControlName] = "campoFormulario"
                (keyup)=keyUp($event)
                (focusout) = "focusOut($event)"
                type="text" 
-               placeholder="{{resource}}" 
+               placeholder="{{placeholder}}" 
                autocomplete="off" 
                spellcheck="false" 
                dir="auto" 
@@ -17,9 +16,9 @@
         </pre>
         <div *ngIf="arrayMostrado.length > 0" class="tt-menu tt-open" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: block;">
             <div class="tt-dataset">
-                <div *ngFor="let item of arrayMostrado" 
+                <div *ngFor="let item of arrayMostrado; let itemActual=index" 
                       [ngClass]="{'tt-suggestion': true, 'tt-selectable':true, 'tt-cursor': item.mouseOver}"
-                      (click)="seleccionaValor(itemMouseOver)"
+                      (mousedown)="seleccionaValor()"
                       (mouseover) = "mouseOver(item)"
                       (keyup)=keyUp($event)>
                     {{item.descripcion}}
@@ -27,4 +26,5 @@
             </div>
         </div>
     </span>
+    <label class="col-md-8 mt-2"> {{description}}</label>
 </div>

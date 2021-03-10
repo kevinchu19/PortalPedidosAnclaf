@@ -35,38 +35,39 @@
                     <div class="content clearfix">
                         <!-- Step 1 -->
                         <h6 id="steps-uid-2-h-0" tabindex="-1" class="title current">Step 1</h6>
-                        <section [hidden]="currentStep!=1" id="steps-uid-2-p-0" role="tabpanel" aria-labelledby="steps-uid-2-h-0" class="body current">
+                        <form [formGroup]="step1form" [hidden]="currentStep!=1" id="steps-uid-2-p-0" role="tabpanel" aria-labelledby="steps-uid-2-h-0" class="body current">
                             <div class="row">
                                 <div class="table-responsive">
                                     <table id="demo-foo-addrow" class="table m-t-30 table-hover contact-list footable-loaded footable" data-page-size="10">
                                         <thead>
                                             <tr>
                                                 <th class="footable-sortable">Codigo de producto<span class="footable-sort-indicator"></span></th>
-                                                <th class="footable-sortable footable-sorted">Descripción<span class="footable-sort-indicator"></span></th>
                                                 <th class="footable-sortable">Cantidad<span class="footable-sort-indicator"></span></th>
                                                 <th class="footable-sortable">Precio<span class="footable-sort-indicator"></span></th>
                                                 <th class="footable-sortable">Total<span class="footable-sort-indicator"></span></th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr *ngFor="let item of order.items; let itemActual=index" class="footable-even" style="">
-                                                <td>
-                                                    <app-typehead (valorSeleccionado)="muestroDatosProducto($event, itemActual)" [resource]='"producto"'></app-typehead>
-                                                </td>
-                                                <td>{{item.producto.descripcion}}</td>
-                                                <td><input type="number" class="form-control" placeholder="Producto" autocomplete="off" spellcheck="false" dir="auto" name="cantidad" [(ngModel)]="item.cantidad" (focusout)="cantidadChange(itemActual)">
-                                                </td>
-                                                <td>${{item.producto.precio}}</td>
-                                                <td>${{item.producto.precio * item.cantidad}}</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete" (click)="borraItem(itemActual)"><i class="ti-close" aria-hidden="true"></i></button>
-                                                </td>
+                                        <tbody formArrayName="items">
+                                            <tr *ngFor="let item of this.step1form.get('items').controls; let itemActual=index" class="footable-even" style="">
+                                                <ng-container [formGroupName]="itemActual">
+                                                    <td>
+                                                        <app-typehead (valorSeleccionado)="muestroDatosProducto($event, itemActual)" placeholder='Producto' [resource]='"producto"' [parentForm]="item" campoFormulario='producto'></app-typehead>
+                                                    </td>
+                                                    <td><input type="number" class="form-control" placeholder="Cantidad" autocomplete="off" spellcheck="false" dir="auto" name="cantidad" formControlName="cantidad" (focusout)="cantidadChange(itemActual)">
+                                                    </td>
+                                                    <td><input type="number" class="form-control" formControlName="precio"></td>
+                                                    <td><input type="number" class="form-control" formControlName="total"></td>
+
+                                                    <td>
+                                                        <button type="button" class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete" (click)="borraItem(itemActual)"><i class="ti-close" aria-hidden="true"></i></button>
+                                                    </td>
+                                                </ng-container>
                                             </tr>
 
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan="2">
+                                                <td class="col-sm-1">
                                                     <button type="button" (click)="agregaProducto()" class="btn btn-info btn-rounded">Agregar producto</button>
                                                 </td>
                                             </tr>
@@ -74,46 +75,48 @@
                                     </table>
                                 </div>
                             </div>
-                        </section>
+                        </form>
                         <!-- Step 2 -->
                         <h6 id="steps-uid-2-h-1" tabindex="-1" class="title">Step 2</h6>
-                        <section [hidden]="currentStep!=2" id="steps-uid-2-p-1" role="tabpanel" aria-labelledby="steps-uid-2-h-1" class="body" aria-hidden="true">
+                        <form [hidden]="currentStep!=2" id="steps-uid-2-p-1" role="tabpanel" aria-labelledby="steps-uid-2-h-1" class="body" aria-hidden="true" (ngSubmit)="siguientePaso()" [formGroup]="step2form">
 
                             <div class="form-group row">
                                 <label for="Cliente" class="col-2 col-form-label">Cliente</label>
-                                <div class="col-2">
-                                    <app-typehead (valorSeleccionado)="muestroDatosCliente($event)" [resource]='"cliente"'></app-typehead>
+                                <div class="col-10">
+                                    <app-typehead (valorSeleccionado)="muestroDatosCliente($event)" [resource]='"cliente"' [parentForm]="step2form" campoFormulario='numeroCliente' placeholder='Cliente'>
+                                    </app-typehead>
                                 </div>
-                                <label class="col-8 col-form-label">{{order.razonSocial}}</label>
+
                             </div>
                             <div class="form-group row">
                                 <label for="Cliente" class="col-2 col-form-label">Codigo de entrega</label>
                                 <div class="col-10">
-                                    <app-typehead (valorSeleccionado)="muestroDatosEntrega($event)" [resource]='"clientedireccionesentrega"' [keyParameterValue]="order.numeroCliente"></app-typehead>
+                                    <app-typehead (valorSeleccionado)="muestroDatosEntrega($event)" [resource]='"clientedireccionesentrega"' [parentForm]="step2form" campoFormulario='codigoEntrega' [keyParameterValue]="order.numeroCliente" placeholder='Dirección de Entrega'>
+                                    </app-typehead>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label for="example-search-input" class="col-2 col-form-label">Direccion Entrega</label>
                                 <div class="col-10">
-                                    <input class="form-control" type="text" name="DireccionEntrega" [(ngModel)]="order.direccionEntrega">
+                                    <input class="form-control" type="text" name="DireccionEntrega" formControlName="direccionEntrega">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="example-search-input" class="col-2 col-form-label">Codigo Postal Entrega</label>
                                 <div class="col-10">
-                                    <input class="form-control" type="text" name="codigoPostalEntrega" [(ngModel)]="order.codigoPostalEntrega">
+                                    <input class="form-control" type="text" name="codigoPostalEntrega" formControlName="codigoPostalEntrega">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="example-search-input" class="col-2 col-form-label">Provincia Entrega</label>
                                 <div class="col-10">
-                                    <input class="form-control" type="text" name="provinciaEntrega" [(ngModel)]="order.provinciaEntrega">
+                                    <input class="form-control" type="text" name="provinciaEntrega" formControlName="provinciaEntrega">
                                 </div>
                             </div>
 
 
-                        </section>
+                        </form>
                         <!-- Step 3 -->
                         <h6 id="steps-uid-2-h-2" tabindex="-1" class="title">Step 3</h6>
                         <section [hidden]="currentStep!=3" id="steps-uid-2-p-2" role="tabpanel" aria-labelledby="steps-uid-2-h-2" class="body" aria-hidden="true">
@@ -216,15 +219,19 @@
                             </div>
                         </section>
                     </div>
+                    <div *ngIf="campoNoValido('numeroCliente')" class="alert alert-danger">El campo Cliente es obligatorio </div>
+                    <div *ngIf="campoNoValido('direccionEntrega')" class="alert alert-danger">El campo Dirección de Entrega es obligatorio </div>
+                    <div *ngIf="campoNoValido('codigoPostalEntrega')" class="alert alert-danger">El campo Codigo Postal de Entrega es obligatorio </div>
+                    <div *ngIf="campoNoValido('provinciaEntrega')" class="alert alert-danger">El campo Provincia de Entrega es obligatorio </div>
                     <div class="actions clearfix">
                         <ul role="menu" aria-label="Pagination">
                             <li class="disabled" aria-disabled="true">
-                                <button *ngIf="currentStep != 1 && currentStep < 4" (click)="siguientePaso(-1)" class="btn btn-warning" type="button" role="menuitem">
+                                <button *ngIf="currentStep != 1 && currentStep < 4" (click)="siguientePaso(-1)" class="btn btn-warning" type="submit" role="menuitem">
                                     Anterior
                                 </button>
                             </li>
                             <li *ngIf="currentStep < 3" aria-hidden="false" aria-disabled="false">
-                                <button (click)="siguientePaso(+1)" class="btn btn-warning" type="button" role="menuitem">
+                                <button (click)="siguientePaso(+1)" class="btn btn-warning" type="submit" role="menuitem">
                                     Siguiente
                                 </button>
                             </li>

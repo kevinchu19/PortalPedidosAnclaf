@@ -1,11 +1,9 @@
 
-//TODO: Implementar unsubscribe | Ver forma de scrollear lista con teclado
+//TODO: Implementar unsubscribe 
 import { Component, OnInit, Output,EventEmitter, Input, OnDestroy } from '@angular/core';
 import { typeheadArray } from '../models/typeheadArray.model';
-import { element } from 'protractor';
 import { TypeheadService } from '../service/typehead.service';
-import { map } from 'rxjs/operators';
-import { product } from 'src/app/pages/models/product.model';
+import { FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -15,8 +13,11 @@ import { product } from 'src/app/pages/models/product.model';
 })
 export class TypeheadComponent implements OnInit {
   
+  @Input() parentForm:FormGroup;
+  @Input() campoFormulario:string;
   @Input() keyParameterValue:string;
   @Input() resource:string;
+  @Input() placeholder:string;
   @Output() valorSeleccionado: EventEmitter<typeheadArray> = new EventEmitter();
   
   
@@ -24,43 +25,49 @@ export class TypeheadComponent implements OnInit {
   public arrayOriginal: typeheadArray[] = [];
   public arrayMostrado: typeheadArray[] = []
   public itemMouseOver: number = 0
+  public description: string = "";
 
   constructor( private _typeheadService: TypeheadService) { }
 
   ngOnInit(): void {
+    console.log(this.parentForm);
+    
+    this.parentForm.get(this.campoFormulario).valueChanges.subscribe(selectedValue=>{
+      this.terminoInput = this.parentForm.get(this.campoFormulario).value 
+      console.log(this.terminoInput);
+      
+      if (this.terminoInput != '') {
+      
+        this._typeheadService.GetValues(this.resource, this.terminoInput.toUpperCase(), this.keyParameterValue)
+                      .subscribe((resp:any[]) => 
+                                  {                                 
+                                    this.arrayMostrado = [];
+                                    resp.forEach(element => {
+      
+                                      this.arrayMostrado.push({
+                                        codigo:element.id,
+                                        descripcion: element.descripcion,
+                                        mouseOver: false
+                                      })
+                                    });
+                                    this.itemMouseOver = 0;
+                                  }
+      
+                                 ); 
+    
+      }
+    
+      
+    })
   }
 
-  filtroArray(){
+  
 
-
-    if (this.terminoInput != '') {
-      
-      this._typeheadService.GetValues(this.resource, this.terminoInput.toUpperCase(), this.keyParameterValue)
-                    .subscribe((resp:any[]) => 
-                                {                                 
-                                  this.arrayMostrado = [];
-                                  resp.forEach(element => {
-    
-                                    this.arrayMostrado.push({
-                                      codigo:element.id,
-                                      descripcion: element.descripcion,
-                                      mouseOver: false
-                                    })
-                                  });
-                                  this.itemMouseOver = 0;
-                                }
-    
-                               ); 
-      
-   }
-                           
-    
-  }
-
-  seleccionaValor(item:number){
-        
-    this.terminoInput = this.arrayMostrado[item].codigo;
+  seleccionaValor(){    
+    let item = this.itemMouseOver;
+    this.parentForm.get(this.campoFormulario).setValue (this.arrayMostrado[item].codigo);
     this.valorSeleccionado.emit(this.arrayMostrado[item]);
+    this.description = this.arrayMostrado[item].descripcion;
     this.arrayMostrado = [];
   }
 
@@ -81,7 +88,7 @@ export class TypeheadComponent implements OnInit {
         this.pongoFocoMouse(this.itemMouseOver)
         break;
       case "Enter":
-          this.seleccionaValor(this.itemMouseOver);
+          this.seleccionaValor();
       default:
         break;
     }
