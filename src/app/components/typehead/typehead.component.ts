@@ -30,12 +30,10 @@ export class TypeheadComponent implements OnInit {
   constructor( private _typeheadService: TypeheadService) { }
 
   ngOnInit(): void {
-    console.log(this.parentForm);
     
     this.parentForm.get(this.campoFormulario).valueChanges.subscribe(selectedValue=>{
-      this.terminoInput = this.parentForm.get(this.campoFormulario).value 
-      console.log(this.terminoInput);
-      
+      this.terminoInput = this.parentForm.get(this.campoFormulario).value;
+            
       if (this.terminoInput != '') {
       
         this._typeheadService.GetValues(this.resource, this.terminoInput.toUpperCase(), this.keyParameterValue)
@@ -56,18 +54,29 @@ export class TypeheadComponent implements OnInit {
                                  ); 
     
       }
+      
+      
+        console.log('invalido' + this.description);
+      
+        this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> {return {valorInvalido:true}}]);
+     
     
       
-    })
+    });
   }
 
   
 
   seleccionaValor(){    
+    
     let item = this.itemMouseOver;
-    this.parentForm.get(this.campoFormulario).setValue (this.arrayMostrado[item].codigo);
-    this.valorSeleccionado.emit(this.arrayMostrado[item]);
     this.description = this.arrayMostrado[item].descripcion;
+    this.parentForm.get(this.campoFormulario).setValue (this.arrayMostrado[item].codigo);
+    console.log('valido');
+    
+    this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> null]);
+    this.parentForm.get(this.campoFormulario).updateValueAndValidity({onlySelf:true});
+    this.valorSeleccionado.emit(this.arrayMostrado[item]);
     this.arrayMostrado = [];
   }
 

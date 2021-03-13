@@ -354,3 +354,8 @@ File: css
         float: none;
     }
 }
+
+.table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}

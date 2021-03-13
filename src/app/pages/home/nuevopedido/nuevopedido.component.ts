@@ -6,12 +6,14 @@ import { typeheadArray } from '../../../components/models/typeheadArray.model';
 import { cliente } from '../../models/cliente.model';
 import { clientedireccionentrega } from '../../models/clientedireccionentrega.model';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
   selector: 'app-nuevopedido',
   templateUrl: './nuevopedido.component.html',
-  styleUrls: ['./nuevopedido.component.css']
+  styleUrls: ['./nuevopedido.component.css'],
+  providers: [DatePipe]
 })
 export class NuevopedidoComponent implements OnInit {
 
@@ -27,32 +29,47 @@ export class NuevopedidoComponent implements OnInit {
                   }
   
   public step1form = this.fb.group({
-    items: this.fb.array([]),
+    items: this.fb.array([],[Validators.required]),
   });
 
   newItem(): FormGroup {
     return this.fb.group({
-      cantidad: 0,
-      producto: "",
+      cantidad: [0,Validators.required],
+      producto: ["",Validators.required],
+      descripcion: [''],
       precio: 0, 
       bonificacion: 0,
-      total: 0
-    })
+      total: 0,
+    },{
+      validators: [this.cantidadMayorACero('cantidad')]
+    });
   }
 
 
   public step2form = this.fb.group({ 
+    fecha:[''],
     numeroCliente: ['',Validators.required],
+    razonSocial:[''],
+    numeroDocumento:[''],
+    listaPrecios: [''],
+    direccionFacturacion:[''],
+    paisFacturacion:[''],
+    codigoPostalFacturacion:[''],
+    provinciaFacturacion:[''],
     codigoEntrega:[''],
+    entregaDescripcion:[''],
+    paisEntrega: [''],
     direccionEntrega:['',Validators.required],
     codigoPostalEntrega:['',Validators.required],
     provinciaEntrega: ['',Validators.required]
    });
    public step1FormSubmitted:boolean = false;
    public step2FormSubmitted:boolean = false;
+   
+   public myDate = new Date();
 
-  constructor(private _nuevoPedidoService: NuevopedidoService, private fb: FormBuilder) {
-    
+  constructor(private _nuevoPedidoService: NuevopedidoService, private fb: FormBuilder, private datePipe: DatePipe) {
+    this.step2form.get('fecha').setValue(this.datePipe.transform(this.myDate, 'dd/MM/yyyy'));
   }
 
   ngOnInit(): void {
@@ -60,12 +77,14 @@ export class NuevopedidoComponent implements OnInit {
   
   siguientePaso(valor:number){
     console.log(this.step2form);
-    
+     
     if (valor > 0) {
       switch (this.currentStep) {
         case 1:
           this.step1FormSubmitted = true;
-          this.currentStep = this.currentStep + valor;  
+          if (this.step1form.valid) {
+            this.currentStep = this.currentStep + valor;  
+          }
           break;
       
         case 2:
@@ -90,21 +109,13 @@ export class NuevopedidoComponent implements OnInit {
 
   muestroDatosProducto(e:typeheadArray, itemactual:number){
     
-    console.log(itemactual);
-    
     this._nuevoPedidoService.GetProducto(e.codigo)
                       .subscribe((resp:product) => 
                       {                                 
-                        this.order.items[itemactual].producto =
-                        {
-                          id: resp.id,
-                          descripcion: resp.descripcion,
-                          precio: resp.precio,
-                          bonificacion: resp.bonificacion
-                        };
-                      });
-
-    
+                        this.items.controls[itemactual].get('descripcion').setValue(resp.descripcion);
+                        this.items.controls[itemactual].get('precio').setValue(resp.precio);
+                        this.items.controls[itemactual].get('bonificacion').setValue(resp.bonificacion);
+                      });    
     
   }
   
@@ -115,18 +126,18 @@ export class NuevopedidoComponent implements OnInit {
     this._nuevoPedidoService.GetCliente(e.codigo)
                       .subscribe((resp:cliente) => 
                       {                      
-                        this.order.numeroCliente = resp.id;
-                        this.order.numeroDocumento = resp.numeroDocumento;
-                        this.order.direccionFacturacion = resp.direccionFacturacion; 
-                        this.order.paisFacturacion= resp.paisFacturacion; 
-                        this.order.codigoPostalFacturacion= resp.codigoPostalFacturacion;
-                        this.order.provinciaFacturacion= resp.provinciaFacturacion; 
-                        
+                        this.step2form.get('razonSocial').setValue(resp.razonSocial);
+                        this.step2form.get('numeroDocumento').setValue(resp.numeroDocumento);
+                        this.step2form.get('direccionFacturacion').setValue(resp.direccionFacturacion); 
+                        this.step2form.get('paisFacturacion').setValue(resp.paisFacturacion); 
+                        this.step2form.get('codigoPostalFacturacion').setValue(resp.codigoPostalFacturacion);
+                        this.step2form.get('provinciaFacturacion').setValue(resp.provinciaFacturacion); 
+                        this.step2form.get('listaPrecios').setValue(resp.listaPrecios);
+
+                        this.step2form.get('paisEntrega').setValue(resp.paisEntrega); 
                         this.step2form.get('direccionEntrega').setValue(resp.direccionEntrega); 
-                        this.order.paisEntrega= resp.paisEntrega; 
                         this.step2form.get('codigoPostalEntrega').setValue(resp.codigoPostalEntrega);
                         this.step2form.get('provinciaEntrega').setValue(resp.provinciaEntrega);
-                        this.order.listaPrecios= resp.listaPrecios;
                       });
     
   }
@@ -134,11 +145,12 @@ export class NuevopedidoComponent implements OnInit {
   muestroDatosEntrega(e:typeheadArray){
     
     
-    this._nuevoPedidoService.GetDireccionEntrega(e.codigo, this.order.numeroCliente)
+    this._nuevoPedidoService.GetDireccionEntrega(e.codigo, this.step2form.get('numeroCliente').value)
                       .subscribe((resp:clientedireccionentrega) => 
                       {                      
+                        this.step2form.get('entregaDescripcion').setValue(resp.descripcion); 
+                        this.step2form.get('paisEntrega').setValue(resp.paisEntrega); 
                         this.step2form.get('direccionEntrega').setValue(resp.direccionEntrega); 
-                        this.order.paisEntrega= resp.paisEntrega; 
                         this.step2form.get('codigoPostalEntrega').setValue(resp.codigoPostalEntrega);
                         this.step2form.get('provinciaEntrega').setValue(resp.provinciaEntrega);
                       });
@@ -147,39 +159,23 @@ export class NuevopedidoComponent implements OnInit {
 
   agregaProducto(){
     
+    this.step1FormSubmitted = false;
     this.items.push(this.newItem());
+    
+    let numeroItem = this.items.controls.length-1
+    this.items.controls[numeroItem].get('cantidad').valueChanges.subscribe(selectedValue=>{
+      let precio = this.items.controls[numeroItem].get('precio').value
+      this.items.controls[numeroItem].get('total').setValue(selectedValue*precio)
+    })
 
-    this.order.items.push({
-      cantidad: 0,
-      producto: {
-        id:"",
-        descripcion: "",
-        precio: 0,
-        bonificacion: 0
-      },
-      total: 0
-    });
-    console.log(this.order.items);
     
   }
-
-  cantidadChange(item:number){
-    if (this.order.items[item].cantidad != null) {
-      this.order.items[item].total = this.order.items[item].cantidad*this.order.items[item].producto.precio;
-    }
-    else {
-      this.order.items[item].total = 0;
-    }
-    
-  }
-
   borraItem(item:number){
     this.items.removeAt(item);
-    this.order.items.splice(item,1);
-  }
+   }
   
-  campoNoValido(campo:string){
-    if (this.step2form.get(campo).invalid && this.step2FormSubmitted) {
+  campoNoValido(_formGroup:FormGroup,campo:string, submittedState:boolean){
+    if (_formGroup.get(campo).invalid && submittedState) {
       return true;
     }else
     {
@@ -189,6 +185,36 @@ export class NuevopedidoComponent implements OnInit {
 
   get items(): FormArray {
     return this.step1form.get("items") as FormArray
+  }
+
+  getItems(): FormArray {
+    return this.step1form.get("items") as FormArray
+  }
+
+  cantidadMayorACero(cantidad:string){
+    
+    return (formGroup:FormGroup) =>{
+      const cantidControl = formGroup.get(cantidad)
+      if (cantidControl.value <= 0) {
+        cantidControl.setErrors({cantidadMenorOIgualACero:true})
+      }else{
+        cantidControl.setErrors(null);
+      }
+    }
+  }
+
+  existenItems(){
+    
+    return (formGroup: FormGroup) =>{
+      
+      const cantidadItems = formGroup.get('items').length
+      if (cantidadItems == 0) {
+        
+      }else{
+        formGroup.setErrors({noHayItems:true})
+        formGroup.setErrors(null);
+      }
+    }
   }
 }
 
