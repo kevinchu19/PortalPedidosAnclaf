@@ -4,6 +4,7 @@ import { Component, OnInit, Output,EventEmitter, Input, OnDestroy } from '@angul
 import { typeheadArray } from '../models/typeheadArray.model';
 import { TypeheadService } from '../service/typehead.service';
 import { FormGroup } from '@angular/forms';
+import { delay } from 'rxjs/operators';
 
 
 @Component({
@@ -25,23 +26,23 @@ export class TypeheadComponent implements OnInit {
   public arrayOriginal: typeheadArray[] = [];
   public arrayMostrado: typeheadArray[] = []
   public itemMouseOver: number = 0
-  public description: string = "";
+  public valorCorrecto: boolean = false;
 
   constructor( private _typeheadService: TypeheadService) { }
 
   ngOnInit(): void {
     
     this.parentForm.get(this.campoFormulario).valueChanges.subscribe(selectedValue=>{
+            
       this.terminoInput = this.parentForm.get(this.campoFormulario).value;
             
-      if (this.terminoInput != '') {
+      if (this.terminoInput != '' && !this.valorCorrecto) {
       
         this._typeheadService.GetValues(this.resource, this.terminoInput.toUpperCase(), this.keyParameterValue)
                       .subscribe((resp:any[]) => 
                                   {                                 
                                     this.arrayMostrado = [];
                                     resp.forEach(element => {
-      
                                       this.arrayMostrado.push({
                                         codigo:element.id,
                                         descripcion: element.descripcion,
@@ -52,14 +53,22 @@ export class TypeheadComponent implements OnInit {
                                   }
       
                                  ); 
-    
+                                 
+         
+        this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> {
+          if (this.valorCorrecto === false) {
+            return {valorInvalido:true}
+          }else{
+            return null
+          }
+        }]);  
+      
+      }else {
+        this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> {return null}]);
       }
       
       
-        console.log('invalido' + this.description);
-      
-        this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> {return {valorInvalido:true}}]);
-     
+      this.parentForm.get(this.campoFormulario).updateValueAndValidity({onlySelf:true, emitEvent:false});        
     
       
     });
@@ -68,16 +77,17 @@ export class TypeheadComponent implements OnInit {
   
 
   seleccionaValor(){    
-    
+    this.valorCorrecto = true;
     let item = this.itemMouseOver;
-    this.description = this.arrayMostrado[item].descripcion;
-    this.parentForm.get(this.campoFormulario).setValue (this.arrayMostrado[item].codigo);
-    console.log('valido');
+    this.parentForm.get(this.campoFormulario +'_descripcion').setValue(this.arrayMostrado[item].descripcion);
+    this.parentForm.get(this.campoFormulario).setValue (this.arrayMostrado[item].codigo);    
     
     this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> null]);
     this.parentForm.get(this.campoFormulario).updateValueAndValidity({onlySelf:true});
     this.valorSeleccionado.emit(this.arrayMostrado[item]);
     this.arrayMostrado = [];
+
+    this.valorCorrecto = false;
   }
 
   keyUp(e:KeyboardEvent){
@@ -112,11 +122,16 @@ export class TypeheadComponent implements OnInit {
     this.arrayMostrado = []
   }
   private pongoFocoMouse(item:number){
-    this.arrayMostrado[item].mouseOver = true
+    if (this.arrayMostrado) {
+      this.arrayMostrado[item].mouseOver = true
+    }
   }
 
   private sacoFocoMouse(item:number){   
-    this.arrayMostrado[item].mouseOver = false
+    if (this.arrayMostrado) {
+      this.arrayMostrado[item].mouseOver = false  
+    }
+    
   }
 
   

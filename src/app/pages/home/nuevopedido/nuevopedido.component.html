@@ -67,8 +67,8 @@
                                                             </ul>
                                                         </div>
                                                     </td>
-                                                    <td>${{item.get('precio').value}}</td>
-                                                    <td>${{item.get('total').value}}</td>
+                                                    <td>${{item.get('precio').value | number:'1.2'}}</td>
+                                                    <td>${{item.get('total').value | number:'1.2'}}</td>
 
                                                     <td>
                                                         <button type="button" class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete" (click)="borraItem(itemActual)"><i class="ti-close" aria-hidden="true"></i></button>
@@ -82,18 +82,25 @@
                                         <tfoot>
                                             <tr>
                                                 <td class="col-sm-1">
-                                                    <button type="button" (click)="agregaProducto()" class="btn btn-info btn-rounded">Agregar producto</button>
+                                                    <button type="button" (click)="agregaProducto()" class="btn btn-danger btn-rounded">Agregar producto</button>
                                                 </td>
                                             </tr>
                                         </tfoot>
                                     </table>
                                     <div *ngIf="step1form.get('items').errors && step1FormSubmitted" class="text-center alert alert-danger alert-rounded">Debe elegir algún producto para avanzar con el pedido</div>
+                                    <div class="col-md-12">
+                                        <div class="pull-right m-t-10 text-right">
+                                            <hr>
+                                            <h3><b>Total sin impuestos :</b> ${{ total | number:'1.2' }}</h3>
+                                        </div>
+                                        <hr>
+                                    </div>
                                 </div>
                             </div>
                         </form>
                         <!-- Step 2 -->
                         <h6 id="steps-uid-2-h-1" tabindex="-1" class="title">Step 2</h6>
-                        <form [hidden]="currentStep!=2" id="steps-uid-2-p-1" role="tabpanel" aria-labelledby="steps-uid-2-h-1" class="body" aria-hidden="true" (ngSubmit)="siguientePaso(+1)" [formGroup]="step2form">
+                        <form [hidden]="currentStep!=2" id="steps-uid-2-p-1" role="tabpanel" aria-labelledby="steps-uid-2-h-1" class="body" aria-hidden="true" [formGroup]="step2form">
 
                             <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'numeroCliente', step2FormSubmitted)}">
                                 <label for="Cliente" class="col-2 col-form-label">Cliente</label>
@@ -146,7 +153,7 @@
                             <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'provinciaEntrega', step2FormSubmitted)}">
                                 <label for="example-search-input" class="col-2 col-form-label">Provincia Entrega</label>
                                 <div class="col-10">
-                                    <app-typehead [resource]='"provincia"' [parentForm]="step2form" campoFormulario='provinciaEntrega' placeholder='Provincia de Entrega'>
+                                    <app-typehead #provinciaEntrega [resource]='"provincia"' [parentForm]="step2form" campoFormulario='provinciaEntrega' placeholder='Provincia de Entrega'>
                                     </app-typehead>
                                     <div *ngIf="campoNoValido(step2form,'provinciaEntrega', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
                                         <ul role="alert">
@@ -156,6 +163,7 @@
                                 </div>
                             </div>
 
+                            <app-typehead style="display: none;" #provinciaFacturacion [resource]='"provincia"' [parentForm]="step2form" campoFormulario='provinciaFacturacion' placeholder='Provincia de Facturacion'> </app-typehead>
 
                         </form>
                         <!-- Step 3 -->
@@ -169,19 +177,19 @@
                                     <div class="col-md-12">
                                         <div class="pull-left">
                                             <address>
-                                                <h3> &nbsp;<b class="text-danger">{{step2form.get('razonSocial').value}}</b></h3>
+                                                <h3> &nbsp;<b class="text-danger">{{step2form.get('numeroCliente_descripcion').value}}</b></h3>
                                                 <p class="text-muted m-l-5">CUIT: {{step2form.get('numeroDocumento').value}}
-                                                    <br> {{step2form.get('direccionFacturacion').value}} - ({{step2form.get('provinciaFacturacion').value}}),
-                                                    <br> {{step2form.get('provinciaFacturacion').value}}
+                                                    <br> {{step2form.get('direccionFacturacion').value}} - ({{step2form.get('codigoPostalFacturacion').value}}),
+                                                    <br> {{step2form.get('provinciaFacturacion_descripcion').value}}
                                                 </p>
                                             </address>
                                         </div>
                                         <div class="pull-right text-right">
                                             <address>
                                                 <h3>Dirección de entrega: </h3>
-                                                <h4 class="font-bold">{{step2form.get('entregaDescripcion').value}}</h4>
+                                                <h4 class="font-bold">{{step2form.get('codigoEntrega_descripcion').value}}</h4>
                                                 <p class="text-muted m-l-30"> {{step2form.get('direccionEntrega').value}} - ({{step2form.get('codigoPostalEntrega').value}}),
-                                                    <br> {{step2form.get('provinciaEntrega').value}}
+                                                    <br> {{step2form.get('provinciaEntrega_descripcion').value}}
                                                 <p class="m-t-30"><b>Fecha del pedido:</b> <i class="fa fa-calendar"></i> {{step2form.get('fecha').value}}</p>
                                             </address>
                                         </div>
@@ -204,9 +212,9 @@
                                                         <td class="text-center">{{id+1}}</td>
                                                         <td>{{itemPedido.get('descripcion').value}}</td>
                                                         <td class="text-right">{{itemPedido.get('cantidad').value}} </td>
-                                                        <td class="text-right"> ${{itemPedido.get('precio').value}} </td>
-                                                        <td class="text-right"> {{itemPedido.get('bonificacion').value}}% </td>
-                                                        <td class="text-right"> ${{itemPedido.get('total').value}} </td>
+                                                        <td class="text-right"> ${{itemPedido.get('precio').value | number:'1.2'}} </td>
+                                                        <td class="text-right"> {{itemPedido.get('bonificacion').value | number:'1.2'}}% </td>
+                                                        <td class="text-right"> ${{itemPedido.get('total').value | number:'1.2'}} </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -214,10 +222,8 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="pull-right m-t-30 text-right">
-                                            <p>Sub - Total amount: $13,848</p>
-                                            <p>vat (10%) : $138 </p>
                                             <hr>
-                                            <h3><b>Total :</b> $13,986</h3>
+                                            <h3><b>Total sin impuestos :</b> ${{total | number:'1.2'}}</h3>
                                         </div>
                                         <div class="clearfix"></div>
                                         <hr>
@@ -280,13 +286,13 @@
                                 </button>
                             </li>
                             <li *ngIf="currentStep < 3" aria-hidden="false" aria-disabled="false">
-                                <button (click)="siguientePaso(+1)" class="btn btn-warning" type="submit" role="menuitem">
+                                <button (click)="siguientePaso(+1)" class="btn btn-warning" type="button" role="menuitem">
                                     Siguiente
                                 </button>
                             </li>
                             <li *ngIf="currentStep == 3" aria-hidden="true">
-                                <button (click)="siguientePaso(+1)" class="btn btn-danger" type="button" role="menuitem">
-                                <i class = "fa fa-check"></i>Confirmar
+                                <button (click)="graboPedido()" class="btn btn-danger" type="submit" role="menuitem">
+                                <i class = "fa fa-check"></i>Confirmar Pedido
                                 </button>
                             </li>
                         </ul>

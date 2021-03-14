@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { order } from '../../models/order.model';
 import { product } from '../../models/product.model';
 import { NuevopedidoService } from '../../services/nuevopedido.service';
@@ -7,26 +7,25 @@ import { cliente } from '../../models/cliente.model';
 import { clientedireccionentrega } from '../../models/clientedireccionentrega.model';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { TypeheadComponent } from '../../../components/typehead/typehead.component';
+import { delay } from 'rxjs/operators';
 
 
 @Component({
   selector: 'app-nuevopedido',
   templateUrl: './nuevopedido.component.html',
   styleUrls: ['./nuevopedido.component.css'],
-  providers: [DatePipe]
+  providers: [DatePipe],
+  
 })
 export class NuevopedidoComponent implements OnInit {
 
   
-  currentStep:number = 1;
-  order:order = { numeroCliente:"", razonSocial:"", direccionFacturacion: "", paisFacturacion: "", codigoPostalFacturacion: "",
-                  provinciaFacturacion: "", direccionEntrega: "", paisEntrega: "", codigoPostalEntrega: "", provinciaEntrega: "",
-                  listaPrecios: "", numeroDocumento:"", items:[{
-                                            cantidad: 0, producto: { 
-                                                                    id:"", descripcion: "", precio: 0, bonificacion: 0
-                                                                   }, total: 0
-                                          }]
-                  }
+  @ViewChild ('provinciaEntrega') provinciaEntregaTypeheadComponent: TypeheadComponent
+  @ViewChild ('provinciaFacturacion') provinciaFacturacionTypeheadComponent: TypeheadComponent
+
+  public currentStep:number = 1;
+  public total:number = 0;
   
   public step1form = this.fb.group({
     items: this.fb.array([],[Validators.required]),
@@ -36,6 +35,7 @@ export class NuevopedidoComponent implements OnInit {
     return this.fb.group({
       cantidad: [0,Validators.required],
       producto: ["",Validators.required],
+      producto_descripcion: [''],
       descripcion: [''],
       precio: 0, 
       bonificacion: 0,
@@ -49,19 +49,21 @@ export class NuevopedidoComponent implements OnInit {
   public step2form = this.fb.group({ 
     fecha:[''],
     numeroCliente: ['',Validators.required],
-    razonSocial:[''],
+    numeroCliente_descripcion:[''],
     numeroDocumento:[''],
     listaPrecios: [''],
     direccionFacturacion:[''],
     paisFacturacion:[''],
     codigoPostalFacturacion:[''],
     provinciaFacturacion:[''],
+    provinciaFacturacion_descripcion: [''],
     codigoEntrega:[''],
-    entregaDescripcion:[''],
+    codigoEntrega_descripcion:[''],
     paisEntrega: [''],
     direccionEntrega:['',Validators.required],
     codigoPostalEntrega:['',Validators.required],
-    provinciaEntrega: ['',Validators.required]
+    provinciaEntrega: ['',Validators.required],
+    provinciaEntrega_descripcion: ['']
    });
    public step1FormSubmitted:boolean = false;
    public step2FormSubmitted:boolean = false;
@@ -76,8 +78,7 @@ export class NuevopedidoComponent implements OnInit {
   }
   
   siguientePaso(valor:number){
-    console.log(this.step2form);
-     
+       
     if (valor > 0) {
       switch (this.currentStep) {
         case 1:
@@ -112,7 +113,7 @@ export class NuevopedidoComponent implements OnInit {
     this._nuevoPedidoService.GetProducto(e.codigo)
                       .subscribe((resp:product) => 
                       {                                 
-                        this.items.controls[itemactual].get('descripcion').setValue(resp.descripcion);
+                        this.items.controls[itemactual].get('descripcion').setValue(resp.descripcion);                      
                         this.items.controls[itemactual].get('precio').setValue(resp.precio);
                         this.items.controls[itemactual].get('bonificacion').setValue(resp.bonificacion);
                       });    
@@ -124,20 +125,26 @@ export class NuevopedidoComponent implements OnInit {
     
     
     this._nuevoPedidoService.GetCliente(e.codigo)
-                      .subscribe((resp:cliente) => 
+                      .subscribe(async (resp:cliente) => 
                       {                      
-                        this.step2form.get('razonSocial').setValue(resp.razonSocial);
+                        this.step2form.get('numeroCliente_descripcion').setValue(resp.razonSocial);
                         this.step2form.get('numeroDocumento').setValue(resp.numeroDocumento);
                         this.step2form.get('direccionFacturacion').setValue(resp.direccionFacturacion); 
                         this.step2form.get('paisFacturacion').setValue(resp.paisFacturacion); 
                         this.step2form.get('codigoPostalFacturacion').setValue(resp.codigoPostalFacturacion);
                         this.step2form.get('provinciaFacturacion').setValue(resp.provinciaFacturacion); 
+                        setTimeout(() => {
+                          this.provinciaFacturacionTypeheadComponent.seleccionaValor();
+                        }, 50);
                         this.step2form.get('listaPrecios').setValue(resp.listaPrecios);
 
                         this.step2form.get('paisEntrega').setValue(resp.paisEntrega); 
                         this.step2form.get('direccionEntrega').setValue(resp.direccionEntrega); 
                         this.step2form.get('codigoPostalEntrega').setValue(resp.codigoPostalEntrega);
-                        this.step2form.get('provinciaEntrega').setValue(resp.provinciaEntrega);
+                        this.step2form.get('provinciaEntrega').setValue(resp.provinciaEntrega);    
+                        setTimeout(() => {
+                          this.provinciaEntregaTypeheadComponent.seleccionaValor();
+                        }, 50);
                       });
     
   }
@@ -148,11 +155,14 @@ export class NuevopedidoComponent implements OnInit {
     this._nuevoPedidoService.GetDireccionEntrega(e.codigo, this.step2form.get('numeroCliente').value)
                       .subscribe((resp:clientedireccionentrega) => 
                       {                      
-                        this.step2form.get('entregaDescripcion').setValue(resp.descripcion); 
+                        this.step2form.get('codigoEntrega_descripcion').setValue(resp.descripcion); 
                         this.step2form.get('paisEntrega').setValue(resp.paisEntrega); 
                         this.step2form.get('direccionEntrega').setValue(resp.direccionEntrega); 
                         this.step2form.get('codigoPostalEntrega').setValue(resp.codigoPostalEntrega);
-                        this.step2form.get('provinciaEntrega').setValue(resp.provinciaEntrega);
+                        this.step2form.get('provinciaEntrega').setValue(resp.provinciaEntrega);    
+                        setTimeout(() => {
+                          this.provinciaEntregaTypeheadComponent.seleccionaValor();
+                        }, 50);
                       });
     
   }
@@ -166,12 +176,14 @@ export class NuevopedidoComponent implements OnInit {
     this.items.controls[numeroItem].get('cantidad').valueChanges.subscribe(selectedValue=>{
       let precio = this.items.controls[numeroItem].get('precio').value
       this.items.controls[numeroItem].get('total').setValue(selectedValue*precio)
+      this.total = this.items.controls.reduce((sum,current)=>  sum + current.get('total').value , 0 );
     })
 
     
   }
   borraItem(item:number){
     this.items.removeAt(item);
+    this.total = this.items.controls.reduce((sum,current)=>  sum + current.get('total').value , 0 );
    }
   
   campoNoValido(_formGroup:FormGroup,campo:string, submittedState:boolean){
@@ -202,46 +214,10 @@ export class NuevopedidoComponent implements OnInit {
       }
     }
   }
-
-  existenItems(){
-    
-    return (formGroup: FormGroup) =>{
-      
-      const cantidadItems = formGroup.get('items').length
-      if (cantidadItems == 0) {
+  graboPedido(){
+    console.log(this.step1form.value.items);
+    console.log(this.step2form.value);
         
-      }else{
-        formGroup.setErrors({noHayItems:true})
-        formGroup.setErrors(null);
-      }
-    }
   }
-}
-
-
-/*
-public formularioPedido = this._fb.group({
   
-  numeroCliente:['',[Validators.required]], 
-  razonSocial:['',[Validators.required]], 
-  direccionFacturacion: ['',[Validators.required]], 
-  paisFacturacion: ['',[Validators.required]], 
-  codigoPostalFacturacion: ['',[Validators.required]],
-  provinciaFacturacion: ['',[Validators.required]], 
-  direccionEntrega: ['',[Validators.required]], 
-  paisEntrega: ['',[Validators.required]], 
-  codigoPostalEntrega: ['',[Validators.required]], 
-  provinciaEntrega: ['',[Validators.required]],
-  listaPrecios: ['',[Validators.required]], 
-  items:  [{
-            cantidad:  [0,[Validators.required]], 
-            producto: { 
-                  id:['',[Validators.required]], 
-                  descripcion: ['',[Validators.required]], 
-                  precio:  [0,[Validators.required]], 
-                  bonificacion:  [0,[Validators.required]]
-            }, 
-            total:  [0,[Validators.required]]
-  }]
-});
-*/
+}
