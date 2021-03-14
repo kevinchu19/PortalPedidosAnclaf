@@ -35,12 +35,15 @@ export class TypeheadComponent implements OnInit {
     this.parentForm.get(this.campoFormulario).valueChanges.subscribe(selectedValue=>{
             
       this.terminoInput = this.parentForm.get(this.campoFormulario).value;
+      console.log(this.valorCorrecto);
             
       if (this.terminoInput != '' && !this.valorCorrecto) {
       
         this._typeheadService.GetValues(this.resource, this.terminoInput.toUpperCase(), this.keyParameterValue)
                       .subscribe((resp:any[]) => 
-                                  {                                 
+                                  {                   
+                                    console.log(resp);
+                                                  
                                     this.arrayMostrado = [];
                                     resp.forEach(element => {
                                       this.arrayMostrado.push({
@@ -78,6 +81,8 @@ export class TypeheadComponent implements OnInit {
 
   seleccionaValor(){    
     this.valorCorrecto = true;
+    console.log(this.arrayMostrado);
+    
     let item = this.itemMouseOver;
     this.parentForm.get(this.campoFormulario +'_descripcion').setValue(this.arrayMostrado[item].descripcion);
     this.parentForm.get(this.campoFormulario).setValue (this.arrayMostrado[item].codigo);    
@@ -88,6 +93,7 @@ export class TypeheadComponent implements OnInit {
     this.arrayMostrado = [];
 
     this.valorCorrecto = false;
+    console.log('falso');
   }
 
   keyUp(e:KeyboardEvent){

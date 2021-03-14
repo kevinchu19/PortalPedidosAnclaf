@@ -1,8 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, debounceTime } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { typeheadArray } from '../models/typeheadArray.model';
+
 
 const base_url = environment.base_url;
 

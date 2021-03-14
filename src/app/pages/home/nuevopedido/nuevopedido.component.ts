@@ -23,6 +23,7 @@ export class NuevopedidoComponent implements OnInit {
   
   @ViewChild ('provinciaEntrega') provinciaEntregaTypeheadComponent: TypeheadComponent
   @ViewChild ('provinciaFacturacion') provinciaFacturacionTypeheadComponent: TypeheadComponent
+  @ViewChild ('cliente') clienteTypeheadComponent: TypeheadComponent
 
   public currentStep:number = 1;
   public total:number = 0;
@@ -48,9 +49,10 @@ export class NuevopedidoComponent implements OnInit {
 
   public step2form = this.fb.group({ 
     fecha:[''],
-    numeroCliente: ['',Validators.required],
+    numeroCliente: ['', Validators.required],
     numeroCliente_descripcion:[''],
     numeroDocumento:[''],
+    vendedor:[localStorage.getItem('vendedor') || ""],
     listaPrecios: [''],
     direccionFacturacion:[''],
     paisFacturacion:[''],
@@ -75,6 +77,14 @@ export class NuevopedidoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
+    setTimeout(() => {
+      this.step2form.get('numeroCliente').setValue(localStorage.getItem('cliente') || ""); 
+    }, 2000); 
+
+    setTimeout(() => {
+      this.clienteTypeheadComponent.seleccionaValor();
+    }, 4000); 
   }
   
   siguientePaso(valor:number){

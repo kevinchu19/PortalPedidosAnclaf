@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
+import Swal from 'sweetalert2'
+import { RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -6,10 +10,48 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.css'  ]
 })
 export class LoginComponent implements OnInit {
-
-  constructor() { }
+  
+  public loginFormSubmitted:boolean = false;
+  public loginForm = this.fb.group({
+    id: ['C000017', Validators.required],
+    password: ['123', Validators.required]
+  });
+  
+  constructor(private fb:FormBuilder, 
+              private _authService: AuthService,
+              private router: Router) {  }
 
   ngOnInit(): void {
   }
 
+  inicioLogin(){
+    this.loginFormSubmitted = true;
+    if (this.loginForm.valid) {
+      this._authService.GetUsuario(this.loginForm.value).subscribe(
+        (resp) => {
+          this.router.navigateByUrl('/home');
+        },(err) =>{
+          localStorage.removeItem('vendedor');
+          localStorage.removeItem('cliente');
+          localStorage.removeItem('token');
+          Swal.fire({
+            title: err.error.mensaje,
+            text: 'Ingrese nuevas credenciales por favor',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          })
+        }
+      )
+    }
+    
+  }
+
+  campoNoValido(_formGroup:FormGroup,campo:string, submittedState:boolean){
+    if (_formGroup.get(campo).invalid && submittedState) {
+      return true;
+    }else
+    {
+      return false;
+    }
+  }
 }
