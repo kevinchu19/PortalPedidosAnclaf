@@ -3,7 +3,7 @@
 import { Component, OnInit, Output,EventEmitter, Input, OnDestroy } from '@angular/core';
 import { typeheadArray } from '../models/typeheadArray.model';
 import { TypeheadService } from '../service/typehead.service';
-import { FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup, Validators } from '@angular/forms';
 import { delay } from 'rxjs/operators';
 
 
@@ -32,18 +32,26 @@ export class TypeheadComponent implements OnInit {
 
   ngOnInit(): void {
     
+
+    let campoRequerido = this.hasRequiredField(this.parentForm.get(this.campoFormulario))
+    
     this.parentForm.get(this.campoFormulario).valueChanges.subscribe(selectedValue=>{
-            
-      this.terminoInput = this.parentForm.get(this.campoFormulario).value;
-      console.log(this.valorCorrecto);
-            
-      if (this.terminoInput != '' && !this.valorCorrecto) {
       
+      
+      let validators = [];
+
+      if (campoRequerido) {        
+        validators.push(Validators.required)
+      }      
+      this.terminoInput = this.parentForm.get(this.campoFormulario).value;
+            
+    
+      if (this.terminoInput != '' && this.terminoInput && !this.valorCorrecto) {
+      
+        
         this._typeheadService.GetValues(this.resource, this.terminoInput.toUpperCase(), this.keyParameterValue)
                       .subscribe((resp:any[]) => 
-                                  {                   
-                                    console.log(resp);
-                                                  
+                                  {                  
                                     this.arrayMostrado = [];
                                     resp.forEach(element => {
                                       this.arrayMostrado.push({
@@ -60,17 +68,22 @@ export class TypeheadComponent implements OnInit {
          
         this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> {
           if (this.valorCorrecto === false) {
-            return {valorInvalido:true}
-          }else{
-            return null
+            validators.push({valorInvalido:true})
           }
+          console.log(this.campoFormulario + ' ' + validators);
+          
+          return validators;  
         }]);  
       
-      }else {
-        this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> {return null}]);
+      }else{
+        if (this.terminoInput=='') {
+          this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> {
+            console.log(this.campoFormulario + ' ' + validators);
+            return validators;  
+          }]);  
+        }
       }
-      
-      
+    
       this.parentForm.get(this.campoFormulario).updateValueAndValidity({onlySelf:true, emitEvent:false});        
     
       
@@ -80,20 +93,21 @@ export class TypeheadComponent implements OnInit {
   
 
   seleccionaValor(){    
-    this.valorCorrecto = true;
-    console.log(this.arrayMostrado);
-    
-    let item = this.itemMouseOver;
-    this.parentForm.get(this.campoFormulario +'_descripcion').setValue(this.arrayMostrado[item].descripcion);
-    this.parentForm.get(this.campoFormulario).setValue (this.arrayMostrado[item].codigo);    
-    
-    this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> null]);
-    this.parentForm.get(this.campoFormulario).updateValueAndValidity({onlySelf:true});
-    this.valorSeleccionado.emit(this.arrayMostrado[item]);
-    this.arrayMostrado = [];
-
-    this.valorCorrecto = false;
-    console.log('falso');
+    if (this.arrayMostrado.length > 0) {
+      this.valorCorrecto = true;
+      
+      let item = this.itemMouseOver;
+  
+      this.parentForm.get(this.campoFormulario +'_descripcion').setValue(this.arrayMostrado[item].descripcion);
+      this.parentForm.get(this.campoFormulario).setValue (this.arrayMostrado[item].codigo);    
+      
+      this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> null]);
+      this.parentForm.get(this.campoFormulario).updateValueAndValidity({onlySelf:true});
+      this.valorSeleccionado.emit(this.arrayMostrado[item]);
+      this.arrayMostrado = [];
+  
+      this.valorCorrecto = false;
+    }
   }
 
   keyUp(e:KeyboardEvent){
@@ -140,5 +154,23 @@ export class TypeheadComponent implements OnInit {
     
   }
 
-  
+  private hasRequiredField(abstractControl: AbstractControl): boolean {
+    if (abstractControl.validator) {
+        const validator = abstractControl.validator({}as AbstractControl);
+        if (validator && validator.required) {
+            return true;
+        }
+    }
+    if (abstractControl['controls']) {
+        for (const controlName in abstractControl['controls']) {
+            if (abstractControl['controls'][controlName]) {
+                if (this.hasRequiredField(abstractControl['controls'][controlName])) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+};
+;
 }

@@ -355,7 +355,20 @@ File: css
     }
 }
 
+
+/******************* Personalizado******************/
+
 .table {
     table-layout: fixed;
     word-wrap: break-word;
+}
+
+.hidden {
+    display: none;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

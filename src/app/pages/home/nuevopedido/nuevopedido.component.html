@@ -3,8 +3,6 @@
     <div class="col-12">
         <div class="card wizard-content">
             <div class="card-body">
-                <h4 class="card-title">Step wizard with validation</h4>
-                <h6 class="card-subtitle">You can us the validation like what we did</h6>
                 <form class="validation-wizard wizard-circle wizard clearfix" role="application" id="steps-uid-2" novalidate="novalidate">
                     <div class="steps clearfix">
                         <ul role="tablist">
@@ -36,38 +34,73 @@
                         <!-- Step 1 -->
                         <h6 id="steps-uid-2-h-0" tabindex="-1" class="title current">Step 1</h6>
                         <form [formGroup]="step1form" [hidden]="currentStep!=1" id="steps-uid-2-p-0" role="tabpanel" aria-labelledby="steps-uid-2-h-0" class="body current">
+                            <div [ngClass]="{'row':true,'form-group':true, 
+                                            'error': campoNoValido(step1form,'numeroCliente', step1FormSubmitted),
+                                            'hidden': decodeTokenFromStorage().cliente != ''}">
+                                <div class="col-2"></div>
+                                <div class="col-8 mt-2 px-0">
+                                    <app-typehead #cliente (valorSeleccionado)="muestroDatosCliente($event)" [resource]='"cliente"' [parentForm]="step1form" campoFormulario='numeroCliente' [keyParameterValue]="step1form.get('vendedor').value" placeholder='Cliente'>
+                                    </app-typehead>
+                                    <div *ngIf="campoNoValido(step1form,'numeroCliente', step1FormSubmitted)" style="margin-left: 15px;" class="help-block">
+                                        <ul role="alert">
+                                            <li>El campo es obligatorio y debe tener un valor válido </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-2"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2"></div>
+                                <textarea formControlName="observacion" id="" cols="30" rows="5" placeholder="Observaciones del pedido" class="form-control col-8"></textarea>
+                                <div class="col-2"></div>
+                            </div>
                             <div class="row">
                                 <div class="table-responsive">
                                     <table id="demo-foo-addrow" class="table m-t-30 table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="w-50">Codigo de producto</th>
-                                                <th class="w-10">Cantidad</th>
-                                                <th class="w-10">Precio</th>
-                                                <th class="w-10">Total</th>
+                                                <th style="width: 40%;">Codigo de producto</th>
+                                                <th>Cantidad</th>
+                                                <th>Precio</th>
+                                                <th style="width: 15%;">Bonificacion</th>
+                                                <th>Total</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody formArrayName="items">
                                             <tr *ngFor="let item of getItems().controls; let itemActual=index" class="footable-even">
                                                 <ng-container [formGroupName]="itemActual">
-                                                    <td [ngClass]="{'w-50':true,'form-group':true, 'error': campoNoValido(item,'producto', step1FormSubmitted)}">
+                                                    <td [ngClass]="{'form-group':true, 'error': campoNoValido(item,'producto', step1FormSubmitted)}">
                                                         <app-typehead (valorSeleccionado)="muestroDatosProducto($event, itemActual)" placeholder='Producto' [resource]='"producto"' [parentForm]="item" campoFormulario='producto'></app-typehead>
                                                         <div *ngIf="campoNoValido(item,'producto', step1FormSubmitted)" style="margin-left: 15px;" class="help-block">
                                                             <ul role="alert">
-                                                                <li>El campo producto es obligatorio y debe tener un valor válido</li>
+                                                                <li>El campo es obligatorio y debe tener un valor válido</li>
                                                             </ul>
                                                         </div>
 
                                                     </td>
-                                                    <td [ngClass]="{'w-50':true,'form-group':true, 'error': campoNoValido(item,'cantidad', step1FormSubmitted)}">
+                                                    <td [ngClass]="{'form-group':true, 'error': campoNoValido(item,'cantidad', step1FormSubmitted)}">
                                                         <input type="number" class="form-control" placeholder="Cantidad" autocomplete="off" spellcheck="false" dir="auto" name="cantidad" formControlName="cantidad">
                                                         <div *ngIf="campoNoValido(item,'cantidad', step1FormSubmitted)" class="help-block">
                                                             <ul role="alert">
-                                                                <li>El campo cantidad es obligatorio </li>
+                                                                <li>El campo es obligatorio y debe ser mayor a cero </li>
                                                             </ul>
                                                         </div>
                                                     </td>
                                                     <td>${{item.get('precio').value | number:'1.2'}}</td>
+                                                    <td [ngClass]="{'error': campoNoValido(item,'bonificacion', step1FormSubmitted)}">
+                                                        <div class="form-group">
+                                                            <div class="form-inline">
+                                                                <input type="number" [attr.disabled]="decodeTokenFromStorage().vendedor != ''?null:true" class="form-control col-md-9" placeholder="Bonificacion(%)" autocomplete="off" spellcheck="false" dir="auto" name="bonificacion" formControlName="bonificacion">
+                                                                <label>%</label>
+                                                            </div>
+                                                            <div *ngIf="campoNoValido(item,'bonificacion', step1FormSubmitted)" class="help-block">
+                                                                <ul role="alert">
+                                                                    <li>Debe ingresar un numero positivo, menor a 100 </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </td>
                                                     <td>${{item.get('total').value | number:'1.2'}}</td>
 
                                                     <td>
@@ -97,32 +130,33 @@
                                     </div>
                                 </div>
                             </div>
+                            <input style="display: none;" type="text" campoFormulario='vendedor'>
                         </form>
                         <!-- Step 2 -->
                         <h6 id="steps-uid-2-h-1" tabindex="-1" class="title">Step 2</h6>
                         <form [hidden]="currentStep!=2" id="steps-uid-2-p-1" role="tabpanel" aria-labelledby="steps-uid-2-h-1" class="body" aria-hidden="true" [formGroup]="step2form">
-
-                            <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'numeroCliente', step2FormSubmitted)}">
-                                <label for="Cliente" class="col-2 col-form-label">Cliente</label>
-                                <div class="col-10">
-                                    <app-typehead #cliente (valorSeleccionado)="muestroDatosCliente($event)" [resource]='"cliente"' [parentForm]="step2form" campoFormulario='numeroCliente' placeholder='Cliente'>
-                                    </app-typehead>
-                                    <div *ngIf="campoNoValido(step2form,'numeroCliente', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
-                                        <ul role="alert">
-                                            <li>El campo cliente es obligatorio y debe tener un valor válido </li>
-                                        </ul>
-                                    </div>
+                            <div class="row">
+                                <div class="col-md-2 mb-2"></div>
+                                <div class="checkbox checkbox-primary col-md-4 p-t-0">
+                                    <input formControlName="retiraDeFabrica" id="retiraDeFabrica" type="checkbox" class="filled-in chk-col-light-blue">
+                                    <label for="retiraDeFabrica"> Retira de Fábrica? </label>
                                 </div>
-
+                                <div [ngClass]="{'hidden': step2form.get('codigoEntrega').value == '99' && step2form.get('codigoEntrega').valid ?false:true, 
+                                                 'checkbox':true, 'checkbox-primary':true, 'col-md-4':true, 'p-t-0':true}">
+                                    <input formControlName="esBarrioCerrado" id="esBarrioCerrado" type="checkbox" class="filled-in chk-col-light-blue">
+                                    <label for="esBarrioCerrado"> Es Barrio Cerrado? </label>
+                                </div>
                             </div>
+
+
                             <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'codigoEntrega', step2FormSubmitted)}">
-                                <label for="Cliente" class="col-2 col-form-label">Codigo de entrega</label>
+                                <label class="col-2 col-form-label">Codigo de entrega</label>
                                 <div class="col-10">
-                                    <app-typehead (valorSeleccionado)="muestroDatosEntrega($event)" [resource]='"clientedireccionesentrega"' [parentForm]="step2form" campoFormulario='codigoEntrega' [keyParameterValue]="step2form.get('numeroCliente').value" placeholder='Dirección de Entrega'>
+                                    <app-typehead (valorSeleccionado)="muestroDatosEntrega($event)" [resource]='"clientedireccionesentrega"' [parentForm]="step2form" campoFormulario='codigoEntrega' [keyParameterValue]="step1form.get('numeroCliente').value">
                                     </app-typehead>
                                     <div *ngIf="campoNoValido(step2form,'codigoEntrega', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
                                         <ul role="alert">
-                                            <li>El campo código de entrega debe tener un valor válido </li>
+                                            <li>El campo debe tener un valor válido </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -134,18 +168,7 @@
                                     <input class="form-control" type="text" name="DireccionEntrega" formControlName="direccionEntrega">
                                     <div *ngIf="campoNoValido(step2form,'direccionEntrega', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
                                         <ul role="alert">
-                                            <li>El campo dirección de entrega es obligatorio </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'codigoPostalEntrega', step2FormSubmitted)}">
-                                <label for="example-search-input" class="col-2 col-form-label">Codigo Postal Entrega</label>
-                                <div class="col-10">
-                                    <input class="form-control" type="text" name="codigoPostalEntrega" formControlName="codigoPostalEntrega">
-                                    <div *ngIf="campoNoValido(step2form,'codigoPostalEntrega', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
-                                        <ul role="alert">
-                                            <li>El campo código postal de entrega es obligatorio </li>
+                                            <li>El campo es obligatorio </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -157,13 +180,29 @@
                                     </app-typehead>
                                     <div *ngIf="campoNoValido(step2form,'provinciaEntrega', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
                                         <ul role="alert">
-                                            <li>El campo provincia de entrega es obligatorio y debe tener un valor válido </li>
+                                            <li>El campO es obligatorio y debe tener un valor válido </li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
-
-                            <app-typehead style="display: none;" #provinciaFacturacion [resource]='"provincia"' [parentForm]="step2form" campoFormulario='provinciaFacturacion' placeholder='Provincia de Facturacion'> </app-typehead>
+                            <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'transportistaRedespacho', step2FormSubmitted)}">
+                                <label for="example-search-input" class="col-2 col-form-label">Transportista</label>
+                                <div class="col-10">
+                                    <app-typehead #transportistaRedespacho [resource]='"transportistaredespacho"' [parentForm]="step2form" campoFormulario='transportistaRedespacho' placeholder='Transportista'>
+                                    </app-typehead>
+                                    <div *ngIf="campoNoValido(step2form,'transportistaRedespacho', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
+                                        <ul role="alert">
+                                            <li>El campo debe tener un valor válido </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2"></div>
+                                <textarea formControlName="observacionLogistica" id="" cols="30" rows="5" placeholder="Observaciones de la entrega" class="form-control col-8"></textarea>
+                                <div class="col-md-2"></div>
+                            </div>
+                            <app-typehead style="display: none;" #provinciaFacturacion [resource]='"provincia"' [parentForm]="step2form" campoFormulario='provinciaFacturacion'> </app-typehead>
 
                         </form>
                         <!-- Step 3 -->
@@ -177,7 +216,7 @@
                                     <div class="col-md-12">
                                         <div class="pull-left">
                                             <address>
-                                                <h3> &nbsp;<b class="text-danger">{{step2form.get('numeroCliente_descripcion').value}}</b></h3>
+                                                <h3> &nbsp;<b class="text-danger">{{step1form.get('numeroCliente_descripcion').value}}</b></h3>
                                                 <p class="text-muted m-l-5">CUIT: {{step2form.get('numeroDocumento').value}}
                                                     <br> {{step2form.get('direccionFacturacion').value}} - ({{step2form.get('codigoPostalFacturacion').value}}),
                                                     <br> {{step2form.get('provinciaFacturacion_descripcion').value}}
@@ -227,52 +266,6 @@
                                         </div>
                                         <div class="clearfix"></div>
                                         <hr>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                        <!-- Step 4 -->
-                        <h6 id="steps-uid-2-h-3" tabindex="-1" class="title">Step 4</h6>
-                        <section [hidden]="currentStep!=4" id="steps-uid-2-p-3" role="tabpanel" aria-labelledby="steps-uid-2-h-3" class="body" aria-hidden="true">
-                            <div class="sweet-alert showSweetAlert visible" data-custom-class="" data-has-cancel-button="false" data-has-confirm-button="true" data-allow-outside-click="false" data-has-done-function="false" data-animation="pop" data-timer="null" style="display: block; margin-top: -178px;">
-                                <div class="sa-icon sa-error" style="display: none;">
-                                    <span class="sa-x-mark">
-                                  <span class="sa-line sa-left"></span>
-                                    <span class="sa-line sa-right"></span>
-                                    </span>
-                                </div>
-                                <div class="sa-icon sa-warning" style="display: none;">
-                                    <span class="sa-body"></span>
-                                    <span class="sa-dot"></span>
-                                </div>
-                                <div class="sa-icon sa-info" style="display: none;"></div>
-                                <div class="sa-icon sa-success animate" style="display: block;">
-                                    <span class="sa-line sa-tip animateSuccessTip"></span>
-                                    <span class="sa-line sa-long animateSuccessLong"></span>
-
-                                    <div class="sa-placeholder"></div>
-                                    <div class="sa-fix"></div>
-                                </div>
-                                <div class="sa-icon sa-custom" style="display: none;"></div>
-                                <h2>Pedido creado</h2>
-                                <p style="display: block;">Pedido generado con éxito</p>
-                                <fieldset>
-                                    <input type="text" tabindex="3" placeholder="">
-                                    <div class="sa-input-error"></div>
-                                </fieldset>
-                                <div class="sa-error-container">
-                                    <div class="icon">!</div>
-                                    <p>Not valid!</p>
-                                </div>
-                                <div class="sa-button-container">
-                                    <button class="cancel" tabindex="2" style="display: none; box-shadow: none;">Cancel</button>
-                                    <div class="sa-confirm-button-container">
-                                        <button class="confirm" tabindex="1" style="display: inline-block; background-color: rgb(140, 212, 245); box-shadow: rgba(140, 212, 245, 0.8) 0px 0px 2px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px inset;">OK</button>
-                                        <div class="la-ball-fall">
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

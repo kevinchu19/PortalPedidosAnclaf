@@ -1,5 +1,5 @@
 <div id="scrollable-dropdown-menu" [formGroup]="parentForm">
-    <span class="twitter-typeahead col-md-5" style="position: relative; display: inline-block; padding-left: 0px;">
+    <span class="twitter-typeahead col-md-4" style="position: relative; display: inline-block; padding-left: 0px;">
         <input class="typeahead form-control tt-input" 
                [formControlName] = "campoFormulario"
                (keyup)=keyUp($event)
@@ -26,5 +26,5 @@
             </div>
         </div>
     </span>
-    <label class="col-md-7 mt-2"> {{parentForm.get(campoFormulario + '_descripcion').value}}</label>
+    <label class="col-md-8 m-t-3"> {{parentForm.get(campoFormulario + '_descripcion').value}}</label>
 </div>

@@ -13,4 +13,6 @@ export class cliente {
     codigoPostalEntrega:string;
     provinciaEntrega:string;
     listaPrecios:string;
+    grupoBonificacion:string;
+    transportistaRedespacho:string;
 }

@@ -5,4 +5,5 @@ export class clientedireccionentrega {
     paisEntrega:string;
     codigoPostalEntrega:string;
     provinciaEntrega:string;
+    transportistaRedespacho:string;
 }
