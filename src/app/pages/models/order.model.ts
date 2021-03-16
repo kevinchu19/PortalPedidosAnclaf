@@ -1,28 +1,29 @@
 export class order {
-    
-    IdCliente: string;
-    IdClienteEntrega: string;
-    IdEntrega: string;
-    DireccionEntrega: string;
-    PaisEntrega: string;
-    CodigoPostalEntrega: string;
-    ProvinciaEntrega: string;
-    ListaPrecios: string;
-    TransportistaRedespacho: string;
-    Observacion: string;
-    ObservacionLogistica: string;
-    Vendedor: string;
-    RetiradeFabrica: number;
-    EsBarrioCerrado: number;
-    Fecha:Date;
-    Items: [{    
-                Item: number;
-                IdProducto: string;
-                Cantidad: number;
-                Precio: number;
-                Bonificacion1: number;
-                Bonificacion2: number;
-                Bonificacion3: number;
+    id: string;
+    idCliente: string;
+    idClienteEntrega: string;
+    idEntrega: string;
+    direccionEntrega: string;
+    paisEntrega: string;
+    codigoPostalEntrega: string;
+    provinciaEntrega: string;
+    listaPrecios: string;
+    transportistaRedespacho: string;
+    observacion: string;
+    observacionLogistica: string;
+    vendedor: string;
+    retiradeFabrica: number;
+    esBarrioCerrado: number;
+    fecha:Date;
+    items: [{    
+                item: number;
+                idProducto: string;
+                cantidad: number;
+                precio: number;
+                bonificacion1: number;
+                bonificacion2: number;
+                bonificacion3: number;
+                bonificacion: number;
             }]
 
 }

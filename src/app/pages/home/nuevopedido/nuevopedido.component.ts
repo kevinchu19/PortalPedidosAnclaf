@@ -7,11 +7,11 @@ import { clientedireccionentrega } from '../../models/clientedireccionentrega.mo
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { TypeheadComponent } from '../../../components/typehead/typehead.component';
-import jwt_decode from 'jwt-decode';
 import { order } from '../../models/order.model';
 import Swal from 'sweetalert2'
-import { Route } from '@angular/compiler/src/core';
+
 import { Router } from '@angular/router';
+import { PagesService } from '../../services/pages.service';
 
 @Component({
   selector: 'app-nuevopedido',
@@ -87,6 +87,7 @@ export class NuevopedidoComponent implements OnInit {
    public myDate = new Date();
 
   constructor(private _nuevoPedidoService: NuevopedidoService, 
+              private _pagesService: PagesService, 
               private fb: FormBuilder, 
               private datePipe: DatePipe,
               private router: Router) {
@@ -94,8 +95,6 @@ export class NuevopedidoComponent implements OnInit {
     
     this.step2form.get('fecha').setValue(this.datePipe.transform(this.myDate), 'dd/MM/yyyy');
       
-    console.log(this.decodeTokenFromStorage().vendedor);
-    
     let tokenDecoded:any = this.decodeTokenFromStorage()
     let cliente = "";
     let vendedor = "";
@@ -128,7 +127,6 @@ export class NuevopedidoComponent implements OnInit {
   }
   
   siguientePaso(valor:number){
-    console.log(this.step2form);
     
     if (valor > 0) {
       switch (this.currentStep) {
@@ -328,47 +326,48 @@ export class NuevopedidoComponent implements OnInit {
   graboPedido(){
        
     this.order =  new order();
-    this.order.IdCliente = this.step1form.value.numeroCliente,
-    this.order.IdClienteEntrega = this.step2form.value.clienteDireccionEntrega!='' ? this.step1form.value.numeroCliente : '',
-    this.order.IdEntrega = this.step2form.value.clienteDireccionEntrega,
-    this.order.DireccionEntrega = this.step2form.value.direccionEntrega,
-    this.order.PaisEntrega = this.step2form.value.paisEntrega,
-    this.order.CodigoPostalEntrega = this.step2form.value.codigoPostalEntrega,
-    this.order.ProvinciaEntrega = this.step2form.value.provinciaEntrega,
-    this.order.ListaPrecios = this.listaPrecios,
-    this.order.TransportistaRedespacho = this.step2form.value.transportistaRedespacho,
-    this.order.Observacion = this.step1form.value.observacion,
-    this.order.ObservacionLogistica = this.step2form.value.observacionLogistica,
-    this.order.Vendedor = this.step1form.value.vendedor,
-    this.order.RetiradeFabrica = this.step1form.value.retiraDeFabrica==true?1:0,
-    this.order.EsBarrioCerrado = this.step1form.value.esBarrioCerrado==true?1:0,
-    this.order.Fecha = this.step2form.value.fecha;
-    this.order.Items = [{Item: 0,
-                        IdProducto: "",
-                        Cantidad: 0,
-                        Precio: 0,
-                        Bonificacion1: 0,
-                        Bonificacion2: 0,
-                        Bonificacion3: 0 }],
+    this.order.idCliente = this.step1form.value.numeroCliente,
+    this.order.idClienteEntrega = this.step2form.value.clienteDireccionEntrega!='' ? this.step1form.value.numeroCliente : '',
+    this.order.idEntrega = this.step2form.value.clienteDireccionEntrega,
+    this.order.direccionEntrega = this.step2form.value.direccionEntrega,
+    this.order.paisEntrega = this.step2form.value.paisEntrega,
+    this.order.codigoPostalEntrega = this.step2form.value.codigoPostalEntrega,
+    this.order.provinciaEntrega = this.step2form.value.provinciaEntrega,
+    this.order.listaPrecios = this.listaPrecios,
+    this.order.transportistaRedespacho = this.step2form.value.transportistaRedespacho,
+    this.order.observacion = this.step1form.value.observacion,
+    this.order.observacionLogistica = this.step2form.value.observacionLogistica,
+    this.order.vendedor = this.step1form.value.vendedor,
+    this.order.retiradeFabrica = this.step1form.value.retiraDeFabrica==true?1:0,
+    this.order.esBarrioCerrado = this.step1form.value.esBarrioCerrado==true?1:0,
+    this.order.fecha = this.step2form.value.fecha;
+    this.order.items = [{item: 0,
+                        idProducto: "",
+                        cantidad: 0,
+                        precio: 0,
+                        bonificacion1: 0,
+                        bonificacion2: 0,
+                        bonificacion3: 0,
+                        bonificacion: 0 }],
     
-    this.order.Items.splice(0,1);
-    console.log(this.items.value);
+    this.order.items.splice(0,1);
     
     this.items.value.forEach((item,index) => {
       let itemForm = {
-        Item: index+1,
-        IdProducto: item.producto,
-        Cantidad: item.cantidad,
-        Precio: item.precio,
-        Bonificacion1: item.bonificacion1,
-        Bonificacion2: item.bonificacion2,
-        Bonificacion3: item.bonificacion3 
+        item: index+1,
+        idProducto: item.producto,
+        cantidad: item.cantidad,
+        precio: item.precio,
+        bonificacion1: item.bonificacion1,
+        bonificacion2: item.bonificacion2,
+        bonificacion3: item.bonificacion3,
+        bonificacion: item.bonificacion 
       }
-      this.order.Items.push(itemForm);
+      this.order.items.push(itemForm);
+    
       
     })
-    console.log(this.step2form.value);
-    console.log(this.order);
+
     
     this._nuevoPedidoService.GraboPedido(this.order).subscribe(
       (resp:any) =>{
@@ -398,14 +397,10 @@ export class NuevopedidoComponent implements OnInit {
     
   };        
   
-  decodeTokenFromStorage():any{
-    let token = localStorage.getItem('token')
-    if (token && token != "" ) {
-      return jwt_decode(token)  
-    }
-    
+  decodeTokenFromStorage():any {
+   return this._pagesService.decodeTokenFromStorage();
   }  
-
+  
   recargoNuevoPedido() {
 
     // save current route first
