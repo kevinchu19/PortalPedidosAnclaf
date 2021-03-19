@@ -70,8 +70,6 @@ export class TypeheadComponent implements OnInit {
           if (this.valorCorrecto === false) {
             validators.push({valorInvalido:true})
           }
-          console.log(this.campoFormulario + ' ' + validators);
-          
           return validators;  
         }]);  
       
@@ -102,7 +100,7 @@ export class TypeheadComponent implements OnInit {
       this.parentForm.get(this.campoFormulario).setValue (this.arrayMostrado[item].codigo);    
       
       this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> null]);
-      this.parentForm.get(this.campoFormulario).updateValueAndValidity({onlySelf:true});
+      this.parentForm.get(this.campoFormulario).updateValueAndValidity();
       this.valorSeleccionado.emit(this.arrayMostrado[item]);
       this.arrayMostrado = [];
   

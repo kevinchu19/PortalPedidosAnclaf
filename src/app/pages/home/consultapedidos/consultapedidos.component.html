@@ -13,7 +13,7 @@
             <tr *ngFor="let pedido of pedidos" class="footable-even" style="">
                 <td><span class="footable-toggle"></span>{{pedido.id}}</td>
                 <td>
-                    <a href="javascript:void(0)"><img src="../assets/images/users/1.jpg" alt="user" class="img-circle"> {{pedido.fecha}}</a>
+                    <a href="javascript:void(0)"><img src="../assets/images/users/1.jpg" alt="user" class="img-circle"> {{pedido.fecha | date:'dd/MM/yyyy'}}</a>
                 </td>
                 <td>{{pedido.direccionEntrega}}</td>
                 <td><span class="label label-warning">$ {{calculoTotalPedido(pedido)}}</span> </td>

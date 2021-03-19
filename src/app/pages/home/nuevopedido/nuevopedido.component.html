@@ -51,7 +51,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-2"></div>
-                                <textarea formControlName="observacion" id="" cols="30" rows="5" placeholder="Observaciones del pedido" class="form-control col-8"></textarea>
+                                <textarea formControlName="observacion" id="" cols="30" rows="2" placeholder="Observaciones del pedido" class="form-control col-8"></textarea>
                                 <div class="col-2"></div>
                             </div>
                             <div class="row">
@@ -135,6 +135,7 @@
                         <!-- Step 2 -->
                         <h6 id="steps-uid-2-h-1" tabindex="-1" class="title">Step 2</h6>
                         <form [hidden]="currentStep!=2" id="steps-uid-2-p-1" role="tabpanel" aria-labelledby="steps-uid-2-h-1" class="body" aria-hidden="true" [formGroup]="step2form">
+                            <!--
                             <div class="row">
                                 <div class="col-md-2 mb-2"></div>
                                 <div class="checkbox checkbox-primary col-md-4 p-t-0">
@@ -147,6 +148,7 @@
                                     <label for="esBarrioCerrado"> Es Barrio Cerrado? </label>
                                 </div>
                             </div>
+                            -->
 
 
                             <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'codigoEntrega', step2FormSubmitted)}">
@@ -199,8 +201,10 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-2"></div>
-                                <textarea formControlName="observacionLogistica" id="" cols="30" rows="5" placeholder="Observaciones de la entrega" class="form-control col-8"></textarea>
-                                <div class="col-md-2"></div>
+                                <div class="col-10">
+                                    <textarea formControlName="observacionLogistica" id="" cols="30" rows="5" placeholder="Observaciones de la entrega" class="form-control"></textarea>
+                                </div>
+
                             </div>
                             <app-typehead style="display: none;" #provinciaFacturacion [resource]='"provincia"' [parentForm]="step2form" campoFormulario='provinciaFacturacion'> </app-typehead>
 

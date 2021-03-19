@@ -71,15 +71,17 @@ export class NuevopedidoComponent implements OnInit {
     codigoEntrega:[''],
     codigoEntrega_descripcion:[''],
     paisEntrega: [''],
-    direccionEntrega:['', Validators.required],
+    direccionEntrega:['',Validators.required],
     codigoPostalEntrega:[''],
-    provinciaEntrega: ['', Validators.required],
+    provinciaEntrega: ['',Validators.required],
     provinciaEntrega_descripcion: [''],
     observacionLogistica: [''],
     transportistaRedespacho: [''],
     transportistaRedespacho_descripcion: [''],
+    /***
     retiraDeFabrica:[false],
     esBarrioCerrado: [false]
+     */
    });
    public step1FormSubmitted:boolean = false;
    public step2FormSubmitted:boolean = false;
@@ -185,13 +187,17 @@ export class NuevopedidoComponent implements OnInit {
                         this.step2form.get('direccionFacturacion').setValue(resp.direccionFacturacion); 
                         this.step2form.get('paisFacturacion').setValue(resp.paisFacturacion); 
                         this.step2form.get('codigoPostalFacturacion').setValue(resp.codigoPostalFacturacion);
+                        
+
                         this.step2form.get('provinciaFacturacion').setValue(resp.provinciaFacturacion); 
                         setTimeout(() => {
                           this.provinciaFacturacionTypeheadComponent.seleccionaValor();
                         }, 200);
+                        
                         this.step2form.get('paisEntrega').setValue(resp.paisEntrega); 
                         this.step2form.get('direccionEntrega').setValue(resp.direccionEntrega); 
                         this.step2form.get('codigoPostalEntrega').setValue(resp.codigoPostalEntrega);
+                        
                         this.step2form.get('provinciaEntrega').setValue(resp.provinciaEntrega);    
                         setTimeout(() => {
                           this.provinciaEntregaTypeheadComponent.seleccionaValor();
@@ -200,6 +206,7 @@ export class NuevopedidoComponent implements OnInit {
                         setTimeout(() => {
                           this.transportistaRedespachoTypeheadComponent.seleccionaValor();
                         }, 200);
+                         
                       });
     
   }
