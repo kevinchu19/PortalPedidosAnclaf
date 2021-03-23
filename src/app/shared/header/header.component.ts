@@ -20,4 +20,8 @@ export class HeaderComponent implements OnInit {
     this.router.navigateByUrl('/login');
   }
 
+  decodeTokenFromStorage():any {
+    return this._authService.decodeTokenFromStorage();
+   }  
+
 }

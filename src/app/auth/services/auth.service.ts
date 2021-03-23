@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { LoginForm } from '../models/loginform.model';
+import jwt_decode from 'jwt-decode';
 
 const base_url = environment.base_url;
 
@@ -27,4 +28,11 @@ export class AuthService {
         })
       )
   }
+  decodeTokenFromStorage():any{
+    let token = localStorage.getItem('token')
+    if (token && token != "" ) {
+      return jwt_decode(token)  
+    }
+    
+  }  
 }

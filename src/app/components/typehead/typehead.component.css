@@ -354,3 +354,7 @@ File: css
         float: none;
     }
 }
+
+.typehead {
+    font-size: 0.1rem !important;
+}

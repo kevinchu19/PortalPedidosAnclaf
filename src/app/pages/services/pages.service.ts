@@ -8,12 +8,4 @@ export class PagesService {
 
   constructor() { }
 
-  decodeTokenFromStorage():any{
-    let token = localStorage.getItem('token')
-    if (token && token != "" ) {
-      return jwt_decode(token)  
-    }
-    
-  }  
-
 }

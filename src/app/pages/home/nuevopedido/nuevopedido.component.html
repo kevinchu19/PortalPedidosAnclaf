@@ -59,12 +59,12 @@
                                     <table id="demo-foo-addrow" class="table m-t-30 table-hover">
                                         <thead>
                                             <tr>
-                                                <th style="width: 60%;">Codigo de producto</th>
-                                                <th style="width: 10%;">Cantidad</th>
+                                                <th style="width: 45%;">Codigo de producto</th>
+                                                <th style="width: 9%;">Cantidad</th>
                                                 <th>Precio</th>
-                                                <th style="width: 10%;">Bonificacion</th>
+                                                <th style="width: 12%;">Bonificacion</th>
                                                 <th>Total</th>
-                                                <th></th>
+                                                <th style="width: 5%;"></th>
                                             </tr>
                                         </thead>
                                         <tbody formArrayName="items">
@@ -182,7 +182,7 @@
                                     </app-typehead>
                                     <div *ngIf="campoNoValido(step2form,'provinciaEntrega', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
                                         <ul role="alert">
-                                            <li>El campO es obligatorio y debe tener un valor válido </li>
+                                            <li>El campo es obligatorio y debe tener un valor válido </li>
                                         </ul>
                                     </div>
                                 </div>

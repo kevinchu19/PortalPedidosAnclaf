@@ -11,7 +11,7 @@ import { order } from '../../models/order.model';
 import Swal from 'sweetalert2'
 
 import { Router } from '@angular/router';
-import { PagesService } from '../../services/pages.service';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-nuevopedido',
@@ -89,7 +89,7 @@ export class NuevopedidoComponent implements OnInit {
    public myDate = new Date();
 
   constructor(private _nuevoPedidoService: NuevopedidoService, 
-              private _pagesService: PagesService, 
+              private _authService: AuthService, 
               private fb: FormBuilder, 
               private datePipe: DatePipe,
               private router: Router) {
@@ -405,7 +405,7 @@ export class NuevopedidoComponent implements OnInit {
   };        
   
   decodeTokenFromStorage():any {
-   return this._pagesService.decodeTokenFromStorage();
+   return this._authService.decodeTokenFromStorage();
   }  
   
   recargoNuevoPedido() {

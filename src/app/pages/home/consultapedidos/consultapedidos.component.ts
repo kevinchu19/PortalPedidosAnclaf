@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ConsultapedidosService } from '../../services/consultapedidos.service';
-import { PagesService } from '../../services/pages.service';
+
 import { cliente } from '../../models/cliente.model';
 import { order } from '../../models/order.model';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-consultapedidos',
@@ -15,7 +16,7 @@ export class ConsultapedidosComponent implements OnInit {
   pedidos: order[];
 
   constructor(private _consultaPedidoService: ConsultapedidosService,
-              private _pagesService: PagesService) { }
+              private _authService: AuthService) { }
 
   ngOnInit(): void {
     this._consultaPedidoService.GetPedidos(this.decodeTokenFromStorage().cliente).subscribe(
@@ -26,7 +27,7 @@ export class ConsultapedidosComponent implements OnInit {
   }
   
   decodeTokenFromStorage():any {
-    return this._pagesService.decodeTokenFromStorage();
+    return this._authService.decodeTokenFromStorage();
    }
 
   calculoTotalPedido(pedido:order){
