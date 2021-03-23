@@ -2,5 +2,5 @@
 
 export const environment = {
   production: true,
-  base_url: 'https://localhost:44322/api/'
+  base_url: 'http://134.122.1.160:80/api/'
 };
