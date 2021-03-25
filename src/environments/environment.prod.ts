@@ -1,4 +1,3 @@
-//TODO: Actualizar ruta en produccion
 
 export const environment = {
   production: true,

@@ -8,23 +8,22 @@
                         <ul role="tablist">
                             <!--<li role="tab" class="done" aria-disabled="false" aria-selected="true">-->
                             <li role="tab" [ngClass]="{'first':true, 'current':currentStep == 1,'done': currentStep > 1, 'disabled': currentStep < 1}" aria-disabled="false" aria-selected="true">
-                                <a id="steps-uid-2-t-0" href="#steps-uid-2-h-0" aria-controls="steps-uid-2-p-0">
-                                    <span class="current-info audible">current step: </span>
-                                    <span class="step">1</span> Productos
+                                <a role="button" id="steps-uid-2-t-0" (click)="currentStep>1?currentStep=1:null" href="javascript: void(0)" aria-controls="steps-uid-2-p-0">
+                                    <span class="step">1</span> Selección de Productos
                                 </a>
                             </li>
                             <li role="tab" [ngClass]="{'current':currentStep == 2,'done': currentStep > 2, 'disabled': currentStep < 2}" aria-disabled="false" aria-selected="false">
-                                <a id="steps-uid-2-t-1" href="#steps-uid-2-h-1" aria-controls="steps-uid-2-p-1">
+                                <a id="steps-uid-2-t-1" (click)="currentStep>2?currentStep=2:null" href="javascript: void(0)" aria-controls="steps-uid-2-p-1">
                                     <span class="step">2</span> Datos de entrega
                                 </a>
                             </li>
                             <li role="tab" [ngClass]="{'current':currentStep == 3,'done': currentStep > 3, 'disabled': currentStep < 3}" aria-disabled=" true ">
-                                <a id="steps-uid-2-t-2 " href="#steps-uid-2-h-2 " aria-controls="steps-uid-2-p-2 ">
-                                    <span class="step ">3</span> Datos de facturación
+                                <a id="steps-uid-2-t-2" (click)="currentStep>3?currentStep=3:null" href="javascript: void(0)" aria-controls="steps-uid-2-p-2 ">
+                                    <span class="step">3</span> Datos de facturación
                                 </a>
                             </li>
                             <li role="tab " [ngClass]="{ 'last':true, 'current':currentStep==4 , 'done': currentStep> 4, 'disabled': currentStep < 4}" aria-disabled="true">
-                                <a id="steps-uid-2-t-3" href="#steps-uid-2-h-3" aria-controls="steps-uid-2-p-3">
+                                <a id="steps-uid-2-t-3" href="javascript: void(0)" aria-controls="steps-uid-2-p-3">
                                     <span class="step">4</span> Pedido confirmado
                                 </a>
                             </li>
@@ -50,9 +49,9 @@
                                 <div class="col-2"></div>
                             </div>
                             <div class="row">
-                                <div class="col-2"></div>
-                                <textarea formControlName="observacion" id="" cols="30" rows="2" placeholder="Observaciones del pedido" class="form-control col-8"></textarea>
-                                <div class="col-2"></div>
+                                <div class="col-1"></div>
+                                <textarea formControlName="observacion" id="" cols="30" rows="2" placeholder="Observaciones del pedido" class="form-control col-10"></textarea>
+                                <div class="col-1"></div>
                             </div>
                             <div class="row">
                                 <div class="table-responsive">
@@ -60,9 +59,9 @@
                                         <thead>
                                             <tr>
                                                 <th style="width: 45%;">Codigo de producto</th>
-                                                <th style="width: 9%;">Cantidad</th>
+                                                <th style="width: 10%;">Cantidad</th>
                                                 <th>Precio</th>
-                                                <th style="width: 12%;">Bonificacion</th>
+                                                <th style="width: 10%;">Bonificacion</th>
                                                 <th>Total</th>
                                                 <th style="width: 5%;"></th>
                                             </tr>
@@ -135,7 +134,7 @@
                         <!-- Step 2 -->
                         <h6 id="steps-uid-2-h-1" tabindex="-1" class="title">Step 2</h6>
                         <form [hidden]="currentStep!=2" id="steps-uid-2-p-1" role="tabpanel" aria-labelledby="steps-uid-2-h-1" class="body" aria-hidden="true" [formGroup]="step2form">
-                            <!--
+
                             <div class="row">
                                 <div class="col-md-2 mb-2"></div>
                                 <div class="checkbox checkbox-primary col-md-4 p-t-0">
@@ -148,11 +147,9 @@
                                     <label for="esBarrioCerrado"> Es Barrio Cerrado? </label>
                                 </div>
                             </div>
-                            -->
-
 
                             <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'codigoEntrega', step2FormSubmitted)}">
-                                <label class="col-2 col-form-label">Codigo de entrega</label>
+                                <label class="col-md-2 col-form-label">Codigo de entrega</label>
                                 <div class="col-10">
                                     <app-typehead (valorSeleccionado)="muestroDatosEntrega($event)" [resource]='"clientedireccionesentrega"' [parentForm]="step2form" campoFormulario='codigoEntrega' [keyParameterValue]="step1form.get('numeroCliente').value">
                                     </app-typehead>
@@ -165,7 +162,7 @@
                             </div>
 
                             <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'direccionEntrega', step2FormSubmitted)}">
-                                <label for="example-search-input" class="col-2 col-form-label">Direccion Entrega</label>
+                                <label for="example-search-input" class="col-md-2 col-form-label">Direccion Entrega</label>
                                 <div class="col-10">
                                     <input class="form-control" type="text" name="DireccionEntrega" formControlName="direccionEntrega">
                                     <div *ngIf="campoNoValido(step2form,'direccionEntrega', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
@@ -176,7 +173,7 @@
                                 </div>
                             </div>
                             <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'provinciaEntrega', step2FormSubmitted)}">
-                                <label for="example-search-input" class="col-2 col-form-label">Provincia Entrega</label>
+                                <label for="example-search-input" class="col-md-2 col-form-label">Provincia Entrega</label>
                                 <div class="col-10">
                                     <app-typehead #provinciaEntrega [resource]='"provincia"' [parentForm]="step2form" campoFormulario='provinciaEntrega' placeholder='Provincia de Entrega'>
                                     </app-typehead>
@@ -188,7 +185,7 @@
                                 </div>
                             </div>
                             <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'transportistaRedespacho', step2FormSubmitted)}">
-                                <label for="example-search-input" class="col-2 col-form-label">Transportista</label>
+                                <label for="example-search-input" class="col-md-2 col-form-label">Transportista</label>
                                 <div class="col-10">
                                     <app-typehead #transportistaRedespacho [resource]='"transportistaredespacho"' [parentForm]="step2form" campoFormulario='transportistaRedespacho' placeholder='Transportista'>
                                     </app-typehead>
@@ -213,66 +210,66 @@
                         <h6 id="steps-uid-2-h-2" tabindex="-1" class="title">Step 3</h6>
                         <section [hidden]="currentStep!=3" id="steps-uid-2-p-2" role="tabpanel" aria-labelledby="steps-uid-2-h-2" class="body" aria-hidden="true">
                             <br>
-                            <div class="card card-body printableArea">
-                                <h3><b>PEDIDO</b> <span class="pull-right">Número a confirmar</span></h3>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="pull-left">
-                                            <address>
+
+                            <h3><b>PEDIDO</b> <span class="pull-right">Número a confirmar</span></h3>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="pull-left">
+                                        <address>
                                                 <h3> &nbsp;<b class="text-danger">{{step1form.get('numeroCliente_descripcion').value}}</b></h3>
                                                 <p class="text-muted m-l-5">CUIT: {{step2form.get('numeroDocumento').value}}
                                                     <br> {{step2form.get('direccionFacturacion').value}} - ({{step2form.get('codigoPostalFacturacion').value}}),
                                                     <br> {{step2form.get('provinciaFacturacion_descripcion').value}}
                                                 </p>
                                             </address>
-                                        </div>
-                                        <div class="pull-right text-right">
-                                            <address>
+                                    </div>
+                                    <div class="pull-right text-right">
+                                        <address>
                                                 <h3>Dirección de entrega: </h3>
                                                 <h4 class="font-bold">{{step2form.get('codigoEntrega_descripcion').value}}</h4>
                                                 <p class="text-muted m-l-30"> {{step2form.get('direccionEntrega').value}} - ({{step2form.get('codigoPostalEntrega').value}}),
                                                     <br> {{step2form.get('provinciaEntrega_descripcion').value}}
                                                 <p class="m-t-30"><b>Fecha del pedido:</b> <i class="fa fa-calendar"></i> {{step2form.get('fecha').value}}</p>
                                             </address>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="table-responsive m-t-40" style="clear: both;">
-                                            <table class="table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center">#</th>
-                                                        <th>Producto</th>
-                                                        <th class="text-right">Cantidad</th>
-                                                        <th class="text-right">Precio</th>
-                                                        <th class="text-right">Bonif.</th>
-                                                        <th class="text-right">Total</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr *ngFor="let itemPedido of getItems().controls; let id=index">
-                                                        <td class="text-center">{{id+1}}</td>
-                                                        <td>{{itemPedido.get('descripcion').value}}</td>
-                                                        <td class="text-right">{{itemPedido.get('cantidad').value}} </td>
-                                                        <td class="text-right"> ${{itemPedido.get('precio').value | number:'1.2'}} </td>
-                                                        <td class="text-right"> {{itemPedido.get('bonificacion').value | number:'1.2'}}% </td>
-                                                        <td class="text-right"> ${{itemPedido.get('total').value | number:'1.2'}} </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="pull-right m-t-30 text-right">
-                                            <hr>
-                                            <h3><b>Total sin impuestos :</b> ${{total | number:'1.2'}}</h3>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <hr>
                                     </div>
                                 </div>
+                                <div class="col-md-12">
+                                    <div class="table-responsive m-t-40" style="clear: both;">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">#</th>
+                                                    <th>Producto</th>
+                                                    <th class="text-right">Cantidad</th>
+                                                    <th class="text-right">Precio</th>
+                                                    <th class="text-right">Bonif.</th>
+                                                    <th class="text-right">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let itemPedido of getItems().controls; let id=index">
+                                                    <td class="text-center">{{id+1}}</td>
+                                                    <td>{{itemPedido.get('descripcion').value}}</td>
+                                                    <td class="text-right">{{itemPedido.get('cantidad').value}} </td>
+                                                    <td class="text-right"> ${{itemPedido.get('precio').value | number:'1.2'}} </td>
+                                                    <td class="text-right"> {{itemPedido.get('bonificacion').value | number:'1.2'}}% </td>
+                                                    <td class="text-right"> ${{itemPedido.get('total').value | number:'1.2'}} </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="pull-right m-t-30 text-right">
+                                        <hr>
+                                        <h3><b>Total sin impuestos :</b> ${{total | number:'1.2'}}</h3>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <hr>
+                                </div>
                             </div>
+
                         </section>
                     </div>
                     <div class="actions clearfix mt-3">

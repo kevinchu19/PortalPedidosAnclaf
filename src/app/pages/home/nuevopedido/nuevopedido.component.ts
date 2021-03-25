@@ -5,7 +5,7 @@ import { typeheadArray } from '../../../components/models/typeheadArray.model';
 import { cliente } from '../../models/cliente.model';
 import { clientedireccionentrega } from '../../models/clientedireccionentrega.model';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { TypeheadComponent } from '../../../components/typehead/typehead.component';
 import { order } from '../../models/order.model';
 import Swal from 'sweetalert2'
@@ -92,7 +92,8 @@ export class NuevopedidoComponent implements OnInit {
               private _authService: AuthService, 
               private fb: FormBuilder, 
               private datePipe: DatePipe,
-              private router: Router) {
+              private router: Router,
+              private _decimalPipe: DecimalPipe) {
      
     
     this.step2form.get('fecha').setValue(this.datePipe.transform(this.myDate), 'dd/MM/yyyy');
@@ -166,9 +167,9 @@ export class NuevopedidoComponent implements OnInit {
                       {                                 
                         this.items.controls[itemactual].get('descripcion').setValue(resp.descripcion);            
                         this.items.controls[itemactual].get('precio').setValue(resp.precio || 0);
-                        this.items.controls[itemactual].get('bonificacion1').setValue(resp.bonificacion1 || 0);
-                        this.items.controls[itemactual].get('bonificacion2').setValue(resp.bonificacion2 || 0);
-                        this.items.controls[itemactual].get('bonificacion3').setValue(resp.bonificacion3 || 0);
+                        this.items.controls[itemactual].get('bonificacion1').setValue(this._decimalPipe.transform(resp.bonificacion1 || 0,'1.2'));
+                        this.items.controls[itemactual].get('bonificacion2').setValue(this._decimalPipe.transform(resp.bonificacion2 || 0,'1.2'));
+                        this.items.controls[itemactual].get('bonificacion3').setValue(this._decimalPipe.transform(resp.bonificacion3 || 0,'1.2'));
                       });    
     
   }
@@ -268,7 +269,7 @@ export class NuevopedidoComponent implements OnInit {
     if (precio != 0) {
       let bonificaciones = [itemControl.get('bonificacion1').value || 0, itemControl.get('bonificacion2').value || 0, itemControl.get('bonificacion3').value || 0]
       let precioBonificado = bonificaciones.reduce((sum, current) => precio-(sum - sum*Math.abs(current)/100), precio)    
-      this.items.controls[numeroItem].get('bonificacion').setValue(100-(precio-precioBonificado)/precio*100)
+      this.items.controls[numeroItem].get('bonificacion').setValue(this._decimalPipe.transform(100-(precio-precioBonificado)/precio*100,'1.2'))
     }
     
   }

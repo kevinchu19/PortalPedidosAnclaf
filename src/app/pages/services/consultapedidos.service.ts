@@ -11,12 +11,12 @@ export class ConsultapedidosService {
 
   constructor(private http:HttpClient) { }
 
-  GetPedidos(idCliente:string){
+  GetPedidos(idCliente:string, skip:string, take:string){
     
     let params = new HttpParams()
     params = params.append('idcliente', idCliente);
-    params = params.append('skip', '0');
-    params = params.append('take', '10');
+    params = params.append('skip', skip);
+    params = params.append('take', take);
     
     
     return this.http.get( `${base_url}pedido` ,{params: params})

@@ -1,6 +1,6 @@
 //Modulos angular
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from "@angular/common/http";
 
@@ -26,6 +26,10 @@ import { ConsultapedidosComponent } from './home/consultapedidos/consultapedidos
   exports: [
     PagesComponent 
   ],
+  providers:[
+    DecimalPipe
+  ]
+  ,
   imports: [
     CommonModule,
     SharedModule,

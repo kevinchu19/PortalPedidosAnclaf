@@ -14,18 +14,37 @@ import { AuthService } from '../../../auth/services/auth.service';
 export class ConsultapedidosComponent implements OnInit {
 
   pedidos: order[];
+  currentPage:number;
+  pageCount:number;
+  skip:number = 0;
+  take:number = 10;
 
   constructor(private _consultaPedidoService: ConsultapedidosService,
               private _authService: AuthService) { }
 
   ngOnInit(): void {
-    this._consultaPedidoService.GetPedidos(this.decodeTokenFromStorage().cliente).subscribe(
+    this.getPedidos();
+  }
+  
+
+  getPedidos(){
+    this._consultaPedidoService.GetPedidos(this.decodeTokenFromStorage().cliente, this.skip.toString() ,this.take.toString()).subscribe(
       (resp:order[]) => {
         this.pedidos = resp;
       }
     )
+    this.pageCount = Math.floor(this.pedidos.length/this.take)+1;
   }
   
+  siguientePaso(i:number){
+    this.currentPage = this.currentPage+i;
+    this.recalculaPagina();
+  }
+
+  recalculaPagina(){
+    this.skip = (this.currentPage-1) * this.take;
+  }
+
   decodeTokenFromStorage():any {
     return this._authService.decodeTokenFromStorage();
    }
