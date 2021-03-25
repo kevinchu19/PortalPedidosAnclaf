@@ -193,7 +193,7 @@ export class NuevopedidoComponent implements OnInit {
                         this.step2form.get('provinciaFacturacion').setValue(resp.provinciaFacturacion); 
                         setTimeout(() => {
                           this.provinciaFacturacionTypeheadComponent.seleccionaValor();
-                        }, 200);
+                        }, 1500);
                         
                         this.step2form.get('paisEntrega').setValue(resp.paisEntrega); 
                         this.step2form.get('direccionEntrega').setValue(resp.direccionEntrega); 
@@ -202,11 +202,11 @@ export class NuevopedidoComponent implements OnInit {
                         this.step2form.get('provinciaEntrega').setValue(resp.provinciaEntrega);    
                         setTimeout(() => {
                           this.provinciaEntregaTypeheadComponent.seleccionaValor();
-                        }, 200);
+                        }, 1500);
                         this.step2form.get('transportistaRedespacho').setValue(resp.transportistaRedespacho); 
                         setTimeout(() => {
                           this.transportistaRedespachoTypeheadComponent.seleccionaValor();
-                        }, 200);
+                        }, 1500);
                          
                       });
     
