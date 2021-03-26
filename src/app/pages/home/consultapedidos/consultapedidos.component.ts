@@ -4,12 +4,12 @@ import { ConsultapedidosService } from '../../services/consultapedidos.service';
 import { cliente } from '../../models/cliente.model';
 import { order } from '../../models/order.model';
 import { AuthService } from '../../../auth/services/auth.service';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-consultapedidos',
   templateUrl: './consultapedidos.component.html',
-  styles: [
-  ]
+  styleUrls: ['./consultapedidos.component.css']
 })
 export class ConsultapedidosComponent implements OnInit {
 
@@ -19,10 +19,19 @@ export class ConsultapedidosComponent implements OnInit {
   skip:number = 0;
   take:number = 10;
 
+  public parametrosForm = this.fb.group({
+    fechaDesde: [''],
+    fechaHasta:[''],
+    numeroCliente: [''],
+    numeroCliente_descripcion: ['']
+  });
+
   constructor(private _consultaPedidoService: ConsultapedidosService,
-              private _authService: AuthService) { }
+              private _authService: AuthService,
+              private fb: FormBuilder, ) { }
 
   ngOnInit(): void {
+    console.log(this.decodeTokenFromStorage().vendedor=="");
     this.getPedidos();
   }
   
@@ -31,9 +40,10 @@ export class ConsultapedidosComponent implements OnInit {
     this._consultaPedidoService.GetPedidos(this.decodeTokenFromStorage().cliente, this.skip.toString() ,this.take.toString()).subscribe(
       (resp:order[]) => {
         this.pedidos = resp;
+        this.pageCount = Math.floor(this.pedidos.length/this.take)+1;
       }
     )
-    this.pageCount = Math.floor(this.pedidos.length/this.take)+1;
+    
   }
   
   siguientePaso(i:number){
@@ -46,6 +56,7 @@ export class ConsultapedidosComponent implements OnInit {
   }
 
   decodeTokenFromStorage():any {
+   
     return this._authService.decodeTokenFromStorage();
    }
 

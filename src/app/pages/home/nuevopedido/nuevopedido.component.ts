@@ -78,10 +78,8 @@ export class NuevopedidoComponent implements OnInit {
     observacionLogistica: [''],
     transportistaRedespacho: [''],
     transportistaRedespacho_descripcion: [''],
-    /***
     retiraDeFabrica:[false],
     esBarrioCerrado: [false]
-     */
    });
    public step1FormSubmitted:boolean = false;
    public step2FormSubmitted:boolean = false;
@@ -225,11 +223,11 @@ export class NuevopedidoComponent implements OnInit {
                         this.step2form.get('provinciaEntrega').setValue(resp.provinciaEntrega);    
                         setTimeout(() => {
                           this.provinciaEntregaTypeheadComponent.seleccionaValor();
-                        }, 50);
+                        }, 750);
                         this.step2form.get('transportistaRedespacho').setValue(resp.transportistaRedespacho); 
                         setTimeout(() => {
                           this.transportistaRedespachoTypeheadComponent.seleccionaValor();
-                        }, 50);
+                        }, 750);
                       });
     
   }

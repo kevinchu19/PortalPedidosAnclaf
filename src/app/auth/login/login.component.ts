@@ -29,11 +29,13 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this._authService.GetUsuario(this.loginForm.value).subscribe(
         (resp) => {
-          this.router.navigateByUrl('/home');
+          this.router.navigateByUrl('/home/nuevo-pedido');
         },(err) =>{
           localStorage.removeItem('vendedor');
           localStorage.removeItem('cliente');
           localStorage.removeItem('token');
+          console.log(err);
+          
           Swal.fire({
             title: err.error.mensaje,
             text: 'Ingrese nuevas credenciales por favor',

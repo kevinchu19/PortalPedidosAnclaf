@@ -4,7 +4,7 @@ import { Component, OnInit, Output,EventEmitter, Input, OnDestroy } from '@angul
 import { typeheadArray } from '../models/typeheadArray.model';
 import { TypeheadService } from '../service/typehead.service';
 import { AbstractControl, FormGroup, Validators } from '@angular/forms';
-import { delay } from 'rxjs/operators';
+import { optionalParameters } from '../models/optionalParameters.model';
 
 
 @Component({
@@ -19,6 +19,8 @@ export class TypeheadComponent implements OnInit {
   @Input() keyParameterValue:string;
   @Input() resource:string;
   @Input() placeholder:string;
+  @Input() optionalParameters:optionalParameters[];
+
   @Output() valorSeleccionado: EventEmitter<typeheadArray> = new EventEmitter();
   
   
@@ -37,7 +39,6 @@ export class TypeheadComponent implements OnInit {
     
     this.parentForm.get(this.campoFormulario).valueChanges.subscribe(selectedValue=>{
       
-      
       let validators = [];
 
       if (campoRequerido) {        
@@ -49,7 +50,7 @@ export class TypeheadComponent implements OnInit {
       if (this.terminoInput != '' && this.terminoInput && !this.valorCorrecto) {
       
         
-        this._typeheadService.GetValues(this.resource, this.terminoInput.toUpperCase(), this.keyParameterValue)
+        this._typeheadService.GetValues(this.resource, this.terminoInput.toUpperCase(), this.keyParameterValue, this.optionalParameters)
                       .subscribe((resp:any[]) => 
                                   {                  
                                     this.arrayMostrado = [];
@@ -76,7 +77,6 @@ export class TypeheadComponent implements OnInit {
       }else{
         if (this.terminoInput=='') {
           this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> {
-            console.log(this.campoFormulario + ' ' + validators);
             return validators;  
           }]);  
         }

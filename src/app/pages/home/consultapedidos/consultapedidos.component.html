@@ -1,37 +1,64 @@
-<div class="table-responsive">
+<div class="row" id="validation">
+    <div class="col-12">
+        <div class="card wizard-content">
+            <div class="card-body">
+                <form>
+                    <div class="row">
+                        <div [ngClass]="{'col-md-5':true,'form-group':true, 
+                                        'hidden': decodeTokenFromStorage().vendedor == ''}">
+                            <app-typehead [resource]='"cliente"' [parentForm]="parametrosForm" campoFormulario='numeroCliente' [keyParameterValue]="decodeTokenFromStorage().vendedor!=''?decodeTokenFromStorage().vendedor:null" placeholder='Cliente'></app-typehead>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input class="form-control" type="date" id="FechaDesde" placeholder="Fecha(Desde)">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input class="form-control" type="date" id="FechaHasta" placeholder="Fecha(Hasta)">
+                        </div>
+                        <div class="button-group col-md-1 pl-0">
+                            <button class="btn waves-effect waves-light btn-warning" type="submit">Buscar</button>
+                        </div>
 
-    <table id="demo-foo-addrow" class="table m-t-30 table-hover no-wrap contact-list footable-loaded footable" data-page-size="10">
-        <thead>
-            <tr>
-                <th class="footable-sortable">Pedido #<span class="footable-sort-indicator"></span></th>
-                <th class="footable-sortable">Fecha<span class="footable-sort-indicator"></span></th>
-                <th class="footable-sortable">Direccion Entrega<span class="footable-sort-indicator"></span></th>
-                <th class="footable-sortable">Importe<span class="footable-sort-indicator"></span></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let pedido of pedidos" class="footable-even" style="">
-                <td><span class="footable-toggle"></span>{{pedido.id}}</td>
-                <td>{{pedido.fecha | date:'dd/MM/yyyy'}}</td>
-                <td>{{pedido.direccionEntrega}}</td>
-                <td><span class="label label-warning">$ {{calculoTotalPedido(pedido)}}</span> </td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="6">
-                    <div class="text-right">
-                        <ul class="pagination">
-                            <li class="footable-page-arrow disabled"><a data-page="first" (click)="currentPage=1" href="javascript:void(0)">«</a></li>
-                            <li class="footable-page-arrow disabled"><a data-page="prev" (click)="siguientePaso(-1)" href="javascript:void(0)">‹</a></li>
-                            <li class="footable-page active"><a data-page="0" (click)="siguientePaso(+1)" href="javascript:void(0)">1</a></li>
-                            <li class="footable-page"><a data-page="1" (click)="siguientePaso(+1)" href="javascript:void(0)">2</a></li>
-                            <li class="footable-page-arrow"><a data-page="next" (click)="siguientePaso(+1)" href="javascript:void(0)">›</a></li>
-                            <li class="footable-page-arrow"><a data-page="last" (click)="siguientePaso(+1)" href="javascript:void(0)">»</a></li>
-                        </ul>
                     </div>
-                </td>
-            </tr>
-        </tfoot>
-    </table>
+
+
+                </form>
+                <div class="table-responsive">
+                    <table id="demo-foo-addrow" class="table m-t-30 table-hover no-wrap contact-list footable-loaded footable" data-page-size="10">
+                        <thead>
+                            <tr>
+                                <th class="footable-sortable">Pedido #<span class="footable-sort-indicator"></span></th>
+                                <th class="footable-sortable">Fecha<span class="footable-sort-indicator"></span></th>
+                                <th class="footable-sortable">Direccion Entrega<span class="footable-sort-indicator"></span></th>
+                                <th class="footable-sortable">Importe<span class="footable-sort-indicator"></span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let pedido of pedidos" class="footable-even" style="">
+                                <td><span class="footable-toggle"></span>{{pedido.id}}</td>
+                                <td>{{pedido.fecha | date:'dd/MM/yyyy'}}</td>
+                                <td>{{pedido.direccionEntrega}}</td>
+                                <td><span class="label label-warning">$ {{calculoTotalPedido(pedido)}}</span> </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="6">
+                                    <div class="text-right">
+                                        <ul class="pagination">
+                                            <li class="footable-page-arrow disabled"><a data-page="first" (click)="currentPage=1" href="javascript:void(0)">«</a></li>
+                                            <li class="footable-page-arrow disabled"><a data-page="prev" (click)="siguientePaso(-1)" href="javascript:void(0)">‹</a></li>
+                                            <li class="footable-page active"><a data-page="0" (click)="siguientePaso(+1)" href="javascript:void(0)">1</a></li>
+                                            <li class="footable-page"><a data-page="1" (click)="siguientePaso(+1)" href="javascript:void(0)">2</a></li>
+                                            <li class="footable-page-arrow"><a data-page="next" (click)="siguientePaso(+1)" href="javascript:void(0)">›</a></li>
+                                            <li class="footable-page-arrow"><a data-page="last" (click)="siguientePaso(+1)" href="javascript:void(0)">»</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
