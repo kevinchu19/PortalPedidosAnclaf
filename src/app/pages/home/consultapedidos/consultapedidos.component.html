@@ -2,42 +2,140 @@
     <div class="col-12">
         <div class="card wizard-content">
             <div class="card-body">
-                <form>
-                    <div class="row">
-                        <div [ngClass]="{'col-md-5':true,'form-group':true, 
+
+                <div *ngIf="viendoDetalle" id="responsive-modal" class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: block; padding-left: 0px;">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="Title">Detalle del pedido</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cerrarDetallePedido()">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <h3><b>PEDIDO</b> <span class="pull-right"># {{pedidoEnDetalle.id}}</span></h3>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="pull-left">
+                                            <address>
+                                                <h3> &nbsp;<b class="text-danger">{{pedidoEnDetalle.cliente.razonSocial}}</b></h3>
+                                                <p class="text-muted m-l-5">CUIT: {{pedidoEnDetalle.cliente.numeroDocumento}}
+                                                    <br> {{pedidoEnDetalle.cliente.direccionFacturacion}} - ({{pedidoEnDetalle.cliente.codigoPostalFacturacion}}),
+                                                    <br> {{pedidoEnDetalle.cliente.provinciaFacturacionNavigation.descripcion}}
+                                                </p>
+                                            </address>
+                                        </div>
+                                        <div class="pull-right text-right">
+                                            <address>
+                                                <h3>Dirección de entrega: </h3>
+                                                <h4 class="font-bold">{{entregaFromPedido}}</h4>
+                                                <p class="text-muted m-l-30"> {{pedidoEnDetalle.direccionEntrega}} - 
+                                                                              ({{pedidoEnDetalle.codigoPostalEntrega}}),
+                                                    <br> {{pedidoEnDetalle.provinciaEntregaNavigation.descripcion}}
+                                                <p class="m-t-30"><b>Fecha del pedido:</b> <i class="fa fa-calendar"></i> {{pedidoEnDetalle.fecha | date:'dd/MM/yyyy' }}</p>
+                                                <p class="m-t-30"><b>Fecha de entrega solicitada:</b> <i class="fa fa-calendar"></i> {{pedidoEnDetalle.fechaDeEntrega | date:'dd/MM/yyyy'}}</p>
+                                            </address>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="table-responsive m-t-40" style="clear: both;">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">#</th>
+                                                        <th>Producto</th>
+                                                        <th class="text-right">Cantidad</th>
+                                                        <th class="text-right">Precio</th>
+                                                        <th class="text-right">Bonif.</th>
+                                                        <th class="text-right">Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let itemPedido of pedidoEnDetalle.items; let id=index">
+                                                        <td class="text-center">{{id+1}}</td>
+                                                        <td>{{itemPedido.idProductoNavigation.descripcion}}</td>
+                                                        <td class="text-right">{{itemPedido.cantidad}} </td>
+                                                        <td class="text-right"> ${{itemPedido.precio| number:'1.2'}} </td>
+                                                        <td class="text-right"> {{itemPedido.bonificacion | number:'1.2'}}% </td>
+                                                        <td class="text-right"> ${{itemPedido.cantidad* (itemPedido.precio-(itemPedido.precio*itemPedido.bonificacion/100))| number:'1.2'}} </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="pull-right m-t-30 text-right">
+                                            <hr>
+                                            <h3><b>Total sin impuestos :</b> ${{calculoTotalPedido(pedidoEnDetalle) | number:'1.2'}}</h3>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger waves-effect text-left" (click)="cerrarDetallePedido()">Cerrar</button>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+
+                <h4 class="card-title">Parámetros de búsqueda:</h4>
+                <form [formGroup]="parametrosForm">
+                    <div class="row justify-content-between">
+                        <div [ngClass]="{'col-md-4':true,'form-group':true, 
                                         'hidden': decodeTokenFromStorage().vendedor == ''}">
                             <app-typehead [resource]='"cliente"' [parentForm]="parametrosForm" campoFormulario='numeroCliente' [keyParameterValue]="decodeTokenFromStorage().vendedor!=''?decodeTokenFromStorage().vendedor:null" placeholder='Cliente'></app-typehead>
                         </div>
                         <div class="form-group col-md-3">
-                            <input class="form-control" type="date" id="FechaDesde" placeholder="Fecha(Desde)">
+                            <input class="form-control" formControlName="idPedido" type="number" id="IdPedido" placeholder="Id Pedido">
                         </div>
                         <div class="form-group col-md-3">
-                            <input class="form-control" type="date" id="FechaHasta" placeholder="Fecha(Hasta)">
+                            <input class="form-control" formControlName="fechaDesde" type="date" id="FechaDesde" placeholder="Fecha(Desde)">
                         </div>
-                        <div class="button-group col-md-1 pl-0">
-                            <button class="btn waves-effect waves-light btn-warning" type="submit">Buscar</button>
+                        <div class="form-group col-md-3 mr-auto ">
+                            <input class="form-control" formControlName="fechaHasta" type="date" id="FechaHasta" placeholder="Fecha(Hasta)">
+                        </div>
+                        <div class="button-group pl-0">
+                            <button class="btn waves-effect waves-light btn-warning" type="button" (click)="buscar()">Buscar</button>
                         </div>
 
                     </div>
 
-
                 </form>
-                <div class="table-responsive">
-                    <table id="demo-foo-addrow" class="table m-t-30 table-hover no-wrap contact-list footable-loaded footable" data-page-size="10">
+
+                <div class="box bg-warning text-center">
+                    <h1 class="font-light text-white">{{totalCount}} </h1>
+                    <h4 *ngIf="totalCount==1" class="text-white">Pedido encontrado</h4>
+                    <h4 *ngIf="totalCount!=1" class="text-white">Pedidos encontrados</h4>
+                </div>
+                <div class="text-center mt-2" *ngIf="cargandoNuevaBusqueda">
+                    <i class="fa fa-spin fa-spinner"></i>
+                </div>
+
+                <div class="table-responsive" *ngIf="!cargandoNuevaBusqueda">
+                    <table id="demo-foo-addrow" class="table m-t-30 table-hover no-wrap contact-list footable-loaded footable " data-page-size="10">
                         <thead>
                             <tr>
                                 <th class="footable-sortable">Pedido #<span class="footable-sort-indicator"></span></th>
+                                <th *ngIf="decodeTokenFromStorage().vendedor!=''" class="footable-sortable">Cliente<span class="footable-sort-indicator"></span></th>
                                 <th class="footable-sortable">Fecha<span class="footable-sort-indicator"></span></th>
                                 <th class="footable-sortable">Direccion Entrega<span class="footable-sort-indicator"></span></th>
                                 <th class="footable-sortable">Importe<span class="footable-sort-indicator"></span></th>
+                                <th class="footable-sortable"><span class="footable-sort-indicator"></span></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let pedido of pedidos" class="footable-even" style="">
                                 <td><span class="footable-toggle"></span>{{pedido.id}}</td>
+                                <td *ngIf="decodeTokenFromStorage().vendedor!=''">{{pedido.cliente.razonSocial}}</td>
                                 <td>{{pedido.fecha | date:'dd/MM/yyyy'}}</td>
                                 <td>{{pedido.direccionEntrega}}</td>
-                                <td><span class="label label-warning">$ {{calculoTotalPedido(pedido)}}</span> </td>
+                                <td> ${{ calculoTotalPedido(pedido) | number:'1.2' }}</td>
+                                <td>
+                                    <a href="javascript:void(0)" (click)="verDetallePedido(pedido)" data-toggle="tooltip" data-placement="bottom" data-original-title="Tooltip on bottom" title="Ver detalle del pedido"><i class="mdi mdi-magnify"> </i></a>
+                                </td>
                             </tr>
                         </tbody>
                         <tfoot>
@@ -45,12 +143,11 @@
                                 <td colspan="6">
                                     <div class="text-right">
                                         <ul class="pagination">
-                                            <li class="footable-page-arrow disabled"><a data-page="first" (click)="currentPage=1" href="javascript:void(0)">«</a></li>
-                                            <li class="footable-page-arrow disabled"><a data-page="prev" (click)="siguientePaso(-1)" href="javascript:void(0)">‹</a></li>
-                                            <li class="footable-page active"><a data-page="0" (click)="siguientePaso(+1)" href="javascript:void(0)">1</a></li>
-                                            <li class="footable-page"><a data-page="1" (click)="siguientePaso(+1)" href="javascript:void(0)">2</a></li>
-                                            <li class="footable-page-arrow"><a data-page="next" (click)="siguientePaso(+1)" href="javascript:void(0)">›</a></li>
-                                            <li class="footable-page-arrow"><a data-page="last" (click)="siguientePaso(+1)" href="javascript:void(0)">»</a></li>
+                                            <li [ngClass]="{'footable-page-arrow':true, 'disabled': hasPrevious == false}"><a data-page="first" (click)="currentPage=1;getPedidos()" href="javascript:void(0)">«</a></li>
+                                            <li [ngClass]="{'footable-page-arrow':true, 'disabled': hasPrevious == false}"><a data-page="prev" (click)="recalculaPagina(-1)" href="javascript:void(0)">‹</a></li>
+                                            <li *ngFor="let page of pages" class="footable-page"><a (click)="currentPage=page;getPedidos()" href="javascript:void(0)">{{page}}</a></li>
+                                            <li [ngClass]="{'footable-page-arrow':true, 'disabled': hasNext == false}"><a data-page="next" (click)="recalculaPagina(+1)" href="javascript:void(0)">›</a></li>
+                                            <li [ngClass]="{'footable-page-arrow':true, 'disabled': hasNext == false}"><a data-page="last" (click)="currentPage=totalPages;getPedidos()" href="javascript:void(0)">»</a></li>
                                         </ul>
                                     </div>
                                 </td>
@@ -62,3 +159,4 @@
         </div>
     </div>
 </div>
+<div *ngIf="viendoDetalle" class="modal-backdrop fade show"></div>

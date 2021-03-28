@@ -1,3 +1,4 @@
+import { Provincia } from "./provincia.model";
 
 export class cliente {
     id:string;
@@ -15,4 +16,6 @@ export class cliente {
     listaPrecios:string;
     grupoBonificacion:string;
     transportistaRedespacho:string;
+    idVendedor:string;
+    provinciaFacturacionNavigation:Provincia;
 }

@@ -33,26 +33,30 @@
                         <!-- Step 1 -->
                         <h6 id="steps-uid-2-h-0" tabindex="-1" class="title current">Step 1</h6>
                         <form [formGroup]="step1form" [hidden]="currentStep!=1" id="steps-uid-2-p-0" role="tabpanel" aria-labelledby="steps-uid-2-h-0" class="body current">
-                            <div [ngClass]="{'row':true,'form-group':true, 
+                            <div class="row">
+                                <div [ngClass]="{'form-group':true, 'col-md-6':true, 'mt-2':true, 'px-0':true,
                                             'error': campoNoValido(step1form,'numeroCliente', step1FormSubmitted),
                                             'hidden': decodeTokenFromStorage().cliente != ''}">
-                                <div class="col-2"></div>
-                                <div class="col-8 mt-2 px-0">
-                                    <app-typehead #cliente (valorSeleccionado)="muestroDatosCliente($event)" [resource]='"cliente"' [parentForm]="step1form" campoFormulario='numeroCliente' [keyParameterValue]="step1form.get('vendedor').value" placeholder='Cliente'>
-                                    </app-typehead>
-                                    <div *ngIf="campoNoValido(step1form,'numeroCliente', step1FormSubmitted)" style="margin-left: 15px;" class="help-block">
-                                        <ul role="alert">
-                                            <li>El campo es obligatorio y debe tener un valor válido </li>
-                                        </ul>
+
+                                    <div>
+                                        <app-typehead #cliente (valorSeleccionado)="muestroDatosCliente($event)" [resource]='"cliente"' [parentForm]="step1form" campoFormulario='numeroCliente' [keyParameterValue]="idVendedor" placeholder='Cliente'>
+                                        </app-typehead>
+                                        <div *ngIf="campoNoValido(step1form,'numeroCliente', step1FormSubmitted)" style="margin-left: 15px;" class="help-block">
+                                            <ul role="alert">
+                                                <li>El campo es obligatorio y debe tener un valor válido </li>
+                                            </ul>
+                                        </div>
                                     </div>
+
                                 </div>
-                                <div class="col-2"></div>
+
+                                <div class="checkbox checkbox-primary col-md-6 p-t-0">
+                                    <input formControlName="pagoEnEfectivo" id="pagoEnEfectivo" type="checkbox" class="filled-in chk-col-light-blue">
+                                    <label for="pagoEnEfectivo"> Pago en Efectivo </label>
+                                </div>
                             </div>
-                            <div class="row">
-                                <div class="col-1"></div>
-                                <textarea formControlName="observacion" id="" cols="30" rows="2" placeholder="Observaciones del pedido" class="form-control col-10"></textarea>
-                                <div class="col-1"></div>
-                            </div>
+
+
                             <div class="row">
                                 <div class="table-responsive">
                                     <table id="demo-foo-addrow" class="table m-t-30 table-hover">
@@ -119,24 +123,28 @@
                                             </tr>
                                         </tfoot>
                                     </table>
+                                    <div class="row">
+                                        <div class="col-1"></div>
+                                        <textarea formControlName="observacion" id="" cols="30" rows="2" placeholder="Observaciones del pedido" class="form-control col-10"></textarea>
+                                        <div class="col-1"></div>
+                                    </div>
                                     <div *ngIf="step1form.get('items').errors && step1FormSubmitted" class="text-center alert alert-danger alert-rounded">Debe elegir algún producto para avanzar con el pedido</div>
                                     <div class="col-md-12">
                                         <div class="pull-right m-t-10 text-right">
                                             <hr>
                                             <h3><b>Total sin impuestos :</b> ${{ total | number:'1.2' }}</h3>
                                         </div>
-                                        <hr>
                                     </div>
                                 </div>
                             </div>
-                            <input style="display: none;" type="text" campoFormulario='vendedor'>
+
+
                         </form>
                         <!-- Step 2 -->
                         <h6 id="steps-uid-2-h-1" tabindex="-1" class="title">Step 2</h6>
                         <form [hidden]="currentStep!=2" id="steps-uid-2-p-1" role="tabpanel" aria-labelledby="steps-uid-2-h-1" class="body" aria-hidden="true" [formGroup]="step2form">
 
                             <div class="row">
-                                <div class="col-md-2 mb-2"></div>
                                 <div class="checkbox checkbox-primary col-md-4 p-t-0">
                                     <input formControlName="retiraDeFabrica" id="retiraDeFabrica" type="checkbox" class="filled-in chk-col-light-blue">
                                     <label for="retiraDeFabrica"> Retira de Fábrica? </label>
@@ -146,6 +154,15 @@
                                     <input formControlName="esBarrioCerrado" id="esBarrioCerrado" type="checkbox" class="filled-in chk-col-light-blue">
                                     <label for="esBarrioCerrado"> Es Barrio Cerrado? </label>
                                 </div>
+                            </div>
+
+                            <div class="row form-group">
+
+                                <label for="example-search-input" class="col-form-label col-md-2">Fecha de entrega:</label>
+                                <div class="col-md-10">
+                                    <input class="form-control " formControlName="fechaDeEntrega" type="date" id="fechaDeEntrega" placeholder="">
+                                </div>
+
                             </div>
 
                             <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'codigoEntrega', step2FormSubmitted)}">
@@ -196,6 +213,28 @@
                                     </div>
                                 </div>
                             </div>
+                            <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'telefono', step2FormSubmitted)}">
+                                <label for="example-search-input" class="col-md-2 col-form-label">Teléfono de contacto</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="phone" name="telefono" formControlName="telefono">
+                                    <div *ngIf="campoNoValido(step2form,'telefono', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
+                                        <ul role="alert">
+                                            <li>El campo es obligatorio </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'email', step2FormSubmitted)}">
+                                <label for="example-search-input" class="col-md-2 col-form-label">Email de contacto</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="email" name="email" formControlName="email">
+                                    <div *ngIf="campoNoValido(step2form,'email', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
+                                        <ul role="alert">
+                                            <li>Debe ingresar un email válido </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-2"></div>
                                 <div class="col-10">
@@ -209,6 +248,10 @@
                         <!-- Step 3 -->
                         <h6 id="steps-uid-2-h-2" tabindex="-1" class="title">Step 3</h6>
                         <section [hidden]="currentStep!=3" id="steps-uid-2-p-2" role="tabpanel" aria-labelledby="steps-uid-2-h-2" class="body" aria-hidden="true">
+                            <div class="alert alert-warning">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+                                <h3 class="text-warning"><i class="fa fa-exclamation-triangle"></i> Importante</h3> En caso que su pedido incluya productos para fabricación, el tiempo estimado de la misma será de 10 días.
+                            </div>
                             <br>
 
                             <h3><b>PEDIDO</b> <span class="pull-right">Número a confirmar</span></h3>
@@ -230,7 +273,8 @@
                                                 <h4 class="font-bold">{{step2form.get('codigoEntrega_descripcion').value}}</h4>
                                                 <p class="text-muted m-l-30"> {{step2form.get('direccionEntrega').value}} - ({{step2form.get('codigoPostalEntrega').value}}),
                                                     <br> {{step2form.get('provinciaEntrega_descripcion').value}}
-                                                <p class="m-t-30"><b>Fecha del pedido:</b> <i class="fa fa-calendar"></i> {{step2form.get('fecha').value}}</p>
+                                                <p class="m-t-30"><b>Fecha del pedido:</b> <i class="fa fa-calendar"></i> {{step2form.get('fecha').value | date:'dd/MM/yyyy'}}</p>
+                                                <p class="m-t-30"><b>Fecha de entrega solicitada:</b> <i class="fa fa-calendar"></i> {{step2form.get('fechaDeEntrega').value | date:'dd/MM/yyyy'}}</p>
                                             </address>
                                     </div>
                                 </div>

@@ -31,6 +31,7 @@ export class NuevopedidoComponent implements OnInit {
   public currentStep:number = 1;
   public total:number = 0;
   public grupoBonificacion: string = "";
+  public idVendedor: string = "";
   public listaPrecios: string = "";
   public order: order;
   
@@ -39,6 +40,7 @@ export class NuevopedidoComponent implements OnInit {
     numeroCliente_descripcion:[''],
     vendedor: [''],
     observacion: [''],
+    pagoEnEfectivo: [false],
     items: this.fb.array([],[Validators.required]),
   });
 
@@ -58,6 +60,11 @@ export class NuevopedidoComponent implements OnInit {
       validators: [this.numeroMayorACero('cantidad'), this.controlBonificacion('bonificacion')]
     });
   }
+
+     
+  public myDate = new Date();
+  public fechaEntrega = new Date();
+  
 
 
   public step2form = this.fb.group({ 
@@ -79,12 +86,13 @@ export class NuevopedidoComponent implements OnInit {
     transportistaRedespacho: [''],
     transportistaRedespacho_descripcion: [''],
     retiraDeFabrica:[false],
-    esBarrioCerrado: [false]
+    esBarrioCerrado: [false],
+    telefono:['', Validators.required],
+    email:['', [Validators.required, Validators.email]],
+    fechaDeEntrega: ['']
    });
    public step1FormSubmitted:boolean = false;
    public step2FormSubmitted:boolean = false;
-   
-   public myDate = new Date();
 
   constructor(private _nuevoPedidoService: NuevopedidoService, 
               private _authService: AuthService, 
@@ -93,8 +101,10 @@ export class NuevopedidoComponent implements OnInit {
               private router: Router,
               private _decimalPipe: DecimalPipe) {
      
+    this.fechaEntrega.setDate(this.myDate.getDate()+1).toString()
     
     this.step2form.get('fecha').setValue(this.datePipe.transform(this.myDate), 'dd/MM/yyyy');
+    this.step2form.get('fechaDeEntrega').setValue(this.fechaEntrega, 'dd/MM/yyyy');    
       
     let tokenDecoded:any = this.decodeTokenFromStorage()
     let cliente = "";
@@ -102,6 +112,7 @@ export class NuevopedidoComponent implements OnInit {
 
     if (tokenDecoded) {
       cliente = tokenDecoded.cliente
+      vendedor = tokenDecoded.vendedor
       if (cliente && cliente != "") {    
         setTimeout(() => {
           this.step1form.get('numeroCliente').setValue(cliente || ""); 
@@ -110,12 +121,11 @@ export class NuevopedidoComponent implements OnInit {
         setTimeout(() => {
           this.clienteTypeheadComponent.seleccionaValor();
         }, 4000); 
-      }else{        
-        vendedor = tokenDecoded.vendedor
-        setTimeout(() => {
-          this.step1form.get('vendedor').setValue(vendedor || ""); 
-        }, 2000); 
+      }
 
+      if (vendedor && vendedor != "") {
+
+        this.idVendedor = vendedor;
       }
     }
     
@@ -182,6 +192,7 @@ export class NuevopedidoComponent implements OnInit {
                         this.step1form.get('numeroCliente_descripcion').setValue(resp.razonSocial);
                         this.listaPrecios = resp.listaPrecios;                        
                         this.grupoBonificacion = resp.grupoBonificacion;
+                        this.idVendedor = resp.idVendedor;
                         this.step2form.get('numeroDocumento').setValue(resp.numeroDocumento);
                         this.step2form.get('direccionFacturacion').setValue(resp.direccionFacturacion); 
                         this.step2form.get('paisFacturacion').setValue(resp.paisFacturacion); 
@@ -343,10 +354,14 @@ export class NuevopedidoComponent implements OnInit {
     this.order.transportistaRedespacho = this.step2form.value.transportistaRedespacho,
     this.order.observacion = this.step1form.value.observacion,
     this.order.observacionLogistica = this.step2form.value.observacionLogistica,
-    this.order.vendedor = this.step1form.value.vendedor,
+    this.order.idVendedor = this.idVendedor,
     this.order.retiradeFabrica = this.step1form.value.retiraDeFabrica==true?1:0,
     this.order.esBarrioCerrado = this.step1form.value.esBarrioCerrado==true?1:0,
     this.order.fecha = this.step2form.value.fecha;
+    this.order.telefono = this.step2form.value.telefono;
+    this.order.email = this.step2form.value.email;
+    this.order.pagoEnEfectivo = this.step1form.value.pagoEnEfectivo==true?1:0,
+    this.order.fechaDeEntrega = this.step2form.value.fechaDeEntrega;
     this.order.items = [{item: 0,
                         idProducto: "",
                         cantidad: 0,
@@ -354,7 +369,8 @@ export class NuevopedidoComponent implements OnInit {
                         bonificacion1: 0,
                         bonificacion2: 0,
                         bonificacion3: 0,
-                        bonificacion: 0 }],
+                        bonificacion: 0,
+                        idProductoNavigation:null}],
     
     this.order.items.splice(0,1);
     
@@ -367,14 +383,14 @@ export class NuevopedidoComponent implements OnInit {
         bonificacion1: item.bonificacion1,
         bonificacion2: item.bonificacion2,
         bonificacion3: item.bonificacion3,
-        bonificacion: item.bonificacion 
+        bonificacion: item.bonificacion ,
+        idProductoNavigation:null
       }
       this.order.items.push(itemForm);
     
       
     })
 
-    
     this._nuevoPedidoService.GraboPedido(this.order).subscribe(
       (resp:any) =>{
           Swal.fire({
@@ -415,5 +431,6 @@ export class NuevopedidoComponent implements OnInit {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate([currentRoute]);
     }); 
-}
+  }
+
 }

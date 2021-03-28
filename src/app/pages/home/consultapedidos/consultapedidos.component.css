@@ -207,3 +207,8 @@ File: scss
 .hidden {
     display: none;
 }
+
+.modal-body {
+    overflow-y: scroll;
+    max-height: 500px;
+}

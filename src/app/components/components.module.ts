@@ -9,7 +9,6 @@ import { TypeheadComponent } from './typehead/typehead.component';
 
 
 
-
 @NgModule({
   declarations: [
     TypeheadComponent

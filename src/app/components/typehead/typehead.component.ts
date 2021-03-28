@@ -23,7 +23,7 @@ export class TypeheadComponent implements OnInit {
 
   @Output() valorSeleccionado: EventEmitter<typeheadArray> = new EventEmitter();
   
-  
+  public cargando:boolean = false;
   public terminoInput:string = "";
   public arrayOriginal: typeheadArray[] = [];
   public arrayMostrado: typeheadArray[] = []
@@ -37,6 +37,7 @@ export class TypeheadComponent implements OnInit {
 
     let campoRequerido = this.hasRequiredField(this.parentForm.get(this.campoFormulario))
     
+
     this.parentForm.get(this.campoFormulario).valueChanges.subscribe(selectedValue=>{
       
       let validators = [];
@@ -48,8 +49,7 @@ export class TypeheadComponent implements OnInit {
             
     
       if (this.terminoInput != '' && this.terminoInput && !this.valorCorrecto) {
-      
-        
+        this.cargando =true;      
         this._typeheadService.GetValues(this.resource, this.terminoInput.toUpperCase(), this.keyParameterValue, this.optionalParameters)
                       .subscribe((resp:any[]) => 
                                   {                  
@@ -62,6 +62,7 @@ export class TypeheadComponent implements OnInit {
                                       })
                                     });
                                     this.itemMouseOver = 0;
+                                    this.cargando = false;
                                   }
       
                                  ); 
@@ -83,7 +84,6 @@ export class TypeheadComponent implements OnInit {
       }
     
       this.parentForm.get(this.campoFormulario).updateValueAndValidity({onlySelf:true, emitEvent:false});        
-    
       
     });
   }
@@ -91,6 +91,7 @@ export class TypeheadComponent implements OnInit {
   
 
   seleccionaValor(){    
+    
     if (this.arrayMostrado.length > 0) {
       this.valorCorrecto = true;
       
@@ -103,7 +104,7 @@ export class TypeheadComponent implements OnInit {
       this.parentForm.get(this.campoFormulario).updateValueAndValidity();
       this.valorSeleccionado.emit(this.arrayMostrado[item]);
       this.arrayMostrado = [];
-  
+      this.cargando = false;
       this.valorCorrecto = false;
     }
   }
@@ -137,16 +138,19 @@ export class TypeheadComponent implements OnInit {
   }
 
   focusOut(e:FocusEvent){
-    this.arrayMostrado = []
+    this.arrayMostrado = [];
+    if (this.terminoInput=="") {
+      this.parentForm.get(this.campoFormulario+'_descripcion').setValue('');
+    }
   }
   private pongoFocoMouse(item:number){
-    if (this.arrayMostrado) {
+    if (this.arrayMostrado.length>0) {
       this.arrayMostrado[item].mouseOver = true
     }
   }
 
   private sacoFocoMouse(item:number){   
-    if (this.arrayMostrado) {
+    if (this.arrayMostrado.length>0) {
       this.arrayMostrado[item].mouseOver = false  
     }
     
