@@ -13,8 +13,8 @@ export class LoginComponent implements OnInit {
   
   public loginFormSubmitted:boolean = false;
   public loginForm = this.fb.group({
-    id: ['C000017', Validators.required],
-    password: ['123', Validators.required]
+    id: ['', Validators.required],
+    password: ['', Validators.required]
   });
   
   constructor(private fb:FormBuilder, 
