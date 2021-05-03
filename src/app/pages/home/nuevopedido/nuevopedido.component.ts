@@ -12,7 +12,6 @@ import Swal from 'sweetalert2'
 
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
-import { log } from 'node:console';
 import { PagesService } from '../../services/pages.service';
 
 @Component({
