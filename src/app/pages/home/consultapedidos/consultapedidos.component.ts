@@ -7,6 +7,7 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { FormBuilder } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
 import { paginatedData } from '../../models/paginateddata.model';
+import { PagesService } from '../../services/pages.service';
 
 @Component({
   selector: 'app-consultapedidos',
@@ -39,7 +40,8 @@ export class ConsultapedidosComponent implements OnInit {
   constructor(private _consultaPedidoService: ConsultapedidosService,
               private _authService: AuthService,
               private fb: FormBuilder,
-              private _decimalPipe: DecimalPipe, ) { }
+              private _decimalPipe: DecimalPipe, 
+              private _pagesService: PagesService) { }
 
    ngOnInit():void {
     this.buscar();
@@ -93,8 +95,30 @@ export class ConsultapedidosComponent implements OnInit {
     return this._authService.decodeTokenFromStorage();
    }
 
+  recalculoBonificacion(bonificaciones:number[], precio:number){
+      
+    return this._decimalPipe.transform((this._pagesService.recalculoBonificacion(bonificaciones, precio)), '1.2');
+  
+  }
+
+  recalculoTotalItem(cantidad:number, precio:number, bonificaciones:number[]){
+      
+    return this._pagesService.recalculoTotalItem(cantidad, precio, bonificaciones);
+    
+  }
+  
   calculoTotalPedido(pedido:order){
-    return pedido.items.reduce((sum,current)=>  sum + current.cantidad*(current.precio-current.precio*current.bonificacion/100), 0 );
+    
+    return pedido.items.reduce((sum,current)=>  {
+
+      let bonificaciones = [current.bonificacion1 || 0, 
+                            current.bonificacion2 || 0, 
+                            current.bonificacion3 || 0,
+                            current.bonificacion4 || 0]      
+      let precioBonificado = bonificaciones.reduce((sum, current) =>  sum-(sum*Math.abs(current)/100), current.precio)    
+
+      return sum + current.cantidad*Math.round(precioBonificado*100)/100
+    }, 0 );
   }
   verDetallePedido(pedido:order){
     this.viendoDetalle = true;

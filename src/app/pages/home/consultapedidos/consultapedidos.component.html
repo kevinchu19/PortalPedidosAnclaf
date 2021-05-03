@@ -55,8 +55,8 @@
                                                         <td>{{itemPedido.idProductoNavigation.descripcion}}</td>
                                                         <td class="text-right">{{itemPedido.cantidad}} </td>
                                                         <td class="text-right"> ${{itemPedido.precio| number:'1.2'}} </td>
-                                                        <td class="text-right"> {{itemPedido.bonificacion | number:'1.2'}}% </td>
-                                                        <td class="text-right"> ${{itemPedido.cantidad* (itemPedido.precio-(itemPedido.precio*itemPedido.bonificacion/100))| number:'1.2'}} </td>
+                                                        <td class="text-right"> {{recalculoBonificacion([itemPedido.bonificacion1, itemPedido.bonificacion2, itemPedido.bonificacion3, itemPedido.bonificacion4], itemPedido.precio) | number:'1.2'}}% </td>
+                                                        <td class="text-right"> ${{recalculoTotalItem(itemPedido.cantidad, itemPedido.precio,[itemPedido.bonificacion1, itemPedido.bonificacion2, itemPedido.bonificacion3, itemPedido.bonificacion4]) | number:'1.2'}} </td>
                                                     </tr>
                                                 </tbody>
                                             </table>

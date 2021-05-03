@@ -50,7 +50,9 @@
 
                                 </div>
 
-                                <div class="checkbox checkbox-primary col-md-6 p-t-0">
+                                <div [ngClass]="{'checkbox':true, 'checkbox-primary':true, 'p-t-0':true, ' text-right':true,
+                                            'col-md-12': decodeTokenFromStorage().cliente != '',
+                                            'col-md-6': decodeTokenFromStorage().cliente == ''}">
                                     <input formControlName="pagoEnEfectivo" id="pagoEnEfectivo" type="checkbox" class="filled-in chk-col-light-blue">
                                     <label for="pagoEnEfectivo"> Pago en Efectivo </label>
                                 </div>
@@ -62,10 +64,11 @@
                                     <table id="demo-foo-addrow" class="table m-t-30 table-hover">
                                         <thead>
                                             <tr>
-                                                <th style="width: 45%;">Codigo de producto</th>
+                                                <th style="width: 45%;padding-left: 0px;">Codigo de producto</th>
                                                 <th style="width: 10%;">Cantidad</th>
-                                                <th>Precio</th>
-                                                <th style="width: 10%;">Bonificacion</th>
+                                                <th style="width: 10%;">Precio</th>
+                                                <th style="width: 10%;">Bonificacion(%)</th>
+                                                <th style="width: 10%;" [hidden]="!decodeTokenFromStorage().vendedor">Bonif. Adicional(%)</th>
                                                 <th>Total</th>
                                                 <th style="width: 5%;"></th>
                                             </tr>
@@ -73,7 +76,7 @@
                                         <tbody formArrayName="items">
                                             <tr *ngFor="let item of getItems().controls; let itemActual=index" class="footable-even">
                                                 <ng-container [formGroupName]="itemActual">
-                                                    <td [ngClass]="{'form-group':true, 'error': campoNoValido(item,'producto', step1FormSubmitted)}">
+                                                    <td [ngClass]="{'form-group':true, 'error': campoNoValido(item,'producto', step1FormSubmitted)}" style="padding-left: 0px;">
                                                         <app-typehead (valorSeleccionado)="muestroDatosProducto($event, itemActual)" placeholder='Producto' [resource]='"producto"' [parentForm]="item" campoFormulario='producto' [optionalParameters]="[{key: 'listaPrecios', value: listaPrecios},{key: 'cliente', value: step1form.get('numeroCliente').value}]"></app-typehead>
                                                         <div *ngIf="campoNoValido(item,'producto', step1FormSubmitted)" style="margin-left: 15px;" class="help-block">
                                                             <ul role="alert">
@@ -91,19 +94,25 @@
                                                         </div>
                                                     </td>
                                                     <td>${{item.get('precio').value | number:'1.2'}}</td>
-                                                    <td [ngClass]="{'error': campoNoValido(item,'bonificacion', step1FormSubmitted)}">
-                                                        <div class="form-group">
-                                                            <div class="form-inline">
-                                                                <input type="number" [attr.disabled]="decodeTokenFromStorage().vendedor != ''?null:true" class="form-control col-md-9" placeholder="Bonificacion(%)" autocomplete="off" spellcheck="false" dir="auto" name="bonificacion" formControlName="bonificacion">
-                                                                <label>%</label>
-                                                            </div>
-                                                            <div *ngIf="campoNoValido(item,'bonificacion', step1FormSubmitted)" class="help-block">
-                                                                <ul role="alert">
-                                                                    <li>Debe ingresar un numero positivo, menor a 100 </li>
-                                                                </ul>
-                                                            </div>
+                                                    <td [ngClass]="{'form-group':true, 'error': campoNoValido(item,'bonificacion', step1FormSubmitted)}">
+                                                        <input type="number" [attr.disabled]="true" class="form-control" autocomplete="off" spellcheck="false" dir="auto" name="bonificacion" formControlName="bonificacion">
+                                                        <div *ngIf="campoNoValido(item,'bonificacion', step1FormSubmitted)" class="help-block">
+                                                            <ul role="alert">
+                                                                <li>Debe ingresar un numero positivo, menor a 100 </li>
+                                                            </ul>
                                                         </div>
+
                                                     </td>
+                                                    <td [hidden]="!decodeTokenFromStorage().vendedor" [ngClass]="{'form-group':true, 'error': campoNoValido(item,'bonificacion4', step1FormSubmitted)}">
+                                                        <input type="number" class="form-control" autocomplete="off" spellcheck="false" dir="auto" name="bonificacion4" formControlName="bonificacion4">
+                                                        <div *ngIf="campoNoValido(item,'bonificacion4', step1FormSubmitted)" class="help-block">
+                                                            <ul role="alert">
+                                                                <li>Debe ingresar un numero positivo, entre 0 y 10 </li>
+                                                            </ul>
+                                                        </div>
+
+                                                    </td>
+
                                                     <td>${{item.get('total').value | number:'1.2'}}</td>
 
                                                     <td>

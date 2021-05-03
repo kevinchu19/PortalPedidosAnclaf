@@ -12,6 +12,8 @@ import Swal from 'sweetalert2'
 
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
+import { log } from 'node:console';
+import { PagesService } from '../../services/pages.service';
 
 @Component({
   selector: 'app-nuevopedido',
@@ -55,13 +57,13 @@ export class NuevopedidoComponent implements OnInit {
       bonificacion1: [0],
       bonificacion2: [0],
       bonificacion3: [0],
+      bonificacion4: [0],
       total: 0,
     },{
-      validators: [this.numeroMayorACero('cantidad'), this.controlBonificacion('bonificacion')]
+      validators: [this.numeroMayorACero('cantidad'), this.controlBonificacion('bonificacion'), this.controlBonificacionAdicional('bonificacion4')]
     });
   }
-
-     
+       
   public myDate = new Date();
   public fechaEntrega = new Date();
   
@@ -99,7 +101,8 @@ export class NuevopedidoComponent implements OnInit {
               private fb: FormBuilder, 
               private datePipe: DatePipe,
               private router: Router,
-              private _decimalPipe: DecimalPipe) {
+              private _decimalPipe: DecimalPipe, 
+              private _pagesService: PagesService) {
      
     this.fechaEntrega.setDate(this.myDate.getDate()+1).toString()
     
@@ -134,7 +137,7 @@ export class NuevopedidoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+    this.agregaProducto()    
   }
   
   siguientePaso(valor:number){
@@ -175,9 +178,9 @@ export class NuevopedidoComponent implements OnInit {
                       {                                 
                         this.items.controls[itemactual].get('descripcion').setValue(resp.descripcion);            
                         this.items.controls[itemactual].get('precio').setValue(resp.precio || 0);
-                        this.items.controls[itemactual].get('bonificacion1').setValue(this._decimalPipe.transform(resp.bonificacion1 || 0,'1.2'));
-                        this.items.controls[itemactual].get('bonificacion2').setValue(this._decimalPipe.transform(resp.bonificacion2 || 0,'1.2'));
-                        this.items.controls[itemactual].get('bonificacion3').setValue(this._decimalPipe.transform(resp.bonificacion3 || 0,'1.2'));
+                        this.items.controls[itemactual].get('bonificacion1').setValue(resp.bonificacion1 || 0);
+                        this.items.controls[itemactual].get('bonificacion2').setValue(resp.bonificacion2 || 0);
+                        this.items.controls[itemactual].get('bonificacion3').setValue(resp.bonificacion3 || 0);
                       });    
     
   }
@@ -262,11 +265,33 @@ export class NuevopedidoComponent implements OnInit {
     
     })
     
+    this.items.controls[numeroItem].get('bonificacion2').valueChanges.subscribe(selectedValue=>{
+      
+      this.recalculoBonificacion(numeroItem)
+    
+    })
+
+    this.items.controls[numeroItem].get('bonificacion3').valueChanges.subscribe(selectedValue=>{
+      
+      this.recalculoBonificacion(numeroItem)
+    
+    })
+    
+    
+    
+    this.items.controls[numeroItem].get('bonificacion4').valueChanges.subscribe(selectedValue=>{
+      
+      this.recalculoBonificacion(numeroItem)
+    
+    })
+
     this.items.controls[numeroItem].get('bonificacion').valueChanges.subscribe(selectedValue=>{
       if (this.items.controls[numeroItem].get('bonificacion').valid) {
         this.recalculoTotalItem(numeroItem)
       }
     })
+
+
 
     
   }
@@ -275,21 +300,30 @@ export class NuevopedidoComponent implements OnInit {
   
     let itemControl = this.items.controls[numeroItem]
     let precio = this.items.controls[numeroItem].get('precio').value    
-    if (precio != 0) {
-      let bonificaciones = [itemControl.get('bonificacion1').value || 0, itemControl.get('bonificacion2').value || 0, itemControl.get('bonificacion3').value || 0]
-      let precioBonificado = bonificaciones.reduce((sum, current) => precio-(sum - sum*Math.abs(current)/100), precio)    
-      this.items.controls[numeroItem].get('bonificacion').setValue(this._decimalPipe.transform(100-(precio-precioBonificado)/precio*100,'1.2'))
-    }
+    
+    let bonificaciones = [itemControl.get('bonificacion1').value || 0, 
+                          itemControl.get('bonificacion2').value || 0, 
+                          itemControl.get('bonificacion3').value || 0,
+                          itemControl.get('bonificacion4').value || 0]      
+    
+    this.items.controls[numeroItem].get('bonificacion').setValue(this._decimalPipe.transform(this._pagesService.recalculoBonificacion(bonificaciones, precio)), '1.2');
+  
     
   }
 
   recalculoTotalItem(numeroItem:number){
-      let cantidad = this.items.controls[numeroItem].get('cantidad').value  
-      let precio = this.items.controls[numeroItem].get('precio').value
-      let bonificacion = this.items.controls[numeroItem].get('bonificacion').value
-      this.items.controls[numeroItem].get('total').setValue(cantidad*(precio-precio*bonificacion/100))
+    let itemControl = this.items.controls[numeroItem]
+      let cantidad = itemControl.get('cantidad').value  
+      let precio = itemControl.get('precio').value
+      let bonificaciones = [itemControl.get('bonificacion1').value || 0, 
+                          itemControl.get('bonificacion2').value || 0, 
+                          itemControl.get('bonificacion3').value || 0,
+                          itemControl.get('bonificacion4').value || 0]  
+      
+      this.items.controls[numeroItem].get('total').setValue(this._pagesService.recalculoTotalItem(cantidad, precio, bonificaciones));
       this.total = this.items.controls.reduce((sum,current)=>  sum + current.get('total').value , 0 );
   }
+  
   borraItem(item:number){
     this.items.removeAt(item);
     this.total = this.items.controls.reduce((sum,current)=>  sum + current.get('total').value , 0 );
@@ -340,6 +374,24 @@ export class NuevopedidoComponent implements OnInit {
 
     }
   }
+
+  controlBonificacionAdicional(campo: string): any {
+    return (formGroup:FormGroup) =>{
+      const campoControl = formGroup.get(campo)
+
+      if (campoControl.value > 10) {
+        campoControl.setErrors({numeroMayorADiez:true})
+      }else{
+        if (campoControl.value < 0) {
+          campoControl.setErrors({numeroMenorOIgualACero:true})
+        }else{
+          campoControl.setErrors(null);
+        }
+      }
+
+    }
+  }
+
   graboPedido(){
        
     this.order =  new order();
@@ -369,6 +421,7 @@ export class NuevopedidoComponent implements OnInit {
                         bonificacion1: 0,
                         bonificacion2: 0,
                         bonificacion3: 0,
+                        bonificacion4: 0,
                         bonificacion: 0,
                         idProductoNavigation:null}],
     
@@ -383,6 +436,7 @@ export class NuevopedidoComponent implements OnInit {
         bonificacion1: item.bonificacion1,
         bonificacion2: item.bonificacion2,
         bonificacion3: item.bonificacion3,
+        bonificacion4: item.bonificacion4*-1,
         bonificacion: item.bonificacion ,
         idProductoNavigation:null
       }

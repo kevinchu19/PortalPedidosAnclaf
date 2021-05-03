@@ -359,10 +359,12 @@ File: css
 /******************* Personalizado******************/
 
 
-/*
-.table {
-    table-layout: fixed;
-    word-wrap: break-word;
+/***
+@media (min-width:769px) {
+    .table {
+        table-layout: fixed;
+        word-wrap: break-word;
+    }
 }
 ***/
 

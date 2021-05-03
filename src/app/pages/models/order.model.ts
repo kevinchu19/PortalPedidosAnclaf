@@ -34,6 +34,7 @@ export class order {
                 bonificacion1: number;
                 bonificacion2: number;
                 bonificacion3: number;
+                bonificacion4: number;
                 bonificacion: number;
                 idProductoNavigation:product;
             }]

@@ -6,7 +6,7 @@
     <div class="login-box card">
         <div class="card-body">
             <form class="form-horizontal form-material" [formGroup]="loginForm" (ngSubmit)="inicioLogin()">
-                <a href="javascript:void(0)" class="text-center db"><img src="./assets/images/LogoAnclaflexLogin.png" alt="Home" /><br/></a>
+                <a href="javascript:void(0)" class="text-center db"><img src="./assets/images/LogoAnclaflexLogin.png" width="240px" heigth="120px" alt="Home" /><br/></a>
                 <div class="form-group m-t-40">
                     <div [ngClass]="{'col-xs-12':true,'form-group':true, 'error': campoNoValido(loginForm,'id', loginFormSubmitted)}">
                         <input formControlName="id" class="form-control" type="text" required="" placeholder="Usuario">
