@@ -25,6 +25,8 @@ export class order {
     telefono:string;
     email:string;
     pagoEnEfectivo:number;
+    acopio:number;
+    direccionModificada:number;
     fechaDeEntrega:Date;
     items: [{    
                 item: number;

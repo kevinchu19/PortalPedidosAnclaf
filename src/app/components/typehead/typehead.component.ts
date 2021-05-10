@@ -19,6 +19,7 @@ export class TypeheadComponent implements OnInit {
   @Input() keyParameterValue:string;
   @Input() resource:string;
   @Input() placeholder:string;
+  @Input() disabled:boolean;
   @Input() optionalParameters:optionalParameters[];
 
   @Output() valorSeleccionado: EventEmitter<typeheadArray> = new EventEmitter();

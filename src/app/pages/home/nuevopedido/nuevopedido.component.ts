@@ -42,6 +42,7 @@ export class NuevopedidoComponent implements OnInit {
     vendedor: [''],
     observacion: [''],
     pagoEnEfectivo: [false],
+    acopio: [false],
     items: this.fb.array([],[Validators.required]),
   });
 
@@ -90,7 +91,8 @@ export class NuevopedidoComponent implements OnInit {
     esBarrioCerrado: [false],
     telefono:['', Validators.required],
     email:['', [Validators.required, Validators.email]],
-    fechaDeEntrega: ['']
+    fechaDeEntrega: [''],
+    modificarDireccion: [false]
    });
    public step1FormSubmitted:boolean = false;
    public step2FormSubmitted:boolean = false;
@@ -185,10 +187,11 @@ export class NuevopedidoComponent implements OnInit {
   }
   
 
-  muestroDatosCliente(e:typeheadArray){
+  muestroDatosCliente(paramNumeroCliente:any){
+    const numeroCliente = typeof(paramNumeroCliente) =="string"?paramNumeroCliente:paramNumeroCliente.codigo
+      
     
-    
-    this._nuevoPedidoService.GetCliente(e.codigo)
+    this._nuevoPedidoService.GetCliente(numeroCliente)
                       .subscribe(async (resp:cliente) => 
                       {                      
                         this.step1form.get('numeroCliente_descripcion').setValue(resp.razonSocial);
@@ -223,10 +226,12 @@ export class NuevopedidoComponent implements OnInit {
     
   }
 
-  muestroDatosEntrega(e:typeheadArray){
+  muestroDatosEntrega(paramCodigoEntrega:any){
     
     
-    this._nuevoPedidoService.GetDireccionEntrega(e.codigo, this.step1form.get('numeroCliente').value)
+    const codigoEntrega = typeof(paramCodigoEntrega) =="string"?paramCodigoEntrega:paramCodigoEntrega.codigo
+    
+    this._nuevoPedidoService.GetDireccionEntrega(codigoEntrega, this.step1form.get('numeroCliente').value)
                       .subscribe((resp:clientedireccionentrega) => 
                       {                      
                         this.step2form.get('codigoEntrega_descripcion').setValue(resp.descripcion); 
@@ -412,6 +417,8 @@ export class NuevopedidoComponent implements OnInit {
     this.order.telefono = this.step2form.value.telefono;
     this.order.email = this.step2form.value.email;
     this.order.pagoEnEfectivo = this.step1form.value.pagoEnEfectivo==true?1:0,
+    this.order.acopio = this.step1form.value.acopio==true?1:0,
+    this.order.direccionModificada = this.step2form.value.modificarDireccion==true?1:0,
     this.order.fechaDeEntrega = this.step2form.value.fechaDeEntrega;
     this.order.items = [{item: 0,
                         idProducto: "",
@@ -485,5 +492,22 @@ export class NuevopedidoComponent implements OnInit {
         this.router.navigate([currentRoute]);
     }); 
   }
+
+  modificaDireccion(e:any){
+    if (!e.target.checked) {
+      const codigoEntrega = this.step2form.get('codigoEntrega').value == null|| 
+        this.step2form.get('codigoEntrega').value == undefined?'':this.step2form.get('codigoEntrega').value
+      
+      if ( codigoEntrega != '') {               
+        this.muestroDatosEntrega(codigoEntrega)
+      }else{
+        const numeroCliente = this.step1form.get('numeroCliente').value
+        this.muestroDatosCliente(numeroCliente)
+      }
+    }
+  }
+  
+  
+
 
 }

@@ -54,7 +54,9 @@
                                             'col-md-12': decodeTokenFromStorage().cliente != '',
                                             'col-md-6': decodeTokenFromStorage().cliente == ''}">
                                     <input formControlName="pagoEnEfectivo" id="pagoEnEfectivo" type="checkbox" class="filled-in chk-col-light-blue">
-                                    <label for="pagoEnEfectivo"> Pago en Efectivo </label>
+                                    <label for="pagoEnEfectivo" style="margin-right: 3px;"> Pago en Efectivo </label>
+                                    <input formControlName="acopio" id="acopio" type="checkbox" class="filled-in chk-col-light-blue">
+                                    <label for="acopio"> Acopio </label>
                                 </div>
                             </div>
 
@@ -188,20 +190,24 @@
                             </div>
 
                             <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'direccionEntrega', step2FormSubmitted)}">
-                                <label for="example-search-input" class="col-md-2 col-form-label">Direccion Entrega</label>
-                                <div class="col-10">
-                                    <input class="form-control" type="text" name="DireccionEntrega" formControlName="direccionEntrega">
+                                <label for="example-search-input" class="col-sm-2 col-form-label">Direccion Entrega</label>
+                                <div class="col-sm-6">
+                                    <input class="form-control" type="text" name="DireccionEntrega" formControlName="direccionEntrega" [attr.disabled]="step2form.get('modificarDireccion').value?null:true">
                                     <div *ngIf="campoNoValido(step2form,'direccionEntrega', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
                                         <ul role="alert">
                                             <li>El campo es obligatorio </li>
                                         </ul>
                                     </div>
                                 </div>
+                                <div class="checkbox checkbox-primary col-sm-4 p-t-0">
+                                    <input formControlName="modificarDireccion" id="modificarDireccion" type="checkbox" class="filled-in chk-col-light-blue" (click)="modificaDireccion($event)">
+                                    <label for="modificarDireccion"> Modificar dirección </label>
+                                </div>
                             </div>
                             <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'provinciaEntrega', step2FormSubmitted)}">
                                 <label for="example-search-input" class="col-md-2 col-form-label">Provincia Entrega</label>
                                 <div class="col-10">
-                                    <app-typehead #provinciaEntrega [resource]='"provincia"' [parentForm]="step2form" campoFormulario='provinciaEntrega' placeholder='Provincia de Entrega'>
+                                    <app-typehead #provinciaEntrega [disabled]="step2form.get('modificarDireccion').value?null:true" [resource]='"provincia"' [parentForm]="step2form" campoFormulario='provinciaEntrega' placeholder='Provincia de Entrega'>
                                     </app-typehead>
                                     <div *ngIf="campoNoValido(step2form,'provinciaEntrega', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
                                         <ul role="alert">
