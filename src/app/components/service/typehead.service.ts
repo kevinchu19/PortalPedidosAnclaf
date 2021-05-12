@@ -18,7 +18,8 @@ export class TypeheadService {
     let params = new HttpParams()
     params = params.append('skip', '0');
     params = params.append('take', '40');
-    params = params.append('termino', termino);
+    params = params.append('termino', termino==null?' ':termino);
+
     if (keyParameterValue) {
       params = params.append('keyParameter', keyParameterValue);
     };

@@ -411,13 +411,13 @@ export class NuevopedidoComponent implements OnInit {
     this.order.observacion = this.step1form.value.observacion,
     this.order.observacionLogistica = this.step2form.value.observacionLogistica,
     this.order.idVendedor = this.idVendedor,
-    this.order.retiradeFabrica = this.step1form.value.retiraDeFabrica==true?1:0,
-    this.order.esBarrioCerrado = this.step1form.value.esBarrioCerrado==true?1:0,
+    this.order.retiradeFabrica = this.step2form.value.retiraDeFabrica==true?1:0,
+    this.order.esBarrioCerrado = this.step2form.value.esBarrioCerrado==true?1:0,
     this.order.fecha = this.step2form.value.fecha;
     this.order.telefono = this.step2form.value.telefono;
     this.order.email = this.step2form.value.email;
     this.order.pagoEnEfectivo = this.step1form.value.pagoEnEfectivo==true?1:0,
-    this.order.acopio = this.step1form.value.acopio==true?1:0,
+    this.order.acopio = this.step1form.value.acopio==true?1:0,    
     this.order.direccionModificada = this.step2form.value.modificarDireccion==true?1:0,
     this.order.fechaDeEntrega = this.step2form.value.fechaDeEntrega;
     this.order.items = [{item: 0,

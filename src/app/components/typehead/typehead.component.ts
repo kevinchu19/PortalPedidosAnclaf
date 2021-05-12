@@ -38,7 +38,7 @@ export class TypeheadComponent implements OnInit {
 
     let campoRequerido = this.hasRequiredField(this.parentForm.get(this.campoFormulario))
     
-
+    
     this.parentForm.get(this.campoFormulario).valueChanges.subscribe(selectedValue=>{
       
       let validators = [];
@@ -51,22 +51,8 @@ export class TypeheadComponent implements OnInit {
     
       if (this.terminoInput != '' && this.terminoInput && !this.valorCorrecto) {
         this.cargando =true;      
-        this._typeheadService.GetValues(this.resource, this.terminoInput.toUpperCase(), this.keyParameterValue, this.optionalParameters)
-                      .subscribe((resp:any[]) => 
-                                  {                  
-                                    this.arrayMostrado = [];
-                                    resp.forEach(element => {
-                                      this.arrayMostrado.push({
-                                        codigo:element.id,
-                                        descripcion: element.descripcion,
-                                        mouseOver: false
-                                      })
-                                    });
-                                    this.itemMouseOver = 0;
-                                    this.cargando = false;
-                                  }
-      
-                                 ); 
+        
+        this.recuperoValores()
                                  
          
         this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> {
@@ -174,6 +160,25 @@ export class TypeheadComponent implements OnInit {
         }
     }
     return false;
-};
-;
+  };
+
+  recuperoValores(){
+    this._typeheadService.GetValues(this.resource, this.terminoInput==null?"":this.terminoInput.toUpperCase(), this.keyParameterValue, this.optionalParameters)
+                      .subscribe((resp:any[]) => 
+                                  {                  
+                                    this.arrayMostrado = [];
+                                    resp.forEach(element => {
+                                      this.arrayMostrado.push({
+                                        codigo:element.id,
+                                        descripcion: element.descripcion,
+                                        mouseOver: false
+                                      })
+                                    });
+                                    this.itemMouseOver = 0;
+                                    this.cargando = false;
+                                  }
+      
+                                 ); 
+  }
+
 }
