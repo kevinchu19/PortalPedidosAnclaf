@@ -50,7 +50,6 @@ export class TypeheadComponent implements OnInit {
             
     
       if (this.terminoInput != '' && this.terminoInput && !this.valorCorrecto) {
-        this.cargando =true;      
         
         this.recuperoValores();
          
@@ -162,6 +161,8 @@ export class TypeheadComponent implements OnInit {
   };
 
   recuperoValores(){
+    this.cargando =true;      
+        
     this._typeheadService.GetValues(this.resource, this.terminoInput==null?"":this.terminoInput.toUpperCase(), this.keyParameterValue, this.optionalParameters)
                       .subscribe((resp:any[]) => 
                                   {                  
