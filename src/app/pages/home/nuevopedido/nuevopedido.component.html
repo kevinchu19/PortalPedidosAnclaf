@@ -79,7 +79,7 @@
                                             <tr *ngFor="let item of getItems().controls; let itemActual=index" class="footable-even">
                                                 <ng-container [formGroupName]="itemActual">
                                                     <td [ngClass]="{'form-group':true, 'error': campoNoValido(item,'producto', step1FormSubmitted)}" style="padding-left: 0px;">
-                                                        <app-typehead (valorSeleccionado)="muestroDatosProducto($event, itemActual)" placeholder='Producto' [resource]='"producto"' [parentForm]="item" campoFormulario='producto' [optionalParameters]="[{key: 'listaPrecios', value: listaPrecios},{key: 'cliente', value: step1form.get('numeroCliente').value}]"></app-typehead>
+                                                        <app-typehead #productos [disabled]="validoItemDeshabilitado(itemActual)" (valorSeleccionado)="muestroDatosProducto($event, itemActual)" placeholder='Producto' [resource]='"producto"' [parentForm]="item" campoFormulario='producto' [optionalParameters]="[{key: 'listaPrecios', value: listaPrecios},{key: 'cliente', value: step1form.get('numeroCliente').value}]"></app-typehead>
                                                         <div *ngIf="campoNoValido(item,'producto', step1FormSubmitted)" style="margin-left: 15px;" class="help-block">
                                                             <ul role="alert">
                                                                 <li>El campo es obligatorio y debe tener un valor válido</li>
@@ -88,7 +88,7 @@
 
                                                     </td>
                                                     <td [ngClass]="{'form-group':true, 'error': campoNoValido(item,'cantidad', step1FormSubmitted)}">
-                                                        <input type="number" class="form-control" placeholder="Cantidad" autocomplete="off" spellcheck="false" dir="auto" name="cantidad" formControlName="cantidad">
+                                                        <input [attr.disabled]="validoItemDeshabilitado(itemActual)" type="number" class="form-control" placeholder="Cantidad" autocomplete="off" spellcheck="false" dir="auto" name="cantidad" formControlName="cantidad">
                                                         <div *ngIf="campoNoValido(item,'cantidad', step1FormSubmitted)" class="help-block">
                                                             <ul role="alert">
                                                                 <li>El campo es obligatorio y debe ser mayor a cero </li>
@@ -118,7 +118,7 @@
                                                     <td>${{item.get('total').value | number:'1.2'}}</td>
 
                                                     <td>
-                                                        <button type="button" class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete" (click)="borraItem(itemActual)"><i class="ti-close" aria-hidden="true"></i></button>
+                                                        <button [attr.disabled]="validoItemDeshabilitado(itemActual)" type="button" class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete" (click)="borraItem(itemActual)"><i class="ti-close" aria-hidden="true"></i></button>
                                                     </td>
                                                 </ng-container>
 

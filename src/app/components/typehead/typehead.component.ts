@@ -52,8 +52,7 @@ export class TypeheadComponent implements OnInit {
       if (this.terminoInput != '' && this.terminoInput && !this.valorCorrecto) {
         this.cargando =true;      
         
-        this.recuperoValores()
-                                 
+        this.recuperoValores();
          
         this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> {
           if (this.valorCorrecto === false) {

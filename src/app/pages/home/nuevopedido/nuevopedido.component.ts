@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { product } from '../../models/product.model';
 import { NuevopedidoService } from '../../services/nuevopedido.service';
 import { typeheadArray } from '../../../components/models/typeheadArray.model';
@@ -13,6 +13,10 @@ import Swal from 'sweetalert2'
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { PagesService } from '../../services/pages.service';
+const PRODUCTO_FLETE = "SV    |105";
+
+
+
 
 @Component({
   selector: 'app-nuevopedido',
@@ -21,6 +25,7 @@ import { PagesService } from '../../services/pages.service';
   providers: [DatePipe],
   
 })
+
 export class NuevopedidoComponent implements OnInit {
 
   
@@ -28,6 +33,8 @@ export class NuevopedidoComponent implements OnInit {
   @ViewChild ('provinciaFacturacion') provinciaFacturacionTypeheadComponent: TypeheadComponent
   @ViewChild ('cliente') clienteTypeheadComponent: TypeheadComponent
   @ViewChild ('transportistaRedespacho') transportistaRedespachoTypeheadComponent: TypeheadComponent
+  @ViewChildren ('productos') productosTypeheadComponent: QueryList<TypeheadComponent>;
+
 
   public currentStep:number = 1;
   public total:number = 0;
@@ -504,9 +511,37 @@ export class NuevopedidoComponent implements OnInit {
         const numeroCliente = this.step1form.get('numeroCliente').value
         this.muestroDatosCliente(numeroCliente)
       }
+      this.eliminaFlete();
+    }else{
+      this.agregaFlete();
     }
   }
-  
+  agregaFlete(){
+    
+    this.agregaProducto()
+    
+    setTimeout(() => {
+      this.items.controls[this.items.length-1].get("producto").setValue(PRODUCTO_FLETE);    
+    }, 1500);     
+    setTimeout(() => {
+    this.productosTypeheadComponent.last.seleccionaValor();
+    }, 3000);     
+    
+    this.items.controls[this.items.length-1].get("cantidad").setValue(1);
+  }
+
+  eliminaFlete(){
+    this.borraItem(this.items.controls.findIndex(item=>item.get('producto').value == PRODUCTO_FLETE));
+  }
+  validoItemDeshabilitado(numeroItem:number):boolean{
+    
+    if (numeroItem!=0){
+      if (this.items.controls[numeroItem].get("producto").value == PRODUCTO_FLETE ) {
+        return true;
+      }
+    }    
+    return null;
+  }
   
 
 
