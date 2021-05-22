@@ -26,4 +26,7 @@ body {
     .btn {
         font-size: 0.75rem !important;
     }
+    .typeahead {
+        width: auto;
+    }
 }

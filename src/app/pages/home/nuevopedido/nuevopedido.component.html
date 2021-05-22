@@ -78,7 +78,7 @@
                                         <tbody formArrayName="items">
                                             <tr *ngFor="let item of getItems().controls; let itemActual=index" class="footable-even">
                                                 <ng-container [formGroupName]="itemActual">
-                                                    <td [ngClass]="{'form-group':true, 'error': campoNoValido(item,'producto', step1FormSubmitted)}" style="padding-left: 0px;">
+                                                    <td [ngClass]="{'form-group':true, 'error': campoNoValido(item,'producto', step1FormSubmitted)}" style="padding-left: 0px;width: 55%;">
                                                         <app-typehead #productos [disabled]="validoItemDeshabilitado(itemActual)" (valorSeleccionado)="muestroDatosProducto($event, itemActual)" placeholder='Producto' [resource]='"producto"' [parentForm]="item" campoFormulario='producto' [optionalParameters]="[{key: 'listaPrecios', value: listaPrecios},{key: 'cliente', value: step1form.get('numeroCliente').value}]"></app-typehead>
                                                         <div *ngIf="campoNoValido(item,'producto', step1FormSubmitted)" style="margin-left: 15px;" class="help-block">
                                                             <ul role="alert">
