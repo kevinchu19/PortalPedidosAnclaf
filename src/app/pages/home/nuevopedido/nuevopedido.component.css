@@ -317,11 +317,13 @@ File: css
     .wizard-content .wizard>.steps>ul {
         margin-bottom: 20px
     }
+    /***
     .wizard-content .wizard>.steps>ul>li {
         display: block;
         float: left;
         width: 50%
     }
+    ****/
     .wizard-content .wizard>.steps>ul>li>a {
         margin-bottom: 0
     }
@@ -359,14 +361,14 @@ File: css
 /******************* Personalizado******************/
 
 
-/***
-@media (min-width:769px) {
+/************************
+@media (max-width:769px) {
     .table {
         table-layout: fixed;
         word-wrap: break-word;
     }
 }
-***/
+**********************/
 
 .hidden {
     display: none;

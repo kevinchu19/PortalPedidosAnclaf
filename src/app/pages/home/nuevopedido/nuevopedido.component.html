@@ -66,7 +66,7 @@
                                     <table id="demo-foo-addrow" class="table m-t-30 table-hover">
                                         <thead>
                                             <tr>
-                                                <th style="width: 45%;padding-left: 0px;">Codigo de producto</th>
+                                                <th style="width: 55%;padding-left: 0px;">Codigo de producto</th>
                                                 <th style="width: 10%;">Cantidad</th>
                                                 <th style="width: 10%;">Precio</th>
                                                 <th style="width: 10%;">Bonificacion(%)</th>
@@ -126,29 +126,28 @@
                                             </tr>
 
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td class="col-sm-1">
-                                                    <button type="button" (click)="agregaProducto()" class="btn btn-danger btn-rounded">Agregar producto</button>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
+
                                     </table>
-                                    <div class="row">
-                                        <div class="col-1"></div>
-                                        <textarea formControlName="observacion" id="" cols="30" rows="2" placeholder="Observaciones del pedido" class="form-control col-10"></textarea>
-                                        <div class="col-1"></div>
-                                    </div>
-                                    <div *ngIf="step1form.get('items').errors && step1FormSubmitted" class="text-center alert alert-danger alert-rounded">Debe elegir algún producto para avanzar con el pedido</div>
-                                    <div class="col-md-12">
-                                        <div class="pull-right m-t-10 text-right">
-                                            <hr>
-                                            <h3><b>Total sin impuestos :</b> ${{ total | number:'1.2' }}</h3>
-                                        </div>
+                                </div>
+                            </div>
+                            <div class="row m-b-10">
+                                <div class="col-12">
+                                    <div class="pull-right">
+                                        <button type="button" (click)="agregaProducto()" class="btn btn-danger btn-rounded">Agregar producto</button>
                                     </div>
                                 </div>
                             </div>
 
+                            <div class="row">
+                                <textarea formControlName="observacion" id="" cols="30" rows="2" placeholder="Observaciones del pedido" class="form-control col-12"></textarea>
+                            </div>
+                            <div *ngIf="step1form.get('items').errors && step1FormSubmitted" class="text-center alert alert-danger alert-rounded">Debe elegir algún producto para avanzar con el pedido</div>
+                            <div class="col-md-12">
+                                <div class="pull-right m-t-10 text-right">
+                                    <hr>
+                                    <h3><b>Total sin impuestos :</b> ${{ total | number:'1.2' }}</h3>
+                                </div>
+                            </div>
 
                         </form>
                         <!-- Step 2 -->

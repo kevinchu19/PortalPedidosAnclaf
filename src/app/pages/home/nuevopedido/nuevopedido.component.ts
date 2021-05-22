@@ -13,7 +13,7 @@ import Swal from 'sweetalert2'
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { PagesService } from '../../services/pages.service';
-const PRODUCTO_FLETE = "SV    | 105";
+const PRODUCTO_FLETE = "SV    |105";
 
 
 
@@ -537,9 +537,11 @@ export class NuevopedidoComponent implements OnInit {
     
     if (numeroItem!=0){
       if (this.items.controls[numeroItem].get("producto").value == PRODUCTO_FLETE ) {
+      
         return true;
       }
     }    
+
     return null;
   }
   
