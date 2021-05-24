@@ -14,9 +14,6 @@ import { PagesComponent } from './pages.component';
 import { NuevopedidoComponent } from './home/nuevopedido/nuevopedido.component';
 import { ConsultapedidosComponent } from './home/consultapedidos/consultapedidos.component';
 
-
-
-
 @NgModule({
   declarations: [
     PagesComponent,

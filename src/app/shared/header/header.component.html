@@ -7,7 +7,7 @@
         <!-- Logo -->
         <!-- ============================================================== -->
         <div class="navbar-header">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="javascript:void(0)">
                 <!-- Logo icon --><b>
                             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                             <!-- Dark Logo icon <img src="./assets/images/LogoAnclaflex.png" alt="homepage" class="dark-logo" />-->
@@ -53,6 +53,8 @@
                     <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> {{decodeTokenFromStorage().descripcion}} <i class="mdi mdi-account"></i></a>
                     <div class="dropdown-menu dropdown-menu-right animated flipInY">
                         <ul class="dropdown-user">
+                            <li><a (click)="changePassword()"><i class="ti-settings"></i> Cambiar contraseña</a></li>
+                            <li role="separator" class="divider"></li>
                             <li><a (click)="logout()"><i class="fa fa-power-off"></i> Logout</a></li>
                         </ul>
                     </div>

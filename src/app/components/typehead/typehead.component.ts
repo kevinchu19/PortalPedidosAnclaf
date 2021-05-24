@@ -1,6 +1,6 @@
 
 //TODO: Implementar unsubscribe 
-import { Component, OnInit, Output,EventEmitter, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Output,EventEmitter, Input, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { typeheadArray } from '../models/typeheadArray.model';
 import { TypeheadService } from '../service/typehead.service';
 import { AbstractControl, FormGroup, Validators } from '@angular/forms';
@@ -14,6 +14,8 @@ import { optionalParameters } from '../models/optionalParameters.model';
 })
 export class TypeheadComponent implements OnInit {
   
+  @ViewChild('scroll') private myScrollContainer: ElementRef;
+
   @Input() parentForm:FormGroup;
   @Input() campoFormulario:string;
   @Input() keyParameterValue:string;
@@ -31,7 +33,7 @@ export class TypeheadComponent implements OnInit {
   public itemMouseOver: number = 0
   public valorCorrecto: boolean = false;
 
-  constructor( private _typeheadService: TypeheadService) { }
+  constructor( private _typeheadService: TypeheadService, private el: ElementRef) { }
 
   ngOnInit(): void {
     
@@ -95,6 +97,18 @@ export class TypeheadComponent implements OnInit {
   }
 
   keyUp(e:KeyboardEvent){
+    
+    let actualCursor:HTMLElement= this.el.nativeElement.querySelector(
+      ".tt-cursor"
+    );  
+    
+    setTimeout(() => {
+      let a=1;
+    }, 500);
+        
+    const x = window.scrollX;
+    const y = window.scrollY;
+    
     switch (e.key) {
       case "ArrowDown":
         this.sacoFocoMouse(this.itemMouseOver);
@@ -102,6 +116,13 @@ export class TypeheadComponent implements OnInit {
           this.itemMouseOver = this.itemMouseOver + 1  
         }
         this.pongoFocoMouse(this.itemMouseOver)  
+        
+        if (actualCursor!=null) {
+          actualCursor.scrollIntoView(true);
+          window.scrollTo(x,y);  
+        }
+          
+      
         break;
       case "ArrowUp":
         this.sacoFocoMouse(this.itemMouseOver);
@@ -109,6 +130,11 @@ export class TypeheadComponent implements OnInit {
           this.itemMouseOver = this.itemMouseOver - 1  
         }
         this.pongoFocoMouse(this.itemMouseOver)
+
+        if (actualCursor!=null) {
+          actualCursor.scrollIntoView(false);
+          window.scrollTo(x,y);  
+        }
         break;
       case "Enter":
           this.seleccionaValor();

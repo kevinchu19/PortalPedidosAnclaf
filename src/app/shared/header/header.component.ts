@@ -19,6 +19,9 @@ export class HeaderComponent implements OnInit {
     this._authService.logOut();
     this.router.navigateByUrl('/login');
   }
+  changePassword(){  
+    this.router.navigateByUrl('/changepassword');
+  }
 
   decodeTokenFromStorage():any {
     return this._authService.decodeTokenFromStorage();

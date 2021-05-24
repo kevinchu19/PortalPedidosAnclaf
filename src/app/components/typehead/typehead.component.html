@@ -17,7 +17,7 @@
         text-rendering: auto; text-transform: none;">
         </pre>
 
-        <div *ngIf="arrayMostrado.length > 0" class="tt-menu tt-open" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: block;">
+        <div #scroll *ngIf="arrayMostrado.length > 0" class="tt-menu tt-open" style="position: relative; top: 100%; left: 0px; z-index: 100; display: block;">
             <div class="tt-dataset">
                 <div *ngFor="let item of arrayMostrado; let itemActual=index" 
                       [ngClass]="{'tt-suggestion': true, 'tt-selectable':true, 'tt-cursor': item.mouseOver}"

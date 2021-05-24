@@ -34,8 +34,7 @@ export class LoginComponent implements OnInit {
           localStorage.removeItem('vendedor');
           localStorage.removeItem('cliente');
           localStorage.removeItem('token');
-          console.log(err);
-          
+
           Swal.fire({
             title: err.error.mensaje,
             text: 'Ingrese nuevas credenciales por favor',
