@@ -13,7 +13,7 @@ import Swal from 'sweetalert2'
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { PagesService } from '../../services/pages.service';
-const PRODUCTO_FLETE = "SV    |105";
+const PRODUCTO_FLETE = "SV    | 105";
 
 
 
