@@ -42,6 +42,7 @@ export class NuevopedidoComponent implements OnInit {
   public idVendedor: string = "";
   public listaPrecios: string = "";
   public order: order;
+  public guardandoPedido:boolean =false;
   
   public step1form = this.fb.group({
     numeroCliente: ['', Validators.required],
@@ -404,7 +405,7 @@ export class NuevopedidoComponent implements OnInit {
   }
 
   graboPedido(){
-       
+    this.guardandoPedido = true;   
     this.order =  new order();
     this.order.idCliente = this.step1form.value.numeroCliente,
     this.order.idClienteEntrega = this.step2form.value.clienteDireccionEntrega!='' ? this.step1form.value.numeroCliente : '',
@@ -461,6 +462,7 @@ export class NuevopedidoComponent implements OnInit {
     this._nuevoPedidoService.GraboPedido(this.order).subscribe(
       (resp:any) =>{
           Swal.fire({
+            allowOutsideClick: false,
             title: 'Pedido generado',
             text: `Se ha generado exitosamente el pedido número #${resp.id}`,
             icon: 'success',
@@ -472,7 +474,7 @@ export class NuevopedidoComponent implements OnInit {
             } 
           })
 
-
+        this.guardandoPedido = false;
       },err=>{
         Swal.fire({
           title: 'Ha ocurrido un error',
@@ -480,8 +482,9 @@ export class NuevopedidoComponent implements OnInit {
           icon: 'error',
           confirmButtonText: 'OK'
         })
+        this.guardandoPedido = false;
       }
-      
+    
     )
     
   };        

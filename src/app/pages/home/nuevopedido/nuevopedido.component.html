@@ -51,7 +51,7 @@
                                 </div>
 
                                 <div [ngClass]="{'checkbox':true, 'checkbox-primary':true, 'p-t-0':true, ' text-right':true,
-                                            'col-md-12': decodeTokenFromStorage().cliente != '',
+                                            'hidden': decodeTokenFromStorage().cliente != '',
                                             'col-md-6': decodeTokenFromStorage().cliente == ''}">
                                     <input formControlName="pagoEnEfectivo" id="pagoEnEfectivo" type="checkbox" class="filled-in chk-col-light-blue">
                                     <label for="pagoEnEfectivo" style="margin-right: 3px;"> Pago en Efectivo </label>
@@ -343,8 +343,12 @@
                                 </button>
                             </li>
                             <li *ngIf="currentStep == 3" aria-hidden="true">
-                                <button (click)="graboPedido()" class="btn btn-danger" type="submit" role="menuitem">
-                                <i class = "fa fa-check"></i>Confirmar Pedido
+                                <button [attr.disabled]="guardandoPedido==true?true:null" (click)="graboPedido()" class="btn btn-danger" type="submit" role="menuitem">
+                                <span *ngIf="!guardandoPedido">
+                                    <i class = "fa fa-check"></i>
+                                    Confirmar Pedido
+                                </span>
+                                <i *ngIf="guardandoPedido" class="fa fa-spin fa-spinner"></i>
                                 </button>
                             </li>
                         </ul>
