@@ -9,7 +9,7 @@ declare function customInitFunctions();
 })
 export class PagesComponent implements OnInit {
 
-  hostName:string = window.location.host;
+  hostName:string = window.location.hostname;
   constructor() { }
 
   ngOnInit(): void {

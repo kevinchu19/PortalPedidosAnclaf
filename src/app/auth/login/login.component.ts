@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   
-  hostName:string = window.location.host;
+  hostName:string = window.location.hostname;
   public loginFormSubmitted:boolean = false;
   public loginForm = this.fb.group({
     id: ['', Validators.required],
@@ -20,9 +20,10 @@ export class LoginComponent implements OnInit {
   
   constructor(private fb:FormBuilder, 
               private _authService: AuthService,
-              private router: Router) {  }
+              private router: Router) {  console.log(window);}
 
   ngOnInit(): void {
+    
   }
 
   inicioLogin(){
