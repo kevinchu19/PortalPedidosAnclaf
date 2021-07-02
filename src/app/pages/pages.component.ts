@@ -9,10 +9,13 @@ declare function customInitFunctions();
 })
 export class PagesComponent implements OnInit {
 
+  hostName:string = window.location.host;
   constructor() { }
 
   ngOnInit(): void {
     customInitFunctions();
   }
+
+  
 
 }

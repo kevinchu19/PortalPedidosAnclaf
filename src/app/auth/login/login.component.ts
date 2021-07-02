@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   
+  hostName:string = window.location.host;
   public loginFormSubmitted:boolean = false;
   public loginForm = this.fb.group({
     id: ['', Validators.required],
