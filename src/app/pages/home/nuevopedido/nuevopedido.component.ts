@@ -185,6 +185,7 @@ export class NuevopedidoComponent implements OnInit {
     this._nuevoPedidoService.GetProducto(e.codigo, this.listaPrecios,this.grupoBonificacion)
                       .subscribe((resp:product) => 
                       {                                 
+                        console.log(`Recupera producto ok ${e.codigo}`);
                         this.items.controls[itemactual].get('descripcion').setValue(resp.descripcion);            
                         this.items.controls[itemactual].get('precio').setValue(resp.precio || 0);
                         this.items.controls[itemactual].get('bonificacion1').setValue(resp.bonificacion1 || 0);
