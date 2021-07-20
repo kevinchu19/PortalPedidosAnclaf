@@ -5,6 +5,8 @@ import { typeheadArray } from '../models/typeheadArray.model';
 import { TypeheadService } from '../service/typehead.service';
 import { AbstractControl, FormGroup, Validators } from '@angular/forms';
 import { optionalParameters } from '../models/optionalParameters.model';
+import { debounce, debounceTime, map } from 'rxjs/operators';
+import { EMPTY, timer } from 'rxjs';
 
 
 @Component({
@@ -41,7 +43,11 @@ export class TypeheadComponent implements OnInit {
     let campoRequerido = this.hasRequiredField(this.parentForm.get(this.campoFormulario))
     
     
-    this.parentForm.get(this.campoFormulario).valueChanges.subscribe(selectedValue=>{
+    this.parentForm.get(this.campoFormulario).valueChanges.pipe(
+      map((e:any) => e),
+      
+      debounce( ev =>!this.valorCorrecto?timer(500):EMPTY)
+      ).subscribe(selectedValue=>{
       
       let validators = [];
 
@@ -86,7 +92,6 @@ export class TypeheadComponent implements OnInit {
   
       this.parentForm.get(this.campoFormulario +'_descripcion').setValue(this.arrayMostrado[item].descripcion);
       this.parentForm.get(this.campoFormulario).setValue (this.arrayMostrado[item].codigo);    
-      
       this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> null]);
       this.parentForm.get(this.campoFormulario).updateValueAndValidity();
       this.valorSeleccionado.emit(this.arrayMostrado[item]);
@@ -188,10 +193,13 @@ export class TypeheadComponent implements OnInit {
 
   recuperoValores(){
     this.cargando =true;      
-        
+    
+            
     this._typeheadService.GetValues(this.resource, this.terminoInput==null?"":this.terminoInput.toUpperCase(), this.keyParameterValue, this.optionalParameters)
-                      .subscribe((resp:any[]) => 
+                            .subscribe(
+                                (resp:any[]) => 
                                   {                  
+   
                                     this.arrayMostrado = [];
                                     resp.forEach(element => {
                                       this.arrayMostrado.push({
