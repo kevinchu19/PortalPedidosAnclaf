@@ -417,7 +417,7 @@ export class NuevopedidoComponent implements OnInit {
     this.order.codigoPostalEntrega = this.step2form.value.codigoPostalEntrega,
     this.order.provinciaEntrega = this.step2form.value.provinciaEntrega,
     this.order.listaPrecios = this.listaPrecios,
-    this.order.transportistaRedespacho = this.step2form.value.transportistaRedespacho,
+    this.order.transportistaRedespacho = this.step2form.value.transportistaRedespacho==''? null:this.step2form.value.transportistaRedespacho,
     this.order.observacion = this.step1form.value.observacion,
     this.order.observacionLogistica = this.step2form.value.observacionLogistica,
     this.order.idVendedor = this.idVendedor,

@@ -14,7 +14,7 @@ const base_url = environment.base_url;
 })
 export class TypeheadService {
 
-  constructor(private http: HttpClient, private _authService:AuthService) { }
+  constructor(private http: HttpClient) { }
   
   GetValues(resource:string,termino:string, keyParameterValue:string=null, optionalParameters:optionalParameters[]){
     
@@ -34,7 +34,7 @@ export class TypeheadService {
     }
     
     
-    const options = {params: params, headers: this._authService.GetAuthorizationHeaders()}
+    const options = {params: params}
     
     return this.http.get( `${base_url}${ resource }`,options)
       

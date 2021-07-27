@@ -10,13 +10,16 @@ import { AppComponent } from './app.component';
 import { NopagefoundComponent } from './404/nopagefound/nopagefound.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { InterceptorService } from './services/interceptor.service';
+import { InternalerrorComponent } from './500/internalerror/internalerror.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NopagefoundComponent,
-    HomeComponent
+    HomeComponent,
+    InternalerrorComponent
   ],
   imports: [
     PagesModule,
@@ -25,6 +28,11 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
     AppRoutingModule,
     NoopAnimationsModule
   ],
+  providers:[{
+    provide: HTTP_INTERCEPTORS,
+    useClass: InterceptorService,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

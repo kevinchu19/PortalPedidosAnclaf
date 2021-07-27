@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  base_url: 'https://localhost:44322/api/'
-  //base_url: 'http://134.122.1.160:80/api/'
+  base_url: 'https://pedidos-ws.anclaflex.com.ar/api/'
+  //base_url: 'https://localhost:44322/api/'
 };
 
 /*

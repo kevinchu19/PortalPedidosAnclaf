@@ -28,7 +28,7 @@ export class ConsultapedidosService {
     params = params.append('pageNumber', pageNumber);
     params = params.append('pageSize', pageSize);
     
-    const options = {params: params, headers: this._authService.GetAuthorizationHeaders()}
+    const options = {params}
     
     return this.http.get( `${base_url}pedido`,options)
       

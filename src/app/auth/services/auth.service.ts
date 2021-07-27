@@ -21,11 +21,11 @@ export class AuthService {
     return localStorage.getItem('token') || '';
   }
   
-  GetAuthorizationHeaders():HttpHeaders{
-    let headers = new HttpHeaders()
-    headers = headers.append('Authorization', `bearer ${this.token}`)
-    return headers;
-  }
+  //GetAuthorizationHeaders():HttpHeaders{
+    //let headers = new HttpHeaders()
+    //headers = headers.append('Authorization', `bearer ${this.token}`)
+    //return headers;
+  //}
 
   logOut(){
     localStorage.removeItem('token');
@@ -46,9 +46,7 @@ export class AuthService {
 
   ValidarToken():Observable<boolean>{
 
-    return this.http.get(`${base_url}usuario/login/renew`,{
-      headers: this.GetAuthorizationHeaders()
-    }).pipe(
+    return this.http.get(`${base_url}usuario/login/renew`).pipe(
       tap((resp:any)=>{
         localStorage.setItem('token',resp.token);
       }),
@@ -59,7 +57,7 @@ export class AuthService {
 
   ChangePassword(formData: ChangePasswordForm){
      
-    return this.http.patch(`${base_url}usuario/changepassword/${this.decodeTokenFromStorage().unique_name}`,formData, {headers: this.GetAuthorizationHeaders()})
+    return this.http.patch(`${base_url}usuario/changepassword/${this.decodeTokenFromStorage().unique_name}`,formData)
   }
 
   decodeTokenFromStorage():any{
