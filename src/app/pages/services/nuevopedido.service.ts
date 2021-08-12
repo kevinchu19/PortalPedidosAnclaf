@@ -39,6 +39,8 @@ export class NuevopedidoService {
 
   GraboPedido(pedido:order){
     
+    console.log(pedido);
+    
     return this.http.post( `${base_url}pedido`,pedido)
       
   }

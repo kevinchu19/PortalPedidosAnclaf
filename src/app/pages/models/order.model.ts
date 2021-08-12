@@ -28,6 +28,7 @@ export class order {
     acopio:number;
     direccionModificada:number;
     fechaDeEntrega:Date;
+    idUsuario:string;
     items: [{    
                 item: number;
                 idProducto: string;

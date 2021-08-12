@@ -430,6 +430,9 @@ export class NuevopedidoComponent implements OnInit {
     this.order.acopio = this.step1form.value.acopio==true?1:0,    
     this.order.direccionModificada = this.step2form.value.modificarDireccion==true?1:0,
     this.order.fechaDeEntrega = this.step2form.value.fechaDeEntrega;
+    console.log(this.decodeTokenFromStorage());
+    
+    this.order.idUsuario = this.decodeTokenFromStorage().unique_name;
     this.order.items = [{item: 0,
                         idProducto: "",
                         cantidad: 0,

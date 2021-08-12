@@ -123,6 +123,8 @@ export class ConsultapedidosComponent implements OnInit {
   verDetallePedido(pedido:order){
     this.viendoDetalle = true;
     this.pedidoEnDetalle = pedido;
+    console.log(this.pedidoEnDetalle);
+    
   }
 
   cerrarDetallePedido(){
