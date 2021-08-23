@@ -126,14 +126,14 @@ export class NuevopedidoComponent implements OnInit {
       cliente = tokenDecoded.cliente
       vendedor = tokenDecoded.vendedor
       if (cliente && cliente != "") {    
-        setTimeout(() => {
-          this.step1form.get('numeroCliente').setValue(cliente || ""); 
-        }, 2000); 
+        //setTimeout(() => {
+         // this.step1form.get('numeroCliente').setValue(cliente || ""); 
+        //}, 2000); 
 
-        setTimeout(() => {
-          
-          this.clienteTypeheadComponent.seleccionaValor();
-        }, 4000); 
+        setTimeout(() => {          
+          this.clienteTypeheadComponent.seleccionaValor(cliente)
+        }, 500); 
+
       }
 
       if (vendedor && vendedor != "") {
@@ -182,7 +182,7 @@ export class NuevopedidoComponent implements OnInit {
   }
 
   muestroDatosProducto(e:typeheadArray, itemactual:number){
-    
+        
     this._nuevoPedidoService.GetProducto(e.codigo, this.listaPrecios,this.grupoBonificacion)
                       .subscribe((resp:product) => 
                       {                                 
@@ -215,22 +215,22 @@ export class NuevopedidoComponent implements OnInit {
                         
 
                         this.step2form.get('provinciaFacturacion').setValue(resp.provinciaFacturacion); 
-                        setTimeout(() => {
-                          this.provinciaFacturacionTypeheadComponent.seleccionaValor();
-                        }, 1500);
+                        //setTimeout(() => {
+                          this.provinciaFacturacionTypeheadComponent.seleccionaValor(resp.provinciaFacturacion);
+                        //}, 1500);
                         
                         this.step2form.get('paisEntrega').setValue(resp.paisEntrega); 
                         this.step2form.get('direccionEntrega').setValue(resp.direccionEntrega); 
                         this.step2form.get('codigoPostalEntrega').setValue(resp.codigoPostalEntrega);
                         
                         this.step2form.get('provinciaEntrega').setValue(resp.provinciaEntrega);    
-                        setTimeout(() => {
-                          this.provinciaEntregaTypeheadComponent.seleccionaValor();
-                        }, 1500);
+                        //setTimeout(() => {
+                          this.provinciaEntregaTypeheadComponent.seleccionaValor(resp.provinciaEntrega);
+                        //}, 1500);
                         this.step2form.get('transportistaRedespacho').setValue(resp.transportistaRedespacho); 
-                        setTimeout(() => {
-                          this.transportistaRedespachoTypeheadComponent.seleccionaValor();
-                        }, 1500);
+                        //setTimeout(() => {
+                          this.transportistaRedespachoTypeheadComponent.seleccionaValor(resp.transportistaRedespacho);
+                        //}, 1500);
                          
                       });
     
@@ -249,13 +249,13 @@ export class NuevopedidoComponent implements OnInit {
                         this.step2form.get('direccionEntrega').setValue(resp.direccionEntrega); 
                         this.step2form.get('codigoPostalEntrega').setValue(resp.codigoPostalEntrega);
                         this.step2form.get('provinciaEntrega').setValue(resp.provinciaEntrega);    
-                        setTimeout(() => {
-                          this.provinciaEntregaTypeheadComponent.seleccionaValor();
-                        }, 750);
+                        //setTimeout(() => {
+                          this.provinciaEntregaTypeheadComponent.seleccionaValor(resp.provinciaEntrega);
+                        //}, 750);
                         this.step2form.get('transportistaRedespacho').setValue(resp.transportistaRedespacho); 
-                        setTimeout(() => {
-                          this.transportistaRedespachoTypeheadComponent.seleccionaValor();
-                        }, 750);
+                        //setTimeout(() => {
+                          this.transportistaRedespachoTypeheadComponent.seleccionaValor(resp.transportistaRedespacho);
+                        //}, 750);
                       });
     
   }
@@ -430,7 +430,7 @@ export class NuevopedidoComponent implements OnInit {
     this.order.acopio = this.step1form.value.acopio==true?1:0,    
     this.order.direccionModificada = this.step2form.value.modificarDireccion==true?1:0,
     this.order.fechaDeEntrega = this.step2form.value.fechaDeEntrega;
-    console.log(this.decodeTokenFromStorage());
+  
     
     this.order.idUsuario = this.decodeTokenFromStorage().unique_name;
     this.order.items = [{item: 0,
@@ -527,15 +527,14 @@ export class NuevopedidoComponent implements OnInit {
   agregaFlete(){
     
     this.agregaProducto()
-    
-    setTimeout(() => {
-      this.items.controls[this.items.length-1].get("producto").setValue(PRODUCTO_FLETE);    
-    }, 1500);     
-    setTimeout(() => {
-    this.productosTypeheadComponent.last.seleccionaValor();
-    }, 3000);     
-    
+  
+    this.items.controls[this.items.length-1].get("producto").setValue(PRODUCTO_FLETE);    
     this.items.controls[this.items.length-1].get("cantidad").setValue(1);
+
+    setTimeout(() => {
+      this.productosTypeheadComponent.last.seleccionaValor(PRODUCTO_FLETE);
+    }, 500);     
+    
   }
 
   eliminaFlete(){

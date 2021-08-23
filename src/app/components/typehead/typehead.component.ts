@@ -6,7 +6,7 @@ import { TypeheadService } from '../service/typehead.service';
 import { AbstractControl, FormGroup, Validators } from '@angular/forms';
 import { optionalParameters } from '../models/optionalParameters.model';
 import { debounce, debounceTime, map } from 'rxjs/operators';
-import { EMPTY, timer } from 'rxjs';
+import { EMPTY, timer, Observable } from 'rxjs';
 
 
 @Component({
@@ -54,10 +54,11 @@ export class TypeheadComponent implements OnInit {
       if (campoRequerido) {        
         validators.push(Validators.required)
       }      
-      this.terminoInput = this.parentForm.get(this.campoFormulario).value;
-            
     
-      if (this.terminoInput != '' && this.terminoInput && !this.valorCorrecto) {
+      this.terminoInput = this.parentForm.get(this.campoFormulario).value;
+           
+      //if (this.terminoInput != '' && this.terminoInput && !this.valorCorrecto) {
+      if (!this.valorCorrecto) {
         
         this.recuperoValores();
          
@@ -83,23 +84,45 @@ export class TypeheadComponent implements OnInit {
 
   
 
-  seleccionaValor(){    
-    
-    if (this.arrayMostrado.length > 0) {
-      this.valorCorrecto = true;
-      
-      let item = this.itemMouseOver;
+  seleccionaValor(valor?:any){    
+         
+      if (!valor){
   
-      this.parentForm.get(this.campoFormulario +'_descripcion').setValue(this.arrayMostrado[item].descripcion);
-      this.parentForm.get(this.campoFormulario).setValue (this.arrayMostrado[item].codigo);    
-      this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> null]);
-      this.parentForm.get(this.campoFormulario).updateValueAndValidity();
-      this.valorSeleccionado.emit(this.arrayMostrado[item]);
-      this.arrayMostrado = [];
-      this.cargando = false;
-      this.valorCorrecto = false;
+        if (this.arrayMostrado.length > 0) {
+            this.valorCorrecto = true;
+            
+            let item = this.itemMouseOver;
+        
+            this.parentForm.get(this.campoFormulario +'_descripcion').setValue(this.arrayMostrado[item].descripcion);
+            this.parentForm.get(this.campoFormulario).setValue (this.arrayMostrado[item].codigo);    
+            this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> null]);
+            this.parentForm.get(this.campoFormulario).updateValueAndValidity();
+            this.valorSeleccionado.emit(this.arrayMostrado[item]);
+            this.arrayMostrado = [];
+            this.cargando = false;
+            this.valorCorrecto = false;
+          }
+      }else{        
+        this.valorCorrecto = true;
+        this.cargando = true;
+
+        this.parentForm.get(this.campoFormulario).setValue (valor,{emitEvent:false});    
+        this.parentForm.get(this.campoFormulario).setValidators([(formGroup:FormGroup)=> null]);
+        this.parentForm.get(this.campoFormulario).updateValueAndValidity();
+        this.recuperoDescripcion(valor).pipe(
+          map((e:any[])=> e[0].descripcion)
+        ).subscribe(descripcion=>
+         { 
+           this.parentForm.get(this.campoFormulario +'_descripcion').setValue(descripcion);
+           let array = new typeheadArray(valor,descripcion,false );
+           this.valorSeleccionado.emit(array);
+           this.cargando = false;
+           this.valorCorrecto = false;
+         }
+        )
+        
+      }
     }
-  }
 
   keyUp(e:KeyboardEvent){
     
@@ -192,8 +215,7 @@ export class TypeheadComponent implements OnInit {
   };
 
   recuperoValores(){
-    this.cargando =true;      
-    
+    this.cargando =true;          
             
     this._typeheadService.GetValues(this.resource, this.terminoInput==null?"":this.terminoInput.toUpperCase(), this.keyParameterValue, this.optionalParameters)
                             .subscribe(
@@ -213,6 +235,12 @@ export class TypeheadComponent implements OnInit {
                                   }
       
                                  ); 
+  }
+
+  recuperoDescripcion(valor:string):Observable<any> {
+    this.cargando =true;          
+            
+    return this._typeheadService.GetValues(this.resource, valor.toUpperCase(), this.keyParameterValue, this.optionalParameters);
   }
 
 }
