@@ -57,8 +57,8 @@ export class TypeheadComponent implements OnInit {
     
       this.terminoInput = this.parentForm.get(this.campoFormulario).value;
            
-      //if (this.terminoInput != '' && this.terminoInput && !this.valorCorrecto) {
-      if (!this.valorCorrecto) {
+      if (this.terminoInput != '' && this.terminoInput && !this.valorCorrecto) {
+      
         
         this.recuperoValores();
          
