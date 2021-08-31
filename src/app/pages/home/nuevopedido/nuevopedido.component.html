@@ -230,10 +230,10 @@
                             <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'telefono', step2FormSubmitted)}">
                                 <label for="example-search-input" class="col-md-2 col-form-label">Teléfono de contacto</label>
                                 <div class="col-10">
-                                    <input class="form-control" type="phone" name="telefono" formControlName="telefono">
+                                    <input maxlength="30" class="form-control" type="phone" name="telefono" formControlName="telefono">
                                     <div *ngIf="campoNoValido(step2form,'telefono', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
                                         <ul role="alert">
-                                            <li>El campo es obligatorio </li>
+                                            <li>El campo es obligatorio y debe ser menor de 30 caracteres</li>
                                         </ul>
                                     </div>
                                 </div>

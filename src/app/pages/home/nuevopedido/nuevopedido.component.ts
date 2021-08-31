@@ -97,7 +97,7 @@ export class NuevopedidoComponent implements OnInit {
     transportistaRedespacho_descripcion: [''],
     retiraDeFabrica:[false],
     esBarrioCerrado: [false],
-    telefono:['', Validators.required],
+    telefono:['', [Validators.maxLength(30),Validators.required] ],
     email:['', [Validators.required, Validators.email]],
     fechaDeEntrega: [''],
     modificarDireccion: [false]
