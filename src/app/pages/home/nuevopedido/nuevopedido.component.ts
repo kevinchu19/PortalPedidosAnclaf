@@ -97,11 +97,13 @@ export class NuevopedidoComponent implements OnInit {
     transportistaRedespacho_descripcion: [''],
     retiraDeFabrica:[false],
     esBarrioCerrado: [false],
-    telefono:['', [Validators.maxLength(30),Validators.required] ],
-    email:['', [Validators.required, Validators.email]],
+    telefono:['', [Validators.maxLength(30)] ],
+    email:['', [Validators.email]],
     fechaDeEntrega: [''],
     modificarDireccion: [false]
-   });
+   },{
+    validators: [this.emailRequeridoClientes(), this.telefonoRequeridoClientes()]
+  });
    public step1FormSubmitted:boolean = false;
    public step2FormSubmitted:boolean = false;
 
@@ -553,5 +555,33 @@ export class NuevopedidoComponent implements OnInit {
   }
   
 
+  emailRequeridoClientes(){
+  
+    return (formGroup:FormGroup) =>{
+      const email = formGroup.get("email");
+      
+      if (email.value == "" && this.decodeTokenFromStorage().cliente != "") {
+          email.setErrors({requerido:true})
+      }else{
+          email.setErrors(null);
+        }        
+      }
+
+  }
+  
+
+  telefonoRequeridoClientes(){
+  
+    return (formGroup:FormGroup) =>{
+      const telefono = formGroup.get("telefono");
+      
+      if (telefono.value == "" && this.decodeTokenFromStorage().cliente != "") {
+        telefono.setErrors({requerido:true})
+      }else{
+        telefono.setErrors(null);
+        }        
+      }
+
+    }
 
 }
