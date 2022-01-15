@@ -1,5 +1,6 @@
 
 export const environment = {
-  production: true,
-  base_url: 'https://pedidos-ws.anclaflex.com.ar/api/'
+  staging: true,
+  production: false,
+  base_url: 'http://165.22.37.224/api/'
 };
