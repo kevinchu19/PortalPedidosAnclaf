@@ -16,5 +16,10 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  
+  ExternalNavigate(url:string){
+    if (url!="") {
+      window.open(url, "_blank");
+    }
+  }
 }
