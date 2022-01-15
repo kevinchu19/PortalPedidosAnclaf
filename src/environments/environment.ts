@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-  //base_url: 'https://pedidos-ws.anclaflex.com.ar/api/'
   base_url: 'https://localhost:44322/api/'
 };
 
