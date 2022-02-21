@@ -13,6 +13,7 @@ import { ComponentsModule } from '../components/components.module';
 import { PagesComponent } from './pages.component';
 import { NuevopedidoComponent } from './home/nuevopedido/nuevopedido.component';
 import { ConsultapedidosComponent } from './home/consultapedidos/consultapedidos.component';
+import { TableFilteredComponent } from '../components/table-filtered/table-filtered.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import { ConsultapedidosComponent } from './home/consultapedidos/consultapedidos
     FormsModule,
     ComponentsModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ]
 })
 export class PagesModule { }
