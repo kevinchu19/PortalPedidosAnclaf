@@ -6,11 +6,12 @@ import { HttpClientModule } from "@angular/common/http";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
-
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 //Componentes
 import { TypeheadComponent } from './typehead/typehead.component';
 import { TableFilteredComponent } from './table-filtered/table-filtered.component';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 
@@ -23,7 +24,9 @@ import { TableFilteredComponent } from './table-filtered/table-filtered.componen
   exports:[
     TypeheadComponent,
     TableFilteredComponent,
-    MatTableModule
+    MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   imports: [
     CommonModule,
@@ -32,7 +35,9 @@ import { TableFilteredComponent } from './table-filtered/table-filtered.componen
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatTableModule
+    MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ]
 })
 export class ComponentsModule { }

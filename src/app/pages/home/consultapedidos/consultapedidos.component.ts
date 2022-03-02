@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ConsultapedidosService } from '../../services/consultapedidos.service';
 
-import { cliente } from '../../models/cliente.model';
+
+
 import { order } from '../../models/order.model';
 import { AuthService } from '../../../auth/services/auth.service';
 import { FormBuilder } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
 import { paginatedData } from '../../models/paginateddata.model';
 import { PagesService } from '../../services/pages.service';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-consultapedidos',
@@ -26,6 +28,7 @@ export class ConsultapedidosComponent implements OnInit {
   hasNext:boolean = false;
   hasPrevious:boolean = false;
   pedidoEnDetalle:order;
+  tableParams:HttpParams = new HttpParams();
 
   public viendoDetalle:boolean = false;
   
@@ -41,7 +44,11 @@ export class ConsultapedidosComponent implements OnInit {
               private _authService: AuthService,
               private fb: FormBuilder,
               private _decimalPipe: DecimalPipe, 
-              private _pagesService: PagesService) { }
+              private _pagesService: PagesService) {
+    this.tableParams.append('idCliente',this.decodeTokenFromStorage().cliente);
+    this.tableParams.append('idVendedor',this.decodeTokenFromStorage().vendedor);
+
+  }
 
    ngOnInit():void {
     this.buscar();
@@ -137,4 +144,6 @@ export class ConsultapedidosComponent implements OnInit {
     }
     return '';
   }
+
+
 }

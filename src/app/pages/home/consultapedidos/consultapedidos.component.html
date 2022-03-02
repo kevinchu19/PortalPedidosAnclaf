@@ -1,4 +1,5 @@
-<app-table-filtered></app-table-filtered>
+<app-table-filtered [displayedColumnsTitles]="['Id de Pedido', 'Cliente', 'Fecha', 'Direccion de Entrega', 'Importe']" [displayedColumns]="
+['id', 'razonSocial', 'fecha', 'direccionEntrega', 'importe']" [dataSourceUrl]="'pedidos'" [params]="this.tableParams"></app-table-filtered>
 
 <div class="row" id="validation">
     <div class="col-12">

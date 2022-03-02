@@ -2,11 +2,14 @@ import { cliente } from './cliente.model';
 import { Provincia } from './provincia.model';
 import { clientedireccionentrega } from './clientedireccionentrega.model';
 import { product } from './product.model';
+import { AutoMap } from '@automapper/classes';
 export class order {
+    @AutoMap()
     id: string;
     idCliente: string;
     idClienteEntrega: string;
     idEntrega: string;
+    @AutoMap()
     direccionEntrega: string;
     paisEntrega: string;
     codigoPostalEntrega: string;
@@ -18,6 +21,7 @@ export class order {
     idVendedor: string;
     retiradeFabrica: number;
     esBarrioCerrado: number;
+    @AutoMap()
     fecha:Date;
     cliente: cliente;
     provinciaEntregaNavigation:Provincia;
