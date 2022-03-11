@@ -7,11 +7,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 
 //Componentes
 import { TypeheadComponent } from './typehead/typehead.component';
 import { TableFilteredComponent } from './table-filtered/table-filtered.component';
 import { MatNativeDateModule } from '@angular/material/core';
+import { CustomPaginationLabels } from './table-filtered/CustomPaginationLabels';
+
 
 
 
@@ -20,6 +23,11 @@ import { MatNativeDateModule } from '@angular/material/core';
   declarations: [
     TypeheadComponent,
     TableFilteredComponent
+  ],
+  providers: [
+    { provide: MatPaginatorIntl, 
+      useClass: CustomPaginationLabels
+    }
   ],
   exports:[
     TypeheadComponent,
@@ -37,7 +45,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatInputModule,
     MatTableModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatPaginatorModule
   ]
 })
 export class ComponentsModule { }

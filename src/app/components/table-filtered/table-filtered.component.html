@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-3">
         <mat-form-field appearance="fill">
             <mat-label>Enter a date dateRange</mat-label>
             <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
@@ -13,7 +13,7 @@
             <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
         </mat-form-field>
     </div>
-    <mat-form-field class="col-md-6">
+    <mat-form-field class="col-md-9">
         <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtro">
     </mat-form-field>
 
@@ -29,3 +29,6 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+
+<mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page" (page)="handlePage($event)">
+</mat-paginator>
