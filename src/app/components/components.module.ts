@@ -44,7 +44,6 @@ import { CustomPaginationLabels } from './table-filtered/CustomPaginationLabels'
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
-    MatDatepickerModule,
     MatNativeDateModule,
     MatPaginatorModule
   ]
