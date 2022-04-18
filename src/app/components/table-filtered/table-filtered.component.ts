@@ -1,8 +1,7 @@
 //TODO: Estilos de la tabla
-//      Agregar lupita de consulta
-//      Independizar el filtro de fechas
 
-import {  Component, Input, OnInit, ViewChild } from '@angular/core';
+
+import {  AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 import { order } from '../../pages/models/order.model';
 
@@ -10,7 +9,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { orderTF } from '../models/orderTF.model';
 import { mapper } from '../automapper/automapper.model';
 import { TableFilteredService } from '../service/table-filtered.service';
-import { HttpParams } from '@angular/common/http';
 
 import { MatPaginator } from '@angular/material/paginator';
 
@@ -21,32 +19,34 @@ import { MatPaginator } from '@angular/material/paginator';
   templateUrl: './table-filtered.component.html',
   styleUrls: ['./table-filtered.component.css']
 })
-export class TableFilteredComponent implements OnInit {
+export class TableFilteredComponent implements OnInit, AfterViewInit {
 
-
+  @Output("verDetallePedido") verDetallePedido: EventEmitter<string> = new EventEmitter();
   @Input() displayedColumnsTitles:string[];
   @Input() displayedColumns:string[];
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
+  
   @Input() set data(value:any[]) {
+
     this.dataSource = new MatTableDataSource<any>(value)
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.paginator;     
+      
   };
+  
   public dataSource = new MatTableDataSource<any>();
-
-  
-
-  
-  constructor(private _tfService: TableFilteredService) {}
-
+   
+  constructor(private _tfService: TableFilteredService) {
+    
+  }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;     
+  }
 
 
   ngOnInit(): void {}
 
-
   public handlePage(e:any){
     console.log(e);
-  
   }
   //public getPedidos(){
     
@@ -73,16 +73,17 @@ export class TableFilteredComponent implements OnInit {
     return number instanceof Number
   }
   getOrderTF(orderToMap:order[]): orderTF[]{
-    console.log(orderToMap);
-    
+        
     return orderToMap.map( (o:order) => {
-      console.log(mapper.map(o, orderTF, order));
       
       return mapper.map(o, orderTF, order)
     })
   }  
 
-
+  verDetalle(id:string){
+    
+    this.verDetallePedido.emit(id);
+  }
 
   public doFilter = (value: string) => {
     

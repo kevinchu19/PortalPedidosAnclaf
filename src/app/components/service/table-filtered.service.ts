@@ -16,8 +16,7 @@ export class TableFilteredService {
 
   
     const options = {params}
-    console.log(params);
-    
+      
     return this.http.get( `${base_url+url}`, options)
   }
 }

@@ -33,4 +33,9 @@ export class ConsultapedidosService {
     return this.http.get( `${base_url}pedido`,options)
       
   }
+
+
+  GetPedidoById(id:string){
+    return this.http.get( `${base_url}pedido/${id}`)
+  }
 }

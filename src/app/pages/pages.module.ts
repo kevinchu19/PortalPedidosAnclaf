@@ -15,18 +15,23 @@ import { NuevopedidoComponent } from './home/nuevopedido/nuevopedido.component';
 import { ConsultapedidosComponent } from './home/consultapedidos/consultapedidos.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { CuentacorrienteComponent } from './home/cuentacorriente/cuentacorriente.component';
+
 
 @NgModule({
   declarations: [
     PagesComponent,
     NuevopedidoComponent,
-    ConsultapedidosComponent
+    ConsultapedidosComponent,
+    CuentacorrienteComponent
   ],
   exports: [
     PagesComponent 
   ],
   providers:[
-    DecimalPipe
+    DecimalPipe,
+    {provide: MAT_DATE_LOCALE, useValue: 'es'}
   ]
   ,
   imports: [
