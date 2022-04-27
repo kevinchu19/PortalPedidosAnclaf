@@ -11,13 +11,18 @@ export class CuentacorrienteService {
 
   constructor(private http:HttpClient) {}
   
-  getCuentaCorriente(cliente:string,fechaDesde:string,fechaHasta:string, soloPendientes:boolean){
+  getCuentaCorriente(cliente:string,idVendedor:string,fechaDesde:string,fechaHasta:string, soloPendientes:boolean){
     let params = new HttpParams() 
     params = params.append('cliente', cliente);
+    params = params.append('idVendedor', idVendedor);
     params = params.append('fechaDesde', fechaDesde);
     params = params.append('fechaHasta', fechaHasta);
 
     const options = {params}
     return this.http.get( `${base_url}table/cuentacorriente${soloPendientes?"/pendientes":""}`, options)
+  }
+
+  getFile(){
+    window.open(`${base_url}cuentacorriente/file`,"_blank_")
   }
 }

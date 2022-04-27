@@ -16,7 +16,7 @@ export class SidebarService {
       ] 
     },
     {
-      titulo: 'Quejas y Reclamos', 
+      titulo: 'Consultas y sugerencias', 
       icono: 'mdi mdi-email',
       url: "https://docs.google.com/forms/d/e/1FAIpQLSenuE4aTGcKdCPzN5UsRzy2DFJxASUeFX8TzMedK14qyQbcQQ/viewform",
       submenu: [] ,

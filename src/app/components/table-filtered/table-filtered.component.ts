@@ -22,6 +22,7 @@ import { MatPaginator } from '@angular/material/paginator';
 export class TableFilteredComponent implements OnInit, AfterViewInit {
 
   @Output("verDetallePedido") verDetallePedido: EventEmitter<string> = new EventEmitter();
+  @Output("getFile") getFile: EventEmitter<string> = new EventEmitter();
   @Input() displayedColumnsTitles:string[];
   @Input() displayedColumns:string[];
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -36,6 +37,7 @@ export class TableFilteredComponent implements OnInit, AfterViewInit {
   public dataSource = new MatTableDataSource<any>();
    
   constructor(private _tfService: TableFilteredService) {
+    
     
   }
   ngAfterViewInit(): void {
@@ -85,9 +87,22 @@ export class TableFilteredComponent implements OnInit, AfterViewInit {
     this.verDetallePedido.emit(id);
   }
 
+  getArchivo(element:string){
+    console.log(element);
+    this.getFile.emit(element)
+  }
+
   public doFilter = (value: string) => {
     
     this.dataSource.filter = value.trim().toLocaleLowerCase();
+  }
+
+  getColumnName(titulo:string){
+    if (titulo== "lupa" || titulo=="pdffile"){
+      return ""
+    }else{
+      return titulo
+    }
   }
 
 }

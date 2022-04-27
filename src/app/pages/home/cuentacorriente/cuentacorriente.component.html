@@ -28,6 +28,6 @@
     </div>
 </div>
 
-<app-table-filtered #tableFiltered *ngIf="!cargandoNuevaBusqueda" [displayedColumnsTitles]="['Codigo de comprobante', 'Número de comprobante', 'Fecha de movimiento', 'Fecha de vencimiento', 'Importe']" [displayedColumns]="['codigoFormulario', 'numeroFormulario', 'fechaMovimiento', 'fechaVencimiento', 'importeNacional']"
-    [data]="this.data">
+<app-table-filtered #tableFiltered *ngIf="!cargandoNuevaBusqueda" [displayedColumnsTitles]="['Codigo de comprobante', 'Número de comprobante', 
+'Fecha de movimiento', 'Fecha de vencimiento', 'Importe','pdffile']" [displayedColumns]="['codigoFormulario', 'numeroFormulario', 'fechaMovimiento', 'fechaVencimiento', 'importeNacional','pdffile']" [data]="this.data" (getFile)="getFile($event)">
 </app-table-filtered>

@@ -68,13 +68,13 @@ export class CuentacorrienteComponent implements OnInit {
   
     
     if (dateRangeStart != null && dateRangeEnd != null) {
-      this.recuperarDatos(this.decodeTokenFromStorage().cliente, dateRangeStart, dateRangeEnd);
+      this.recuperarDatos(this.decodeTokenFromStorage().cliente, this.decodeTokenFromStorage().vendedor, dateRangeStart, dateRangeEnd);
     }
     
   }
 
-  recuperarDatos(cliente:string, fechaDesde:string, fechaHasta:string) {
-    this._cuentaCorrienteService.getCuentaCorriente(cliente, fechaDesde, fechaHasta, this.soloPendientes).subscribe(
+  recuperarDatos(cliente:string,idVendedor:string, fechaDesde:string, fechaHasta:string) {
+    this._cuentaCorrienteService.getCuentaCorriente(cliente,idVendedor, fechaDesde, fechaHasta, this.soloPendientes).subscribe(
       (resp:any)=>{
         this.data = resp;
         
@@ -86,6 +86,10 @@ export class CuentacorrienteComponent implements OnInit {
    
     return this._authService.decodeTokenFromStorage();
    }
+
+  getFile(e:Event){
+    this._cuentaCorrienteService.getFile()
+  }
 
 
 }
