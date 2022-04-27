@@ -1,31 +1,59 @@
+<div class="row">
+
+    <div class="col-md-12">
+
+        <mat-form-field appearance="fill">
+            <mat-label>Seleccione un rango de fechas</mat-label>
+            <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+                <input matStartDate formControlName="start" placeholder="Desde">
+                <input matEndDate formControlName="end" placeholder="Hasta">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+
+            <mat-error *ngIf="dateRange.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+            <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+        </mat-form-field>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="text-center mt-2" *ngIf="cargandoNuevaBusqueda">
+            <i class="fa fa-spin fa-spinner"></i>
+        </div>
+        <app-table-filtered #tableFiltered *ngIf="!cargandoNuevaBusqueda" [displayedColumnsTitles]="['Id de Pedido', 'Cliente', 'Fecha', 'Direccion de Entrega', 'Importe','lupa']" [displayedColumns]="
+        ['id', 'razonSocial', 'fecha', 'direccionEntrega', 'importe', 'lupa']" [data]="this.data" (verDetallePedido)="verDetallePedido($event)"></app-table-filtered>
+    </div>
+</div>
+
 <div class="row" id="validation">
     <div class="col-12">
         <div class="card wizard-content">
-            <div class="card-body">
 
-                <div *ngIf="viendoDetalle" id="responsive-modal" class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: block; padding-left: 0px;">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="Title">Detalle del pedido</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cerrarDetallePedido()">×</button>
-                            </div>
-                            <div class="modal-body">
-                                <h3><b>PEDIDO</b> <span class="pull-right"># {{pedidoEnDetalle.id}}</span></h3>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="pull-left">
-                                            <address>
+
+            <div *ngIf="viendoDetalle" id="responsive-modal" class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: block; padding-left: 0px;">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="Title">Detalle del pedido</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cerrarDetallePedido()">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <h3><b>PEDIDO</b> <span class="pull-right"># {{pedidoEnDetalle.id}}</span></h3>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="pull-left">
+                                        <address>
                                                 <h3> &nbsp;<b class="text-danger">{{pedidoEnDetalle.cliente.razonSocial}}</b></h3>
                                                 <p class="text-muted m-l-5">CUIT: {{pedidoEnDetalle.cliente.numeroDocumento}}
                                                     <br> {{pedidoEnDetalle.cliente.direccionFacturacion}} - ({{pedidoEnDetalle.cliente.codigoPostalFacturacion}}),
                                                     <br> {{pedidoEnDetalle.cliente.provinciaFacturacionNavigation.descripcion}}
                                                 </p>
                                             </address>
-                                        </div>
-                                        <div class="pull-right text-right">
-                                            <address>
+                                    </div>
+                                    <div class="pull-right text-right">
+                                        <address>
                                                 <h3>Dirección de entrega: </h3>
                                                 <h4 class="font-bold">{{entregaFromPedido}}</h4>
                                                 <p class="text-muted m-l-30"> {{pedidoEnDetalle.direccionEntrega}} - 
@@ -34,56 +62,56 @@
                                                 <p class="m-t-30"><b>Fecha del pedido:</b> <i class="fa fa-calendar"></i> {{pedidoEnDetalle.fecha | date:'dd/MM/yyyy' }}</p>
                                                 <p class="m-t-30"><b>Fecha de entrega solicitada:</b> <i class="fa fa-calendar"></i> {{pedidoEnDetalle.fechaDeEntrega | date:'dd/MM/yyyy'}}</p>
                                             </address>
-                                        </div>
-                                        <div class="pull-left">
-                                            {{pedidoEnDetalle.observacion}}
-                                        </div>
                                     </div>
-                                    <div class="col-md-12">
-                                        <div class="table-responsive m-t-40" style="clear: both;">
-                                            <table class="table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center">#</th>
-                                                        <th>Producto</th>
-                                                        <th class="text-right">Cantidad</th>
-                                                        <th class="text-right">Precio</th>
-                                                        <th class="text-right">Bonif.</th>
-                                                        <th class="text-right">Total</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr *ngFor="let itemPedido of pedidoEnDetalle.items; let id=index">
-                                                        <td class="text-center">{{id+1}}</td>
-                                                        <td>{{itemPedido.idProductoNavigation.descripcion}}</td>
-                                                        <td class="text-right">{{itemPedido.cantidad}} </td>
-                                                        <td class="text-right"> ${{itemPedido.precio| number:'1.2'}} </td>
-                                                        <td class="text-right"> {{recalculoBonificacion([itemPedido.bonificacion1, itemPedido.bonificacion2, itemPedido.bonificacion3, itemPedido.bonificacion4], itemPedido.precio) | number:'1.2'}}% </td>
-                                                        <td class="text-right"> ${{recalculoTotalItem(itemPedido.cantidad, itemPedido.precio,[itemPedido.bonificacion1, itemPedido.bonificacion2, itemPedido.bonificacion3, itemPedido.bonificacion4]) | number:'1.2'}} </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="pull-right m-t-30 text-right">
-                                            <hr>
-                                            <h3><b>Total sin impuestos :</b> ${{calculoTotalPedido(pedidoEnDetalle) | number:'1.2'}}</h3>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <hr>
+                                    <div class="pull-left">
+                                        {{pedidoEnDetalle.observacion}}
                                     </div>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger waves-effect text-left" (click)="cerrarDetallePedido()">Cerrar</button>
+                                <div class="col-md-12">
+                                    <div class="table-responsive m-t-40" style="clear: both;">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">#</th>
+                                                    <th>Producto</th>
+                                                    <th class="text-right">Cantidad</th>
+                                                    <th class="text-right">Precio</th>
+                                                    <th class="text-right">Bonif.</th>
+                                                    <th class="text-right">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let itemPedido of pedidoEnDetalle.items; let id=index">
+                                                    <td class="text-center">{{id+1}}</td>
+                                                    <td>{{itemPedido.idProductoNavigation.descripcion}}</td>
+                                                    <td class="text-right">{{itemPedido.cantidad}} </td>
+                                                    <td class="text-right"> ${{itemPedido.precio| number:'1.2'}} </td>
+                                                    <td class="text-right"> {{recalculoBonificacion([itemPedido.bonificacion1, itemPedido.bonificacion2, itemPedido.bonificacion3, itemPedido.bonificacion4], itemPedido.precio) | number:'1.2'}}% </td>
+                                                    <td class="text-right"> ${{recalculoTotalItem(itemPedido.cantidad, itemPedido.precio,[itemPedido.bonificacion1, itemPedido.bonificacion2, itemPedido.bonificacion3, itemPedido.bonificacion4]) | number:'1.2'}} </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="pull-right m-t-30 text-right">
+                                        <hr>
+                                        <h3><b>Total sin impuestos :</b> ${{calculoTotalPedido(pedidoEnDetalle) | number:'1.2'}}</h3>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <hr>
+                                </div>
                             </div>
                         </div>
-                        <!-- /.modal-content -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger waves-effect text-left" (click)="cerrarDetallePedido()">Cerrar</button>
+                        </div>
                     </div>
-                    <!-- /.modal-dialog -->
+                    <!-- /.modal-content -->
                 </div>
-
+                <!-- /.modal-dialog -->
+            </div>
+            <!--
                 <h4 class="card-title">Parámetros de búsqueda:</h4>
                 <form [formGroup]="parametrosForm">
                     <div class="row justify-content-between">
@@ -113,10 +141,8 @@
                     <h4 *ngIf="totalCount==1" class="text-white">Pedido encontrado</h4>
                     <h4 *ngIf="totalCount!=1" class="text-white">Pedidos encontrados</h4>
                 </div>
-                <div class="text-center mt-2" *ngIf="cargandoNuevaBusqueda">
-                    <i class="fa fa-spin fa-spinner"></i>
-                </div>
 
+                
                 <div class="table-responsive" *ngIf="!cargandoNuevaBusqueda">
                     <table id="demo-foo-addrow" class="table m-t-30 table-hover no-wrap contact-list footable-loaded footable " data-page-size="10">
                         <thead>
@@ -158,7 +184,8 @@
                         </tfoot>
                     </table>
                 </div>
-            </div>
+            -->
+
         </div>
     </div>
 </div>

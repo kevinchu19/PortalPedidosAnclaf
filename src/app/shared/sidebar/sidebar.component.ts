@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SidebarService } from '../../services/sidebar.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,16 +11,20 @@ import { SidebarService } from '../../services/sidebar.service';
 export class SidebarComponent implements OnInit {
 
   menuItems: any[];
-  constructor( private sidebarService: SidebarService) {
+  constructor( private sidebarService: SidebarService, private router: Router) {
     this.menuItems = sidebarService.menu;    
    }
 
   ngOnInit(): void {
   }
   
-  ExternalNavigate(url:string){
+  navigate(url:string, newWindow:boolean){
     if (url!="") {
-      window.open(url, "_blank");
+      if (newWindow) {
+        window.open(url, "_blank");
+      }else{
+        this.router.navigateByUrl(url)
+      }
     }
   }
 }

@@ -1,0 +1,33 @@
+table {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-width: 500px;
+}
+
+th.mat-header-cell {
+    text-align: left;
+    max-width: 300px;
+}
+
+th.mat-header-cell:first-of-type,
+td.mat-cell:first-of-type,
+td.mat-footer-cell:first-of-type {
+    padding-left: 0.2rem!important;
+}
+
+.mat-header-cell {
+    padding: 0.2rem;
+}
+
+.mat-cell {
+    padding: 0.2rem;
+}
+
+.mat-table {
+    background: none;
+}
+
+.mat-paginator {
+    background: none;
+}
