@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  base_url: 'https://localhost:44322/api/'
+  base_url: 'https://localhost:44322/api/',
+  pdf_url: 'https://localhost:44323/api/'
 };
 
 /*

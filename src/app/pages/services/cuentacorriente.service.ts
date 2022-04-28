@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 const base_url = environment.base_url;
+const pdf_url = environment.pdf_url;
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class CuentacorrienteService {
     return this.http.get( `${base_url}table/cuentacorriente${soloPendientes?"/pendientes":""}`, options)
   }
 
-  getFile(){
-    window.open(`${base_url}cuentacorriente/file`,"_blank_")
+  getFile(pdfPath:string){
+    window.open(`${pdf_url}cuentacorriente/file/${pdfPath}`,"_blank_")
   }
 }

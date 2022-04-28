@@ -48,7 +48,6 @@ export class TableFilteredComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {}
 
   public handlePage(e:any){
-    console.log(e);
   }
   //public getPedidos(){
     
@@ -87,8 +86,8 @@ export class TableFilteredComponent implements OnInit, AfterViewInit {
     this.verDetallePedido.emit(id);
   }
 
-  getArchivo(element:string){
-    console.log(element);
+  getArchivo(element:any){
+  
     this.getFile.emit(element)
   }
 
