@@ -81,8 +81,8 @@ export class ConsultapedidosComponent implements OnInit {
   recalcDateParams(dateStart:string, dateEnd:string){
     const datePipe = new DatePipe('en-US');
     
-    const dateRangeStart = datePipe.transform(dateStart,'dd/MM/yyyy')
-    const dateRangeEnd = datePipe.transform(dateEnd,'dd/MM/yyyy')
+    const dateRangeStart = datePipe.transform(dateStart,'yyyy-MM-dd')
+    const dateRangeEnd = datePipe.transform(dateEnd,'yyyy-MM-dd')
   
     
     if (dateRangeStart != null && dateRangeEnd != null) {
