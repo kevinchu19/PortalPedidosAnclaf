@@ -14,6 +14,7 @@ import { TypeheadComponent } from './typehead/typehead.component';
 import { TableFilteredComponent } from './table-filtered/table-filtered.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { CustomPaginationLabels } from './table-filtered/CustomPaginationLabels';
+import { TableFilteredPipe } from './pipes/table-filtered.pipe';
 
 
 
@@ -22,7 +23,8 @@ import { CustomPaginationLabels } from './table-filtered/CustomPaginationLabels'
 @NgModule({
   declarations: [
     TypeheadComponent,
-    TableFilteredComponent
+    TableFilteredComponent,
+    TableFilteredPipe
   ],
   providers: [
     { provide: MatPaginatorIntl, 

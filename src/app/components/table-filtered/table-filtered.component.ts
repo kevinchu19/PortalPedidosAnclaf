@@ -1,4 +1,5 @@
-//TODO: Estilos de la tabla
+//TODO: Campos footer, calcularlos en funcion a displayedTotalColumns
+
 
 
 import {  AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
@@ -21,20 +22,24 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 export class TableFilteredComponent implements OnInit, AfterViewInit {
 
+  
+  public dataSource = new MatTableDataSource<any>();
+
   @Output("verDetallePedido") verDetallePedido: EventEmitter<string> = new EventEmitter();
   @Output("getFile") getFile: EventEmitter<string> = new EventEmitter();
   @Input() displayedColumnsTitles:string[];
   @Input() displayedColumns:string[];
+  @Input() displayedTotalColumns:string[];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   
   @Input() set data(value:any[]) {
 
     this.dataSource = new MatTableDataSource<any>(value)
-    this.dataSource.paginator = this.paginator;     
-      
+    this.dataSource.paginator = this.paginator;    
+     
+  
   };
   
-  public dataSource = new MatTableDataSource<any>();
    
   constructor(private _tfService: TableFilteredService) {
     
@@ -49,21 +54,6 @@ export class TableFilteredComponent implements OnInit, AfterViewInit {
 
   public handlePage(e:any){
   }
-  //public getPedidos(){
-    
-    //this._consultaPedidoService.GetPedidos("042",
-    //                                       "",
-    //                                       "",
-    //                                       "",
-    //                                       "",
-    //                                       "1","5").subscribe(
-    //  (resp:paginatedData<order>) => {      
-    //    this.dataSource.data = this.getOrderTF(resp.data);
-    //    console.log(this.dataSource.data);
-        
-    //  }
-   // )
- // }
 
 
   checkIfDate(date:any){
@@ -94,6 +84,7 @@ export class TableFilteredComponent implements OnInit, AfterViewInit {
   public doFilter = (value: string) => {
     
     this.dataSource.filter = value.trim().toLocaleLowerCase();
+   
   }
 
   getColumnName(titulo:string){
@@ -104,6 +95,21 @@ export class TableFilteredComponent implements OnInit, AfterViewInit {
     }
   }
 
+  calculoCamposFooter(titulo:string){
+    
+    if (titulo=="Importe" ) {
+      return this.getImporteTotal()
+    }else{
+      if (this.displayedColumnsTitles.indexOf(titulo)==0) {
+        return "Total:"
+      }
+    }
+    return ""
+  }
+
+  getImporteTotal() {
+   return this.dataSource.filteredData? this.dataSource.filteredData.map(c=>Number(c.importeNacional)).reduce((acc, value) => acc + value, 0):0;
+  }
 }
 
 

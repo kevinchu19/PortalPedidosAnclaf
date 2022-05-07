@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   base_url: 'https://localhost:44322/api/',
-  pdf_url: 'https://localhost:44323/api/'
+  pdf_url: 'http://191.102.18.36:22772/api/'
 };
 
 /*

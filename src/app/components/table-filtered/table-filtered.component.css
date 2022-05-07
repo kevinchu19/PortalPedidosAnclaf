@@ -1,8 +1,12 @@
-table {
+.mat-table {
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
     min-width: 500px;
+}
+
+.scroll {
+    overflow: scroll;
 }
 
 th.mat-header-cell {
@@ -14,6 +18,10 @@ th.mat-header-cell:first-of-type,
 td.mat-cell:first-of-type,
 td.mat-footer-cell:first-of-type {
     padding-left: 0.2rem!important;
+}
+
+td.mat-footer-cell {
+    font-weight: bold;
 }
 
 .mat-header-cell {

@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+
+const base_url = environment.pdf_url
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +31,14 @@ export class SidebarService {
       url: "/home/cuenta-corriente",
       submenu: [],
       newWindow:false
+    }
+    ,
+    {
+      titulo: 'Lista de Precios Vigente', 
+      icono: 'mdi mdi-file-pdf',
+      url: `${base_url}listadepreciosvigente/file`,
+      submenu: [],
+      newWindow:true
     }
   ];
    

@@ -1,3 +1,5 @@
+
+
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -83,7 +85,7 @@ export class CuentacorrienteComponent implements OnInit {
   }
 
   decodeTokenFromStorage():any {
-   
+      
     return this._authService.decodeTokenFromStorage();
    }
 
@@ -92,5 +94,22 @@ export class CuentacorrienteComponent implements OnInit {
     this._cuentaCorrienteService.getFile(e.pdfPath);
   }
 
+  calculaCamposTabla(tipo:string){
+    const TITULOS_COLUMNAS = {
+      titulos:  ['Razón social','Codigo de comprobante', 'Número de comprobante', 
+      'Fecha de movimiento', 'Fecha de vencimiento', 'Importe','pdffile'],
+      columnas: ['razonSocial','codigoFormulario', 'numeroFormulario', 'fechaMovimiento', 'fechaVencimiento', 'importeNacional','pdffile'],
+      totales: ['importeNacional']
+    } 
+
+    let resultado = TITULOS_COLUMNAS[tipo]
+  
+    if (this.decodeTokenFromStorage().cliente != "") {
+      
+      var eliminado = resultado.shift();
+    }
+    
+    return resultado;
+  }
 
 }
