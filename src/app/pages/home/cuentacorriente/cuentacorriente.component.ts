@@ -76,10 +76,11 @@ export class CuentacorrienteComponent implements OnInit {
   }
 
   recuperarDatos(cliente:string,idVendedor:string, fechaDesde:string, fechaHasta:string) {
+    this.cargandoNuevaBusqueda = true;
     this._cuentaCorrienteService.getCuentaCorriente(cliente,idVendedor, fechaDesde, fechaHasta, this.soloPendientes).subscribe(
       (resp:any)=>{
         this.data = resp;
-        
+        this.cargandoNuevaBusqueda = false;
       }
     )
   }
