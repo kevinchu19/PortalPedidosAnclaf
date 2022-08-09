@@ -12,7 +12,7 @@ export class TableFilteredPipe implements PipeTransform {
       if (titulo != 'Importe') {
         return value
       }
-      
+     
       
       let nf = new Intl.NumberFormat('en-US');
       
