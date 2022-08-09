@@ -21,7 +21,7 @@
         <div class="text-center mt-2" *ngIf="cargandoNuevaBusqueda">
             <i class="fa fa-spin fa-spinner"></i>
         </div>
-        <app-table-filtered #tableFiltered *ngIf="!cargandoNuevaBusqueda" [displayedColumnsTitles]="['Id de Pedido', 'Cliente', 'Fecha', 'Direccion de Entrega', 'Importe','lupa']" [displayedColumns]="['id', 'razonSocial', 'fecha', 'direccionEntrega', 'importeNacional', 'lupa']"
+        <app-table-filtered #tableFiltered *ngIf="!cargandoNuevaBusqueda" [displayedColumnsTitles]="['Id de Pedido', 'Cliente', 'Fecha', 'Direccion de Entrega', 'Importe','Estado','lupa']" [displayedColumns]="['id', 'razonSocial', 'fecha', 'direccionEntrega', 'importeNacional','estado', 'lupa']"
             [displayedTotalColumns]="['importeNacional']" [data]="this.data" (verDetallePedido)="verDetallePedido($event)"></app-table-filtered>
     </div>
 </div>
