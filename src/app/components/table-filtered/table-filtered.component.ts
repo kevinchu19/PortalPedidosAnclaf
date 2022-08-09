@@ -12,6 +12,8 @@ import { mapper } from '../automapper/automapper.model';
 import { TableFilteredService } from '../service/table-filtered.service';
 
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSort, Sort } from '@angular/material/sort';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 
 
@@ -31,17 +33,19 @@ export class TableFilteredComponent implements OnInit, AfterViewInit {
   @Input() displayedColumns:string[];
   @Input() displayedTotalColumns:string[];
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  
+
+  @ViewChild(MatSort) sort: MatSort;
+
+
   @Input() set data(value:any[]) {
 
     this.dataSource = new MatTableDataSource<any>(value)
     this.dataSource.paginator = this.paginator;    
-     
-  
+    this.dataSource.sort = this.sort;     
   };
   
    
-  constructor(private _tfService: TableFilteredService) {
+  constructor(private _tfService: TableFilteredService, private _liveAnnouncer: LiveAnnouncer) {
     
     
   }
@@ -110,6 +114,7 @@ export class TableFilteredComponent implements OnInit, AfterViewInit {
   getImporteTotal() {
    return this.dataSource.filteredData? this.dataSource.filteredData.map(c=>Number(c.importeNacional)).reduce((acc, value) => acc + value, 0):0;
   }
+
 }
 
 

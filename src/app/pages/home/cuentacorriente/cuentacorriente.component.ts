@@ -1,10 +1,12 @@
 
 
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { TypeheadComponent } from 'src/app/components/typehead/typehead.component';
 import { CuentacorrienteService } from '../../services/cuentacorriente.service';
+import { cliente } from '../../models/cliente.model';
 
 @Component({
   selector: 'app-cuentacorriente',
@@ -15,6 +17,9 @@ export class CuentacorrienteComponent implements OnInit {
   public cargandoNuevaBusqueda:boolean;
   public data:any;
   public soloPendientes:boolean;
+  public idVendedor: string = "";
+
+  @ViewChild ('cliente') clienteTypeheadComponent: TypeheadComponent
 
   public fechaMovimientoRange = new FormGroup({
     start: new FormControl(),
@@ -22,7 +27,9 @@ export class CuentacorrienteComponent implements OnInit {
   });
   
   public parametrosCuentaCorriente = this.fb.group({
-    soloPendientes: [false]
+    soloPendientes: [false],
+    cliente:[""],
+    cliente_descripcion:['']
   });
 
 
@@ -38,15 +45,44 @@ export class CuentacorrienteComponent implements OnInit {
     })
     
     this.parametrosCuentaCorriente.get("soloPendientes").valueChanges.subscribe(selectedValue=>{
+      
       this.soloPendientes = selectedValue;
       this.recalcDateParams(this.fechaMovimientoRange.value.start, this.fechaMovimientoRange.value.end)
       
     })
     
+    this.parametrosCuentaCorriente.get("cliente").valueChanges.subscribe(selectedValue=>{
+      
+      this.recalcDateParams(this.fechaMovimientoRange.value.start, this.fechaMovimientoRange.value.end)
+      
+    })
+
+    let tokenDecoded:any = this.decodeTokenFromStorage()
+    let cliente = "";
+    let vendedor = "";
+
+    if (tokenDecoded) {
+      cliente = tokenDecoded.cliente
+      vendedor = tokenDecoded.vendedor
+      if (cliente && cliente != "") {    
+        //setTimeout(() => {
+         // this.step1form.get('numeroCliente').setValue(cliente || ""); 
+        //}, 2000); 
+
+        setTimeout(() => {          
+          this.clienteTypeheadComponent.seleccionaValor(cliente)
+        }, 500); 
+
+      }
+
+      if (vendedor && vendedor != "") {
+
+        this.idVendedor = vendedor;
+      }
 
    }
 
-  
+  }
 
   ngOnInit(): void {
     //this.recuperarDatos(this.decodeTokenFromStorage().cliente)
@@ -70,12 +106,15 @@ export class CuentacorrienteComponent implements OnInit {
   
     
     if (dateRangeStart != null && dateRangeEnd != null) {
-      this.recuperarDatos(this.decodeTokenFromStorage().cliente, this.decodeTokenFromStorage().vendedor, dateRangeStart, dateRangeEnd);
+      this.recuperarDatos(this.parametrosCuentaCorriente.get('cliente').value, this.idVendedor, dateRangeStart, dateRangeEnd);
     }
     
   }
 
   recuperarDatos(cliente:string,idVendedor:string, fechaDesde:string, fechaHasta:string) {
+    
+    
+    
     this.cargandoNuevaBusqueda = true;
     this._cuentaCorrienteService.getCuentaCorriente(cliente,idVendedor, fechaDesde, fechaHasta, this.soloPendientes).subscribe(
       (resp:any)=>{
@@ -97,9 +136,9 @@ export class CuentacorrienteComponent implements OnInit {
 
   calculaCamposTabla(tipo:string){
     const TITULOS_COLUMNAS = {
-      titulos:  ['Razón social','Codigo de comprobante', 'Número de comprobante', 
-      'Fecha de movimiento', 'Fecha de vencimiento', 'Importe','pdffile'],
-      columnas: ['razonSocial','codigoFormulario', 'numeroFormulario', 'fechaMovimiento', 'fechaVencimiento', 'importeNacional','pdffile'],
+      titulos:  ['Razón social','Fecha de movimiento', 'Fecha de vencimiento','Codigo de comprobante', 'Número de comprobante', 
+       'Importe','pdffile'],
+      columnas: ['razonSocial','fechaMovimiento', 'fechaVencimiento','codigoFormulario', 'numeroFormulario',  'importeNacional','pdffile'],
       totales: ['importeNacional']
     } 
 
@@ -111,6 +150,15 @@ export class CuentacorrienteComponent implements OnInit {
     }
     
     return resultado;
+  }
+
+  campoNoValido(_formGroup:FormGroup,campo:string){
+    if (_formGroup.get(campo).invalid ) {
+      return true;
+    }else
+    {
+      return false;
+    }
   }
 
 }

@@ -20,6 +20,7 @@ import { TableFilteredPipe } from './pipes/table-filtered.pipe';
 
 
 
+
 @NgModule({
   declarations: [
     TypeheadComponent,
@@ -48,6 +49,7 @@ import { TableFilteredPipe } from './pipes/table-filtered.pipe';
     MatTableModule,
     MatNativeDateModule,
     MatPaginatorModule
+ 
   ]
 })
 export class ComponentsModule { }
