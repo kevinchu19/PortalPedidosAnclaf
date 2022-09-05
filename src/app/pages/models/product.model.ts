@@ -5,5 +5,6 @@ export class product {
     bonificacion1: number;
     bonificacion2: number;
     bonificacion3: number;
+    pesokg: number;
     
 }
