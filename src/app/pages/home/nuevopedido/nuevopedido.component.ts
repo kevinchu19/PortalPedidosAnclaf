@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { PagesService } from '../../services/pages.service';
 const PRODUCTO_FLETE = "SV    | 105";
+const PRODUCTO_FLETE_KG = "SV    | 124";
 
 
 
@@ -38,11 +39,14 @@ export class NuevopedidoComponent implements OnInit {
 
   public currentStep:number = 1;
   public total:number = 0;
+  public totalkg:number = 0;
+  public minimoFleteKg = 300;
   public grupoBonificacion: string = "";
   public idVendedor: string = "";
   public listaPrecios: string = "";
   public order: order;
   public guardandoPedido:boolean =false;
+  public leyendaMinimoKG:string = `Las entregas a partir de los ${this.minimoFleteKg}KG en vuestros locales serán sin costo, caso contrario tendrá un costo adicional sujeto a lista de precios vigente`
   
   public step1form = this.fb.group({
     numeroCliente: ['', Validators.required],
@@ -66,6 +70,7 @@ export class NuevopedidoComponent implements OnInit {
       bonificacion2: [0],
       bonificacion3: [0],
       bonificacion4: [0],
+      pesokg: [0],
       total: 0,
     },{
       validators: [this.numeroMayorACero('cantidad'), this.controlBonificacion('bonificacion'), this.controlBonificacionAdicional('bonificacion4')]
@@ -161,6 +166,7 @@ export class NuevopedidoComponent implements OnInit {
           if (this.step1form.valid) {
             this.currentStep = this.currentStep + valor;  
           }
+          this.ValidoAgregadoFleteporKg(this.step2form.get('modificarDireccion').value)
           break;
       
         case 2:
@@ -182,6 +188,23 @@ export class NuevopedidoComponent implements OnInit {
 
     
   }
+  ValidoAgregadoFleteporKg(modificarDireccion:boolean) {
+
+    if (modificarDireccion== false) {
+      this.eliminaFletes();
+      if (this.totalkg<this.minimoFleteKg) {       
+        this.agregaFlete(PRODUCTO_FLETE_KG);
+        Swal.fire({
+          allowOutsideClick: false,
+          title: 'Importante!',
+          text: this.leyendaMinimoKG,
+          icon: 'error',
+          confirmButtonText: 'OK'
+        })
+      }  
+    }
+    
+  }
 
   muestroDatosProducto(e:typeheadArray, itemactual:number){
         
@@ -193,6 +216,8 @@ export class NuevopedidoComponent implements OnInit {
                         this.items.controls[itemactual].get('bonificacion1').setValue(resp.bonificacion1 || 0);
                         this.items.controls[itemactual].get('bonificacion2').setValue(resp.bonificacion2 || 0);
                         this.items.controls[itemactual].get('bonificacion3').setValue(resp.bonificacion3 || 0);
+                        this.items.controls[itemactual].get('pesokg').setValue(resp.pesokg || 0);
+                         
                       });    
     
   }
@@ -338,11 +363,17 @@ export class NuevopedidoComponent implements OnInit {
       
       this.items.controls[numeroItem].get('total').setValue(this._pagesService.recalculoTotalItem(cantidad, precio, bonificaciones));
       this.total = this.items.controls.reduce((sum,current)=>  sum + current.get('total').value , 0 );
+      this.totalkg = this.items.controls.reduce((sum,current)=>  sum + current.get('pesokg').value*current.get('cantidad').value , 0 );
   }
   
   borraItem(item:number){
-    this.items.removeAt(item);
-    this.total = this.items.controls.reduce((sum,current)=>  sum + current.get('total').value , 0 );
+    if (item>0) {
+      
+      this.items.removeAt(item);
+      this.total = this.items.controls.reduce((sum,current)=>  sum + current.get('total').value , 0 );
+      this.totalkg = this.items.controls.reduce((sum,current)=>  sum + current.get('pesokg').value*current.get('cantidad').value , 0 );
+      
+    }
    }
   
   campoNoValido(_formGroup:FormGroup,campo:string, submittedState:boolean){
@@ -521,31 +552,34 @@ export class NuevopedidoComponent implements OnInit {
         const numeroCliente = this.step1form.get('numeroCliente').value
         this.muestroDatosCliente(numeroCliente)
       }
-      this.eliminaFlete();
+      this.ValidoAgregadoFleteporKg(e.target.checked);
     }else{
-      this.agregaFlete();
+      this.eliminaFletes();
+      this.agregaFlete(PRODUCTO_FLETE);
     }
   }
-  agregaFlete(){
+
+  agregaFlete(codigoFlete:string){
     
     this.agregaProducto()
   
-    this.items.controls[this.items.length-1].get("producto").setValue(PRODUCTO_FLETE);    
+    this.items.controls[this.items.length-1].get("producto").setValue(codigoFlete);    
     this.items.controls[this.items.length-1].get("cantidad").setValue(1);
 
     setTimeout(() => {
-      this.productosTypeheadComponent.last.seleccionaValor(PRODUCTO_FLETE);
+     
+      this.productosTypeheadComponent.last.seleccionaValor(codigoFlete);
     }, 500);     
     
   }
 
-  eliminaFlete(){
-    this.borraItem(this.items.controls.findIndex(item=>item.get('producto').value == PRODUCTO_FLETE));
+  eliminaFletes(){
+    this.borraItem(this.items.controls.findIndex(item=>item.get('producto').value == PRODUCTO_FLETE || item.get('producto').value == PRODUCTO_FLETE_KG));
   }
   validoItemDeshabilitado(numeroItem:number):boolean{
     
     if (numeroItem!=0){
-      if (this.items.controls[numeroItem].get("producto").value == PRODUCTO_FLETE ) {
+      if (this.items.controls[numeroItem].get("producto").value == PRODUCTO_FLETE || this.items.controls[numeroItem].get('producto').value == PRODUCTO_FLETE_KG ) {
       
         return true;
       }

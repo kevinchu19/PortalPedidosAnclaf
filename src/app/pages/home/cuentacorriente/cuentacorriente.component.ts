@@ -34,6 +34,9 @@ export class CuentacorrienteComponent implements OnInit {
 
 
   constructor(private _authService:AuthService, private _cuentaCorrienteService:CuentacorrienteService, private fb: FormBuilder, ) {
+    this.inicializoVariablesGlobales()
+    
+
     this.inicializoParametrosFechaConsulta(90);
     
     this.fechaMovimientoRange.get("start").valueChanges.subscribe(selectedValue=>{     
@@ -57,6 +60,9 @@ export class CuentacorrienteComponent implements OnInit {
       
     })
 
+
+  }
+  inicializoVariablesGlobales() {
     let tokenDecoded:any = this.decodeTokenFromStorage()
     let cliente = "";
     let vendedor = "";
@@ -78,6 +84,7 @@ export class CuentacorrienteComponent implements OnInit {
       if (vendedor && vendedor != "") {
 
         this.idVendedor = vendedor;
+        
       }
 
    }

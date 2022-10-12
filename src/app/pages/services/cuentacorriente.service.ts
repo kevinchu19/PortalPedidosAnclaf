@@ -15,6 +15,8 @@ export class CuentacorrienteService {
   getCuentaCorriente(cliente:string,idVendedor:string,fechaDesde:string,fechaHasta:string, soloPendientes:boolean){
     let params = new HttpParams() 
     params = params.append('cliente', cliente);
+    console.log(idVendedor);
+    
     params = params.append('idVendedor', idVendedor);
     params = params.append('fechaDesde', fechaDesde);
     params = params.append('fechaHasta', fechaHasta);
