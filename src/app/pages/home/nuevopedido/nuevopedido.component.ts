@@ -40,12 +40,13 @@ export class NuevopedidoComponent implements OnInit {
   public currentStep:number = 1;
   public total:number = 0;
   public totalkg:number = 0;
-  public maximoFleteKg = 250;
+  public minimoFleteKg = 300;
   public grupoBonificacion: string = "";
   public idVendedor: string = "";
   public listaPrecios: string = "";
   public order: order;
   public guardandoPedido:boolean =false;
+  public leyendaMinimoKG:string = `Las entregas a partir de los ${this.minimoFleteKg}KG en vuestros locales serán sin costo, caso contrario tendrá un costo adicional sujeto a lista de precios vigente`
   
   public step1form = this.fb.group({
     numeroCliente: ['', Validators.required],
@@ -191,8 +192,15 @@ export class NuevopedidoComponent implements OnInit {
 
     if (modificarDireccion== false) {
       this.eliminaFletes();
-      if (this.totalkg>this.maximoFleteKg) {       
+      if (this.totalkg<this.minimoFleteKg) {       
         this.agregaFlete(PRODUCTO_FLETE_KG);
+        Swal.fire({
+          allowOutsideClick: false,
+          title: 'Importante!',
+          text: this.leyendaMinimoKG,
+          icon: 'error',
+          confirmButtonText: 'OK'
+        })
       }  
     }
     
