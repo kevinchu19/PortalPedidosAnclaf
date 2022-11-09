@@ -14,8 +14,9 @@ import { TableFilteredService } from '../service/table-filtered.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { environment } from 'src/environments/environment';
 
-
+const PDF_URL = environment.pdf_url;
 
 @Component({
   selector: 'app-table-filtered',
@@ -27,6 +28,7 @@ export class TableFilteredComponent implements OnInit, AfterViewInit {
   
   public dataSource = new MatTableDataSource<any>();
 
+  public pdf_url:string;
   @Output("verDetallePedido") verDetallePedido: EventEmitter<string> = new EventEmitter();
   @Output("getFile") getFile: EventEmitter<string> = new EventEmitter();
   @Input() displayedColumnsTitles:string[];
@@ -46,6 +48,7 @@ export class TableFilteredComponent implements OnInit, AfterViewInit {
   
    
   constructor(private _tfService: TableFilteredService, private _liveAnnouncer: LiveAnnouncer) {
+    this.pdf_url = PDF_URL;
     
     
   }
