@@ -14,8 +14,7 @@ export class CuentacorrienteService {
   
   getCuentaCorriente(cliente:string,idVendedor:string,fechaDesde:string,fechaHasta:string, soloPendientes:boolean){
     let params = new HttpParams() 
-    params = params.append('cliente', cliente);
-    console.log(idVendedor);
+    params = params.append('cliente', cliente);  
     
     params = params.append('idVendedor', idVendedor);
     params = params.append('fechaDesde', fechaDesde);
@@ -25,7 +24,7 @@ export class CuentacorrienteService {
     return this.http.get( `${base_url}table/cuentacorriente${soloPendientes?"/pendientes":""}`, options)
   }
 
-  getFile(pdfPath:string){
-    window.open(`${pdf_url}cuentacorriente/file/${pdfPath}`,"_blank_")
-  }
+  //getFile(pdfPath:string){
+    //window.open(`${pdf_url}cuentacorriente/file/${pdfPath}`,"_blank_")
+  //}
 }

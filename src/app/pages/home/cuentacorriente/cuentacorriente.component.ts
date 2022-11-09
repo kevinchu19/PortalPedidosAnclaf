@@ -136,10 +136,10 @@ export class CuentacorrienteComponent implements OnInit {
     return this._authService.decodeTokenFromStorage();
    }
 
-  getFile(e:any){
+  //getFile(e:any){
        
-    this._cuentaCorrienteService.getFile(e.pdfPath);
-  }
+    //this._cuentaCorrienteService.getFile(e.pdfPath);
+  //}
 
   calculaCamposTabla(tipo:string){
     const TITULOS_COLUMNAS = {

@@ -45,5 +45,6 @@
 <div class="text-center mt-2" *ngIf="cargandoNuevaBusqueda">
     <i class="fa fa-spin fa-spinner"></i>
 </div>
-<app-table-filtered #tableFiltered *ngIf="!cargandoNuevaBusqueda" [displayedColumnsTitles]="calculaCamposTabla('titulos')" [displayedColumns]="calculaCamposTabla('columnas')" [displayedTotalColumns]="calculaCamposTabla('totales')" [data]="this.data" (getFile)="getFile($event)">
+<app-table-filtered #tableFiltered *ngIf="!cargandoNuevaBusqueda" [displayedColumnsTitles]="calculaCamposTabla('titulos')" [displayedColumns]="calculaCamposTabla('columnas')" [displayedTotalColumns]="calculaCamposTabla('totales')" [data]="this.data">
+    <!-- (getFile)="getFile($event)"-->
 </app-table-filtered>
