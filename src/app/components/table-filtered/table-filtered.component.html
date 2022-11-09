@@ -20,6 +20,8 @@
                     {{element[column] | tableFiltered:getColumnName(displayedColumnsTitles[columnaActual])}}
                     <a *ngIf="displayedColumnsTitles[columnaActual]=='lupa'" href="javascript:void(0)" (click)="verDetalle(element.id)" data-toggle="tooltip" data-placement="bottom" data-original-title="Tooltip on bottom" title="Ver detalle del pedido"><i class="mdi mdi-magnify"> </i></a>
                     <a *ngIf="displayedColumnsTitles[columnaActual]=='pdffile'" [attr.href]="'http://191.102.18.36:22771/api/cuentacorriente/file/' + element.pdfPath" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Tooltip on bottom" title="Ver PDF asociado"><i class="mdi mdi-file-pdf"> </i></a>
+                    <a *ngIf="displayedColumnsTitles[columnaActual]=='pdffile'" [attr.href]="'http://gilera.netcontent.com.ar:8080/#/login/es'" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Tooltip on bottom" title="Ver PDF asociado"><i class="mdi mdi-file-pdf"> </i></a>
+                    <a *ngIf="displayedColumnsTitles[columnaActual]=='pdffile'" [attr.href]="'https://www.google.com.ar/'" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Tooltip on bottom" title="Ver PDF asociado"><i class="mdi mdi-file-pdf"> </i></a>
                 </div>
             </td>
 
