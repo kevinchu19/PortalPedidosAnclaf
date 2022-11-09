@@ -166,14 +166,17 @@ export class NuevopedidoComponent implements OnInit {
           if (this.step1form.valid) {
             this.currentStep = this.currentStep + valor;  
           }
-          this.ValidoAgregadoFleteporKg(this.step2form.get('modificarDireccion').value)
+          
           break;
       
         case 2:
           this.step2FormSubmitted = true;
           if (this.step2form.valid) {
-            this.currentStep = this.currentStep + valor;  
+            setTimeout(() => {
+              this.currentStep = this.currentStep + valor;  
+            }, 1000); 
           }
+          this.ValidoAgregadoFleteporKg(this.step2form.get('modificarDireccion').value, this.step2form.get('retiraDeFabrica').value)
           break;
       
         default:
@@ -188,9 +191,9 @@ export class NuevopedidoComponent implements OnInit {
 
     
   }
-  ValidoAgregadoFleteporKg(modificarDireccion:boolean) {
-
-    if (modificarDireccion== false) {
+  ValidoAgregadoFleteporKg(modificarDireccion:boolean, retiraDePlanta:boolean) {
+    
+    if (modificarDireccion== false && retiraDePlanta==false) {
       this.eliminaFletes();
       if (this.totalkg<this.minimoFleteKg) {       
         this.agregaFlete(PRODUCTO_FLETE_KG);
@@ -552,10 +555,16 @@ export class NuevopedidoComponent implements OnInit {
         const numeroCliente = this.step1form.get('numeroCliente').value
         this.muestroDatosCliente(numeroCliente)
       }
-      this.ValidoAgregadoFleteporKg(e.target.checked);
+      this.ValidoAgregadoFleteporKg(e.target.checked,this.step2form.get('retiraDeFabrica').value);
     }else{
       this.eliminaFletes();
       this.agregaFlete(PRODUCTO_FLETE);
+    }
+  }
+
+  modificaRetiraEnPlanta(e:any){
+    if (e.target.checked) {
+      this.eliminaFletes();
     }
   }
 
@@ -567,13 +576,16 @@ export class NuevopedidoComponent implements OnInit {
     this.items.controls[this.items.length-1].get("cantidad").setValue(1);
 
     setTimeout(() => {
-     
+      
       this.productosTypeheadComponent.last.seleccionaValor(codigoFlete);
     }, 500);     
+
     
   }
 
   eliminaFletes(){
+    console.log('Entra a borrar');
+    
     this.borraItem(this.items.controls.findIndex(item=>item.get('producto').value == PRODUCTO_FLETE || item.get('producto').value == PRODUCTO_FLETE_KG));
   }
   validoItemDeshabilitado(numeroItem:number):boolean{

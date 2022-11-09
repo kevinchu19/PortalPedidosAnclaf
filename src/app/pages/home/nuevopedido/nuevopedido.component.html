@@ -162,7 +162,7 @@
                         <!-- Step 2 -->
                         <h6 id="steps-uid-2-h-1" tabindex="-1" class="title">Step 2</h6>
                         <form [hidden]="currentStep!=2" id="steps-uid-2-p-1" role="tabpanel" aria-labelledby="steps-uid-2-h-1" class="body" aria-hidden="true" [formGroup]="step2form">
-                            <div *ngIf="this.totalkg < this.minimoFleteKg" class="row">
+                            <div *ngIf="this.totalkg < this.minimoFleteKg && step2form.get('retiraDeFabrica').value == false" class="row">
                                 <div class="col-md-12">
                                     <div class="alert alert-danger">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
@@ -172,7 +172,7 @@
                             </div>
                             <div class="row">
                                 <div class="checkbox checkbox-primary col-md-4 p-t-0">
-                                    <input formControlName="retiraDeFabrica" id="retiraDeFabrica" type="checkbox" class="filled-in chk-col-light-blue">
+                                    <input formControlName="retiraDeFabrica" id="retiraDeFabrica" type="checkbox" class="filled-in chk-col-light-blue" (click)="modificaRetiraEnPlanta($event)">
                                     <label for="retiraDeFabrica"> Retira de Fábrica? </label>
                                 </div>
                                 <div [ngClass]="{'hidden': step2form.get('codigoEntrega').value == '99' && step2form.get('codigoEntrega').valid ?false:true, 
