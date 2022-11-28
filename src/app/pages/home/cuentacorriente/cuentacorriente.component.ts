@@ -75,7 +75,7 @@ export class CuentacorrienteComponent implements OnInit {
          // this.step1form.get('numeroCliente').setValue(cliente || ""); 
         //}, 2000); 
 
-        setTimeout(() => {          
+      setTimeout(() => {          
           this.clienteTypeheadComponent.seleccionaValor(cliente)
         }, 500); 
 
@@ -113,7 +113,7 @@ export class CuentacorrienteComponent implements OnInit {
   
     
     if (dateRangeStart != null && dateRangeEnd != null) {
-      this.recuperarDatos(this.parametrosCuentaCorriente.get('cliente').value, this.idVendedor, dateRangeStart, dateRangeEnd);
+      this.recuperarDatos(this.parametrosCuentaCorriente.get('cliente').value == ''?this.decodeTokenFromStorage().cliente:this.parametrosCuentaCorriente.get('cliente').value, this.idVendedor, dateRangeStart, dateRangeEnd);
     }
     
   }
