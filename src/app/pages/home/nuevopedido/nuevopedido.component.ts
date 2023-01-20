@@ -591,8 +591,10 @@ export class NuevopedidoComponent implements OnInit {
       if ( this.productosTypeheadComponent.last.cargando == true) {
         return false
       }
-
+    
+    setTimeout(() => {
       return true
+    }, 1000);     
   }
 
   eliminaFletes(){
