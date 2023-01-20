@@ -592,9 +592,9 @@ export class NuevopedidoComponent implements OnInit {
         return false
       }
     
-    setTimeout(() => {
+    
       return true
-    }, 1000);     
+    
   }
 
   eliminaFletes(){
