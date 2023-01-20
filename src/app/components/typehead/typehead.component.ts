@@ -27,6 +27,7 @@ export class TypeheadComponent implements OnInit {
   @Input() optionalParameters:optionalParameters[];
 
   @Output() valorSeleccionado: EventEmitter<typeheadArray> = new EventEmitter();
+  //@Output() cargandoEmit: EventEmitter<boolean> = new EventEmitter();
   
   public cargando:boolean = false;
   public terminoInput:string = "";

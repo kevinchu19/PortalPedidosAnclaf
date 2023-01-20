@@ -366,12 +366,12 @@
                                 </button>
                             </li>
                             <li *ngIf="currentStep == 3" aria-hidden="true">
-                                <button [attr.disabled]="guardandoPedido==true?true:null" (click)="graboPedido()" class="btn btn-danger" type="submit" role="menuitem">
-                                <span *ngIf="!guardandoPedido">
+                                <button [attr.disabled]="!dejoGuardar()?true:null" (click)="graboPedido()" class="btn btn-danger" type="submit" role="menuitem">
+                                <span *ngIf="dejoGuardar()">
                                     <i class = "fa fa-check"></i>
                                     Confirmar Pedido
                                 </span>
-                                <i *ngIf="guardandoPedido" class="fa fa-spin fa-spinner"></i>
+                                <i *ngIf="!dejoGuardar()" class="fa fa-spin fa-spinner"></i>
                                 </button>
                             </li>
                         </ul>
