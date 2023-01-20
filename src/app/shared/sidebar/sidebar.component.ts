@@ -21,7 +21,8 @@ export class SidebarComponent implements OnInit {
   navigate(url:string, newWindow:boolean){
     if (url!="") {
       if (newWindow) {
-        window.open(url, "_blank");
+        //window.open(url, "_blank");
+        document.location.href = url;
       }else{
         this.router.navigateByUrl(url)
       }
