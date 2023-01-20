@@ -574,13 +574,25 @@ export class NuevopedidoComponent implements OnInit {
   
     this.items.controls[this.items.length-1].get("producto").setValue(codigoFlete);    
     this.items.controls[this.items.length-1].get("cantidad").setValue(1);
-
+    
     setTimeout(() => {
       
       this.productosTypeheadComponent.last.seleccionaValor(codigoFlete);
+      
     }, 500);     
-
     
+  }
+
+  dejoGuardar():boolean{
+      if (this.guardandoPedido==true) {
+        return false
+      }
+
+      if ( this.productosTypeheadComponent.last.cargando == true) {
+        return false
+      }
+
+      return true
   }
 
   eliminaFletes(){
