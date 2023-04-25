@@ -1,4 +1,4 @@
-import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren, ElementRef } from '@angular/core';
 import { product } from '../../models/product.model';
 import { NuevopedidoService } from '../../services/nuevopedido.service';
 import { typeheadArray } from '../../../components/models/typeheadArray.model';
@@ -29,7 +29,7 @@ const PRODUCTO_FLETE_KG = "SV    | 124";
 
 export class NuevopedidoComponent implements OnInit {
 
-  
+  @ViewChild ('leyendaFabricacion') leyendaFabricacionElement: HTMLElement
   @ViewChild ('provinciaEntrega') provinciaEntregaTypeheadComponent: TypeheadComponent
   @ViewChild ('provinciaFacturacion') provinciaFacturacionTypeheadComponent: TypeheadComponent
   @ViewChild ('cliente') clienteTypeheadComponent: TypeheadComponent
@@ -37,10 +37,11 @@ export class NuevopedidoComponent implements OnInit {
   @ViewChildren ('productos') productosTypeheadComponent: QueryList<TypeheadComponent>;
 
 
+  
   public currentStep:number = 1;
   public total:number = 0;
   public totalkg:number = 0;
-  public minimoFleteKg = 300;
+  public minimoFleteKg = 250;
   public grupoBonificacion: string = "";
   public idVendedor: string = "";
   public listaPrecios: string = "";
@@ -187,7 +188,11 @@ export class NuevopedidoComponent implements OnInit {
       this.currentStep = this.currentStep + valor;  
     }
     
-    
+    window.scroll({ 
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth' 
+    });
 
     
   }
