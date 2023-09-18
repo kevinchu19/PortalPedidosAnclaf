@@ -17,6 +17,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { CuentacorrienteComponent } from './home/cuentacorriente/cuentacorriente.component';
+import { NuevopresupuestoComponent } from './home/nuevopresupuesto/nuevopresupuesto.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { CuentacorrienteComponent } from './home/cuentacorriente/cuentacorriente
     PagesComponent,
     NuevopedidoComponent,
     ConsultapedidosComponent,
-    CuentacorrienteComponent
+    CuentacorrienteComponent,
+    NuevopresupuestoComponent
   ],
   exports: [
     PagesComponent 

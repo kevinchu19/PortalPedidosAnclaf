@@ -1,0 +1,383 @@
+<!-- Validation wizard -->
+<div class="row" id="validation">
+    <div class="col-12">
+        <div class="card wizard-content">
+            <div class="card-body">
+                <form class="validation-wizard wizard-circle wizard clearfix" role="application" id="steps-uid-2" novalidate="novalidate">
+                    <div class="steps clearfix">
+                        <ul role="tablist">
+                            <!--<li role="tab" class="done" aria-disabled="false" aria-selected="true">-->
+                            <li role="tab" [ngClass]="{'first':true, 'current':currentStep == 1,'done': currentStep > 1, 'disabled': currentStep < 1}" aria-disabled="false" aria-selected="true">
+                                <a role="button" id="steps-uid-2-t-0" (click)="currentStep>1?currentStep=1:null" href="javascript: void(0)" aria-controls="steps-uid-2-p-0">
+                                    <span class="step">1</span> Selección de Productos
+                                </a>
+                            </li>
+                            <li role="tab" [ngClass]="{'current':currentStep == 2,'done': currentStep > 2, 'disabled': currentStep < 2}" aria-disabled="false" aria-selected="false">
+                                <a id="steps-uid-2-t-1" (click)="currentStep>2?currentStep=2:null" href="javascript: void(0)" aria-controls="steps-uid-2-p-1">
+                                    <span class="step">2</span> Datos de entrega
+                                </a>
+                            </li>
+                            <li role="tab" [ngClass]="{'current':currentStep == 3,'done': currentStep > 3, 'disabled': currentStep < 3}" aria-disabled=" true ">
+                                <a id="steps-uid-2-t-2" (click)="currentStep>3?currentStep=3:null" href="javascript: void(0)" aria-controls="steps-uid-2-p-2 ">
+                                    <span class="step">3</span> Datos de facturación
+                                </a>
+                            </li>
+                            <li role="tab " [ngClass]="{ 'last':true, 'current':currentStep==4 , 'done': currentStep> 4, 'disabled': currentStep < 4}" aria-disabled="true">
+                                <a id="steps-uid-2-t-3" href="javascript: void(0)" aria-controls="steps-uid-2-p-3">
+                                    <span class="step">4</span> Presupuesto confirmado
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="content clearfix">
+                        <!-- Step 1 -->
+                        <h6 id="steps-uid-2-h-0" tabindex="-1" class="title current">Step 1</h6>
+                        <form [formGroup]="step1form" [hidden]="currentStep!=1" id="steps-uid-2-p-0" role="tabpanel" aria-labelledby="steps-uid-2-h-0" class="body current">
+                            <div class="row">
+                                <div [ngClass]="{'form-group':true, 'col-md-6':true, 'mt-2':true, 'px-0':true,
+                                            'error': campoNoValido(step1form,'numeroCliente', step1FormSubmitted),
+                                            'hidden': decodeTokenFromStorage().cliente != ''}">
+
+                                    <div>
+                                        <app-typehead #cliente (valorSeleccionado)="muestroDatosCliente($event)" [resource]='"cliente"' [parentForm]="step1form" campoFormulario='numeroCliente' [keyParameterValue]="idVendedor" placeholder='Cliente'>
+                                        </app-typehead>
+                                        <div *ngIf="campoNoValido(step1form,'numeroCliente', step1FormSubmitted)" style="margin-left: 15px;" class="help-block">
+                                            <ul role="alert">
+                                                <li>El campo es obligatorio y debe tener un valor válido </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div [ngClass]="{'checkbox':true, 'checkbox-primary':true, 'p-t-0':true, ' text-right':true,
+                                            'hidden': decodeTokenFromStorage().cliente != '',
+                                            'col-md-6': decodeTokenFromStorage().cliente == ''}">
+                                    <input formControlName="pagoEnEfectivo" id="pagoEnEfectivo" type="checkbox" class="filled-in chk-col-light-blue">
+                                    <label for="pagoEnEfectivo" style="margin-right: 3px;"> Pago en Efectivo </label>
+                                    <!-- Comentado el 3/1/2022. Etapa II portal web
+                                        <input formControlName="acopio" id="acopio" type="checkbox" class="filled-in chk-col-light-blue">
+                                        <label for="acopio"> Acopio </label>
+                                    -->
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table id="demo-foo-addrow" class="table m-t-30 table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 55%;padding-left: 0px;">Codigo de producto</th>
+                                                <th style="width: 10%;">Cantidad</th>
+                                                <th style="width: 10%;">Precio</th>
+                                                <th style="width: 10%;">Bonificacion(%)</th>
+                                                <th style="width: 10%;" [hidden]="!decodeTokenFromStorage().vendedor">Bonif. Adicional(%)</th>
+                                                <th>Total</th>
+                                                <th style="width: 5%;"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody formArrayName="items">
+                                            <tr *ngFor="let item of getItems().controls; let itemActual=index" class="footable-even">
+                                                <ng-container [formGroupName]="itemActual">
+                                                    <td [ngClass]="{'form-group':true, 'error': campoNoValido(item,'producto', step1FormSubmitted)}" style="padding-left: 0px;width: 55%;">
+                                                        <app-typehead #productos [disabled]="validoItemDeshabilitado(itemActual)" (valorSeleccionado)="muestroDatosProducto($event, itemActual)" placeholder='Producto' [resource]='"producto"' [parentForm]="item" campoFormulario='producto' [optionalParameters]="[{key: 'listaPrecios', value: listaPrecios},{key: 'cliente', value: step1form.get('numeroCliente').value}]"></app-typehead>
+                                                        <div *ngIf="campoNoValido(item,'producto', step1FormSubmitted)" style="margin-left: 15px;" class="help-block">
+                                                            <ul role="alert">
+                                                                <li>El campo es obligatorio y debe tener un valor válido</li>
+                                                            </ul>
+                                                        </div>
+
+                                                    </td>
+                                                    <td [ngClass]="{'form-group':true, 'error': campoNoValido(item,'cantidad', step1FormSubmitted)}">
+                                                        <input [attr.disabled]="validoItemDeshabilitado(itemActual)" type="number" class="form-control" placeholder="Cantidad" autocomplete="off" spellcheck="false" dir="auto" name="cantidad" formControlName="cantidad">
+                                                        <div *ngIf="campoNoValido(item,'cantidad', step1FormSubmitted)" class="help-block">
+                                                            <ul role="alert">
+                                                                <li>El campo es obligatorio y debe ser mayor a cero </li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                    <td>${{item.get('precio').value | number:'1.2'}}</td>
+                                                    <td [ngClass]="{'form-group':true, 'error': campoNoValido(item,'bonificacion', step1FormSubmitted)}">
+                                                        <input type="number" [attr.disabled]="true" class="form-control" autocomplete="off" spellcheck="false" dir="auto" name="bonificacion" formControlName="bonificacion">
+                                                        <div *ngIf="campoNoValido(item,'bonificacion', step1FormSubmitted)" class="help-block">
+                                                            <ul role="alert">
+                                                                <li>Debe ingresar un numero positivo, menor a 100 </li>
+                                                            </ul>
+                                                        </div>
+
+                                                    </td>
+                                                    <td [hidden]="!decodeTokenFromStorage().vendedor" [ngClass]="{'form-group':true, 'error': campoNoValido(item,'bonificacion4', step1FormSubmitted)}">
+                                                        <input type="number" class="form-control" autocomplete="off" spellcheck="false" dir="auto" name="bonificacion4" formControlName="bonificacion4">
+                                                        <div *ngIf="campoNoValido(item,'bonificacion4', step1FormSubmitted)" class="help-block">
+                                                            <ul role="alert">
+                                                                <li>Debe ingresar un numero positivo, entre 0 y 10 </li>
+                                                            </ul>
+                                                        </div>
+
+                                                    </td>
+
+                                                    <td>${{item.get('total').value | number:'1.2'}}</td>
+
+                                                    <td>
+                                                        <button [attr.disabled]="validoItemDeshabilitado(itemActual)" type="button" class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete" (click)="borraItem(itemActual)"><i class="ti-close" aria-hidden="true"></i></button>
+                                                    </td>
+                                                </ng-container>
+
+
+                                            </tr>
+
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row m-b-10">
+                                <div class="col-12">
+                                    <div class="pull-right">
+                                        <button type="button" (click)="agregaProducto()" class="btn btn-danger btn-rounded">Agregar producto</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <textarea formControlName="observacion" id="" cols="30" rows="2" placeholder="Observaciones del presupuesto" class="form-control col-12"></textarea>
+                            </div>
+                            <div *ngIf="step1form.get('items').errors && step1FormSubmitted" class="text-center alert alert-danger alert-rounded">Debe elegir algún producto para avanzar con el presupuesto</div>
+
+                            <div class="col-md-12">
+                                <hr>
+                                <div class="d-flex justify-content-between m-t-10">
+
+                                    <div>
+                                        <h3><b>Total KG :</b> {{ totalkg | number:'1.2' }}</h3>
+                                    </div>
+                                    <div>
+                                        <h3><b>Total sin impuestos :</b> ${{ total | number:'1.2' }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                        <!-- Step 2 -->
+                        <h6 id="steps-uid-2-h-1" tabindex="-1" class="title">Step 2</h6>
+                        <form [hidden]="currentStep!=2" id="steps-uid-2-p-1" role="tabpanel" aria-labelledby="steps-uid-2-h-1" class="body" aria-hidden="true" [formGroup]="step2form">
+                            <div *ngIf="this.totalkg < this.minimoFleteKg && step2form.get('retiraDeFabrica').value == false" class="row">
+                                <div class="col-md-12">
+                                    <div class="alert alert-danger">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+                                        <h3 class="text-danger"><i class="fa fa-exclamation-triangle"></i> Importante</h3> {{this.leyendaMinimoKG}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="checkbox checkbox-primary col-md-4 p-t-0">
+                                    <input formControlName="retiraDeFabrica" id="retiraDeFabrica" type="checkbox" class="filled-in chk-col-light-blue" (click)="modificaRetiraEnPlanta($event)">
+                                    <label for="retiraDeFabrica"> Retira de Fábrica? </label>
+                                </div>
+                                <div [ngClass]="{'hidden': step2form.get('codigoEntrega').value == '99' && step2form.get('codigoEntrega').valid ?false:true, 
+                                                 'checkbox':true, 'checkbox-primary':true, 'col-md-4':true, 'p-t-0':true}">
+                                    <input formControlName="esBarrioCerrado" id="esBarrioCerrado" type="checkbox" class="filled-in chk-col-light-blue">
+                                    <label for="esBarrioCerrado"> Es Barrio Cerrado? </label>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+
+                                <label for="example-search-input" class="col-form-label col-md-2">Fecha de entrega:</label>
+                                <div class="col-md-10">
+                                    <input class="form-control " formControlName="fechaDeEntrega" type="date" id="fechaDeEntrega" placeholder="">
+                                </div>
+
+                            </div>
+
+                            <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'codigoEntrega', step2FormSubmitted)}">
+                                <label class="col-md-2 col-form-label">Codigo de entrega</label>
+                                <div class="col-10">
+                                    <app-typehead (valorSeleccionado)="muestroDatosEntrega($event)" [resource]='"clientedireccionesentrega"' [parentForm]="step2form" campoFormulario='codigoEntrega' [keyParameterValue]="step1form.get('numeroCliente').value">
+                                    </app-typehead>
+                                    <div *ngIf="campoNoValido(step2form,'codigoEntrega', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
+                                        <ul role="alert">
+                                            <li>El campo debe tener un valor válido </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'direccionEntrega', step2FormSubmitted)}">
+                                <label for="example-search-input" class="col-sm-2 col-form-label">Direccion Entrega</label>
+                                <div class="col-sm-6">
+                                    <input class="form-control" type="text" name="DireccionEntrega" formControlName="direccionEntrega" [attr.disabled]="step2form.get('modificarDireccion').value?null:true">
+                                    <div *ngIf="campoNoValido(step2form,'direccionEntrega', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
+                                        <ul role="alert">
+                                            <li>El campo es obligatorio </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="checkbox checkbox-primary col-sm-4 p-t-0">
+                                    <input formControlName="modificarDireccion" id="modificarDireccion" type="checkbox" class="filled-in chk-col-light-blue" (click)="modificaDireccion($event)">
+                                    <label for="modificarDireccion"> Modificar dirección </label>
+                                </div>
+                            </div>
+                            <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'provinciaEntrega', step2FormSubmitted)}">
+                                <label for="example-search-input" class="col-md-2 col-form-label">Provincia Entrega</label>
+                                <div class="col-10">
+                                    <app-typehead #provinciaEntrega [disabled]="step2form.get('modificarDireccion').value?null:true" [resource]='"provincia"' [parentForm]="step2form" campoFormulario='provinciaEntrega' placeholder='Provincia de Entrega'>
+                                    </app-typehead>
+                                    <div *ngIf="campoNoValido(step2form,'provinciaEntrega', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
+                                        <ul role="alert">
+                                            <li>El campo es obligatorio y debe tener un valor válido </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'transportistaRedespacho', step2FormSubmitted)}">
+                                <label for="example-search-input" class="col-md-2 col-form-label">Transportista</label>
+                                <div class="col-10">
+                                    <app-typehead #transportistaRedespacho [resource]='"transportistaredespacho"' [parentForm]="step2form" campoFormulario='transportistaRedespacho' placeholder='Transportista'>
+                                    </app-typehead>
+                                    <div *ngIf="campoNoValido(step2form,'transportistaRedespacho', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
+                                        <ul role="alert">
+                                            <li>El campo debe tener un valor válido </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'telefono', step2FormSubmitted)}">
+                                <label for="example-search-input" class="col-md-2 col-form-label">Teléfono de contacto</label>
+                                <div class="col-10">
+                                    <input maxlength="30" class="form-control" type="phone" name="telefono" formControlName="telefono">
+                                    <div *ngIf="campoNoValido(step2form,'telefono', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
+                                        <ul role="alert">
+                                            <li>El campo es obligatorio y debe ser menor de 30 caracteres</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div [ngClass]="{'row':true,'form-group':true, 'error': campoNoValido(step2form,'email', step2FormSubmitted)}">
+                                <label for="example-search-input" class="col-md-2 col-form-label">Email de contacto</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="email" name="email" formControlName="email">
+                                    <div *ngIf="campoNoValido(step2form,'email', step2FormSubmitted)" style="margin-left: 15px;" class="help-block">
+                                        <ul role="alert">
+                                            <li>Debe ingresar un email válido </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2"></div>
+                                <div class="col-10">
+                                    <textarea formControlName="observacionLogistica" id="" cols="30" rows="5" placeholder="Observaciones de la entrega" class="form-control"></textarea>
+                                </div>
+
+                            </div>
+                            <app-typehead style="display: none;" #provinciaFacturacion [resource]='"provincia"' [parentForm]="step2form" campoFormulario='provinciaFacturacion'> </app-typehead>
+
+                        </form>
+                        <!-- Step 3 -->
+                        <h6 id="steps-uid-2-h-2" tabindex="-1" class="title">Step 3</h6>
+                        <section [hidden]="currentStep!=3" id="steps-uid-2-p-2" role="tabpanel" aria-labelledby="steps-uid-2-h-2" class="body" aria-hidden="true">
+                            <div #leyendaFabricacion class="alert alert-warning">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+                                <h3 class="text-warning"><i class="fa fa-exclamation-triangle"></i> Importante</h3> En el caso que su presupuesto incluya productos para su fabricación, el tiempo estimado de la misma, será de 10 días hábiles a partir de la autorización de créditos.
+                            </div>
+                            <br>
+
+                            <h3><b>PRESUPUESTO</b> <span class="pull-right">Número a confirmar</span></h3>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="pull-left">
+                                        <address>
+                                                <h3> &nbsp;<b class="text-danger">{{step1form.get('numeroCliente_descripcion').value}}</b></h3>
+                                                <p class="text-muted m-l-5">CUIT: {{step2form.get('numeroDocumento').value}}
+                                                    <br> {{step2form.get('direccionFacturacion').value}} - ({{step2form.get('codigoPostalFacturacion').value}}),
+                                                    <br> {{step2form.get('provinciaFacturacion_descripcion').value}}
+                                                </p>
+                                            </address>
+                                    </div>
+                                    <div class="pull-right text-right">
+                                        <address>
+                                                <h3>Dirección de entrega: </h3>
+                                                <h4 class="font-bold">{{step2form.get('codigoEntrega_descripcion').value}}</h4>
+                                                <p class="text-muted m-l-30"> {{step2form.get('direccionEntrega').value}} - ({{step2form.get('codigoPostalEntrega').value}}),
+                                                    <br> {{step2form.get('provinciaEntrega_descripcion').value}}
+                                                <p class="m-t-30"><b>Fecha del presupuesto:</b> <i class="fa fa-calendar"></i> {{step2form.get('fecha').value | date:'dd/MM/yyyy'}}</p>
+                                                <p class="m-t-30"><b>Fecha de entrega solicitada:</b> <i class="fa fa-calendar"></i> {{step2form.get('fechaDeEntrega').value | date:'dd/MM/yyyy'}}</p>
+                                            </address>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="pull-left">
+                                        <p class="text-muted m-l-5">
+                                            {{step1form.get('observacion').value}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="table-responsive m-t-40" style="clear: both;">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">#</th>
+                                                    <th>Producto</th>
+                                                    <th class="text-right">Cantidad</th>
+                                                    <th class="text-right">Precio</th>
+                                                    <th class="text-right">Bonif.</th>
+                                                    <th class="text-right">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let itemPedido of getItems().controls; let id=index">
+                                                    <td class="text-center">{{id+1}}</td>
+                                                    <td>{{itemPedido.get('descripcion').value}}</td>
+                                                    <td class="text-right">{{itemPedido.get('cantidad').value}} </td>
+                                                    <td class="text-right"> ${{itemPedido.get('precio').value | number:'1.2'}} </td>
+                                                    <td class="text-right"> {{itemPedido.get('bonificacion').value | number:'1.2'}}% </td>
+                                                    <td class="text-right"> ${{itemPedido.get('total').value | number:'1.2'}} </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="pull-right m-t-30 text-right">
+                                        <hr>
+                                        <h3><b>Total sin impuestos :</b> ${{total | number:'1.2'}}</h3>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <hr>
+                                </div>
+                            </div>
+
+                        </section>
+                    </div>
+                    <div class="actions clearfix mt-3">
+                        <ul role="menu" aria-label="Pagination">
+                            <li class="disabled" aria-disabled="true">
+                                <button *ngIf="currentStep != 1 && currentStep < 4" (click)="siguientePaso(-1)" class="btn btn-warning" type="submit" role="menuitem">
+                                    Anterior
+                                </button>
+                            </li>
+                            <li *ngIf="currentStep < 3" aria-hidden="false" aria-disabled="false">
+                                <button (click)="siguientePaso(+1)" class="btn btn-warning" type="button" role="menuitem">
+                                    Siguiente
+                                </button>
+                            </li>
+                            <li *ngIf="currentStep == 3" aria-hidden="true">
+                                <button [attr.disabled]="!dejoGuardar()?true:null" (click)="graboPedido()" class="btn btn-danger" type="submit" role="menuitem">
+                                <span *ngIf="dejoGuardar()">
+                                    <i class = "fa fa-check"></i>
+                                    Confirmar Presupuesto
+                                </span>
+                                <i *ngIf="!dejoGuardar()" class="fa fa-spin fa-spinner"></i>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,3 +1,4 @@
+
 import { Component, OnInit, QueryList, ViewChild, ViewChildren, ElementRef } from '@angular/core';
 import { product } from '../../models/product.model';
 import { NuevopedidoService } from '../../services/nuevopedido.service';
@@ -7,7 +8,7 @@ import { clientedireccionentrega } from '../../models/clientedireccionentrega.mo
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { TypeheadComponent } from '../../../components/typehead/typehead.component';
-import { order } from '../../models/order.model';
+import { budget } from '../../models/budget.model';
 import Swal from 'sweetalert2'
 
 import { Router } from '@angular/router';
@@ -16,15 +17,15 @@ import { PagesService } from '../../services/pages.service';
 const PRODUCTO_FLETE = "SV    | 105";
 const PRODUCTO_FLETE_KG = "SV    | 124";
 
+
 @Component({
-  selector: 'app-nuevopedido',
-  templateUrl: './nuevopedido.component.html',
-  styleUrls: ['./nuevopedido.component.css'],
+  selector: 'app-nuevopresupuesto',
+  templateUrl: './nuevopresupuesto.component.html',
+  styleUrls: ['./nuevopresupuesto.component.css'],
   providers: [DatePipe],
-  
 })
 
-export class NuevopedidoComponent implements OnInit {
+export class NuevopresupuestoComponent implements OnInit {
 
   @ViewChild ('leyendaFabricacion') leyendaFabricacionElement: HTMLElement
   @ViewChild ('provinciaEntrega') provinciaEntregaTypeheadComponent: TypeheadComponent
@@ -42,7 +43,7 @@ export class NuevopedidoComponent implements OnInit {
   public grupoBonificacion: string = "";
   public idVendedor: string = "";
   public listaPrecios: string = "";
-  public order: order;
+  public budget: budget;
   public guardandoPedido:boolean =false;
   public leyendaMinimoKG:string = `Las entregas a partir de los ${this.minimoFleteKg}KG en vuestros locales serán sin costo, caso contrario tendrá un costo adicional sujeto a lista de precios vigente`
   
@@ -446,32 +447,32 @@ export class NuevopedidoComponent implements OnInit {
 
   graboPedido(){
     this.guardandoPedido = true;   
-    this.order =  new order();
-    this.order.idCliente = this.step1form.value.numeroCliente,
-    this.order.idClienteEntrega = this.step2form.value.clienteDireccionEntrega!='' ? this.step1form.value.numeroCliente : '',
-    this.order.idEntrega = this.step2form.value.clienteDireccionEntrega,
-    this.order.direccionEntrega = this.step2form.value.direccionEntrega,
-    this.order.paisEntrega = this.step2form.value.paisEntrega,
-    this.order.codigoPostalEntrega = this.step2form.value.codigoPostalEntrega,
-    this.order.provinciaEntrega = this.step2form.value.provinciaEntrega,
-    this.order.listaPrecios = this.listaPrecios,
-    this.order.transportistaRedespacho = this.step2form.value.transportistaRedespacho==''? null:this.step2form.value.transportistaRedespacho,
-    this.order.observacion = this.step1form.value.observacion,
-    this.order.observacionLogistica = this.step2form.value.observacionLogistica,
-    this.order.idVendedor = this.idVendedor,
-    this.order.retiradeFabrica = this.step2form.value.retiraDeFabrica==true?1:0,
-    this.order.esBarrioCerrado = this.step2form.value.esBarrioCerrado==true?1:0,
-    this.order.fecha = this.step2form.value.fecha;
-    this.order.telefono = this.step2form.value.telefono;
-    this.order.email = this.step2form.value.email;
-    this.order.pagoEnEfectivo = this.step1form.value.pagoEnEfectivo==true?1:0,
-    this.order.acopio = this.step1form.value.acopio==true?1:0,    
-    this.order.direccionModificada = this.step2form.value.modificarDireccion==true?1:0,
-    this.order.fechaDeEntrega = this.step2form.value.fechaDeEntrega;
+    this.budget =  new budget();
+    this.budget.idCliente = this.step1form.value.numeroCliente,
+    this.budget.idClienteEntrega = this.step2form.value.clienteDireccionEntrega!='' ? this.step1form.value.numeroCliente : '',
+    this.budget.idEntrega = this.step2form.value.clienteDireccionEntrega,
+    this.budget.direccionEntrega = this.step2form.value.direccionEntrega,
+    this.budget.paisEntrega = this.step2form.value.paisEntrega,
+    this.budget.codigoPostalEntrega = this.step2form.value.codigoPostalEntrega,
+    this.budget.provinciaEntrega = this.step2form.value.provinciaEntrega,
+    this.budget.listaPrecios = this.listaPrecios,
+    this.budget.transportistaRedespacho = this.step2form.value.transportistaRedespacho==''? null:this.step2form.value.transportistaRedespacho,
+    this.budget.observacion = this.step1form.value.observacion,
+    this.budget.observacionLogistica = this.step2form.value.observacionLogistica,
+    this.budget.idVendedor = this.idVendedor,
+    this.budget.retiradeFabrica = this.step2form.value.retiraDeFabrica==true?1:0,
+    this.budget.esBarrioCerrado = this.step2form.value.esBarrioCerrado==true?1:0,
+    this.budget.fecha = this.step2form.value.fecha;
+    this.budget.telefono = this.step2form.value.telefono;
+    this.budget.email = this.step2form.value.email;
+    this.budget.pagoEnEfectivo = this.step1form.value.pagoEnEfectivo==true?1:0,
+    this.budget.acopio = this.step1form.value.acopio==true?1:0,    
+    this.budget.direccionModificada = this.step2form.value.modificarDireccion==true?1:0,
+    this.budget.fechaDeEntrega = this.step2form.value.fechaDeEntrega;
   
     
-    this.order.idUsuario = this.decodeTokenFromStorage().unique_name;
-    this.order.items = [{item: 0,
+    this.budget.idUsuario = this.decodeTokenFromStorage().unique_name;
+    this.budget.items = [{item: 0,
                         idProducto: "",
                         cantidad: 0,
                         precio: 0,
@@ -482,7 +483,7 @@ export class NuevopedidoComponent implements OnInit {
                         bonificacion: 0,
                         idProductoNavigation:null}],
     
-    this.order.items.splice(0,1);
+    this.budget.items.splice(0,1);
     
     this.items.value.forEach((item,index) => {
       let itemForm = {
@@ -497,17 +498,17 @@ export class NuevopedidoComponent implements OnInit {
         bonificacion: item.bonificacion ,
         idProductoNavigation:null
       }
-      this.order.items.push(itemForm);
+      this.budget.items.push(itemForm);
     
       
     })
 
-    this._nuevoPedidoService.GraboPedido(this.order).subscribe(
+    this._nuevoPedidoService.GraboPresupuesto(this.budget).subscribe(
       (resp:any) =>{
           Swal.fire({
             allowOutsideClick: false,
-            title: 'Pedido generado',
-            text: `Se ha generado exitosamente el pedido número #${resp.id}`,
+            title: 'Presupuesto generado',
+            text: `Se ha generado exitosamente el presupuesto número #${resp.id}`,
             icon: 'success',
             confirmButtonText: 'OK'
           }).then((result) => {

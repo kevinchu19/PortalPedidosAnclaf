@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { order } from '../models/order.model';
 import { AuthService } from '../../auth/services/auth.service';
+import { budget } from '../models/budget.model';
 
 const base_url = environment.base_url;
 
@@ -42,6 +43,13 @@ export class NuevopedidoService {
     console.log(pedido);
     
     return this.http.post( `${base_url}pedido`,pedido)
+      
+  }
+
+  GraboPresupuesto(presupuesto:budget){
+    
+   
+    return this.http.post( `${base_url}presupuesto`,presupuesto)
       
   }
 

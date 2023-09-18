@@ -6,6 +6,7 @@ import { NuevopedidoComponent } from './home/nuevopedido/nuevopedido.component';
 import { ConsultapedidosComponent } from './home/consultapedidos/consultapedidos.component';
 import { AuthGuard } from '../guards/auth.guard';
 import { CuentacorrienteComponent } from './home/cuentacorriente/cuentacorriente.component';
+import { NuevopresupuestoComponent } from './home/nuevopresupuesto/nuevopresupuesto.component';
 
 
 const routes: Routes = [
@@ -17,7 +18,8 @@ const routes: Routes = [
           {path: '', component:HomeComponent, data:{titulo: 'Principal'}},
           {path: 'nuevo-pedido', component:NuevopedidoComponent, data: {titulo: 'Nuevo Pedido'}},
           {path: 'consulta-pedidos', component:ConsultapedidosComponent,data: {titulo: 'Consulta Pedidos'}},
-          {path: 'cuenta-corriente', component:CuentacorrienteComponent,data: {titulo: 'Consulta de Cuenta Corriente'}}
+          {path: 'cuenta-corriente', component:CuentacorrienteComponent,data: {titulo: 'Consulta de Cuenta Corriente'}},
+          {path: 'nuevo-presupuesto', component:NuevopresupuestoComponent, data: {titulo: 'Nuevo Presupuesto'}}
         ]
       },
       
