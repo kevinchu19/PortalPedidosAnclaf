@@ -11,11 +11,20 @@ export class SidebarService {
   menu: any[] = [
     {
       titulo: 'Pedidos',
-      icono: 'mdi mdi-gauge',
+      
+      icono: 'mdi mdi-shopping',
       url: "",
       submenu: [
         {titulo: 'Nuevo pedido', url: '/home/nuevo-pedido'},
         {titulo: 'Consulta de pedidos realizados', url: '/home/consulta-pedidos'}
+      ] 
+    },
+    {
+      titulo: 'Presupuestos',
+      icono: 'mdi mdi-file-powerpoint',
+      url: "",
+      submenu: [
+        {titulo: 'Nuevo presupuesto', url: '/home/nuevo-presupuesto'}
       ] 
     },
     {
