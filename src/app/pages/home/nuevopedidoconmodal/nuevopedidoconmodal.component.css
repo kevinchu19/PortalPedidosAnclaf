@@ -317,11 +317,13 @@ File: css
     .wizard-content .wizard>.steps>ul {
         margin-bottom: 20px
     }
+    /***
     .wizard-content .wizard>.steps>ul>li {
         display: block;
         float: left;
         width: 50%
     }
+    ****/
     .wizard-content .wizard>.steps>ul>li>a {
         margin-bottom: 0
     }
@@ -355,16 +357,90 @@ File: css
     }
 }
 
-.typehead {
-    font-size: 0.1rem !important;
+
+/******************* Personalizado******************/
+
+
+/************************
+@media (max-width:769px) {
+    .table {
+        table-layout: fixed;
+        word-wrap: break-word;
+    }
+}
+**********************/
+
+.hidden {
+    display: none;
 }
 
-.tt-dropdown-menu .tt-suggestion,
-.tt-menu .tt-suggestion {
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1040;
+}
+
+.modal-agregar-producto {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+    padding: 32px 24px;
+    z-index: 1050;
+    min-width: 320px;
+    max-width: 90vw;
+}
+
+.modal-agregar-producto h3 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    color: #009efb;
+}
+
+.modal-agregar-producto .form-group {
+    margin-bottom: 16px;
+}
+
+.modal-agregar-producto label {
+    font-weight: 500;
+    margin-bottom: 4px;
     display: block;
-    padding: 3px 20px;
-    clear: both;
-    font-weight: 300;
-    line-height: 1.57142857;
-    color: #000000;
+}
+
+.modal-agregar-producto input[type="number"] {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.modal-actions .btn {
+    min-width: 100px;
+}
+
+@media (max-width: 600px) {
+    .modal-agregar-producto {
+        padding: 16px 8px;
+        min-width: 90vw;
+    }
 }

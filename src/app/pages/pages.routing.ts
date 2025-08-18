@@ -7,6 +7,7 @@ import { ConsultapedidosComponent } from './home/consultapedidos/consultapedidos
 import { AuthGuard } from '../guards/auth.guard';
 import { CuentacorrienteComponent } from './home/cuentacorriente/cuentacorriente.component';
 import { NuevopresupuestoComponent } from './home/nuevopresupuesto/nuevopresupuesto.component';
+import { NuevopedidoConModalComponent } from './home/nuevopedidoconmodal/nuevopedidoconmodal.component';
 
 
 const routes: Routes = [
@@ -19,7 +20,8 @@ const routes: Routes = [
           {path: 'nuevo-pedido', component:NuevopedidoComponent, data: {titulo: 'Nuevo Pedido'}},
           {path: 'consulta-pedidos', component:ConsultapedidosComponent,data: {titulo: 'Consulta Pedidos'}},
           {path: 'cuenta-corriente', component:CuentacorrienteComponent,data: {titulo: 'Consulta de Cuenta Corriente'}},
-          {path: 'nuevo-presupuesto', component:NuevopresupuestoComponent, data: {titulo: 'Nuevo Presupuesto'}}
+          {path: 'nuevo-presupuesto', component:NuevopresupuestoComponent, data: {titulo: 'Nuevo Presupuesto'}}//,
+          //{ path: 'nuevopedidoconmodal', component: NuevopedidoConModalComponent, data: {titulo: 'Nuevo pedido con modal' }}
         ]
       },
       

@@ -32,7 +32,7 @@ export class TypeheadComponent implements OnInit {
   public cargando:boolean = false;
   public terminoInput:string = "";
   public arrayOriginal: typeheadArray[] = [];
-  public arrayMostrado: typeheadArray[] = []
+  public arrayMostrado: typeheadArray[] = [];
   public itemMouseOver: number = 0
   public valorCorrecto: boolean = false;
 
@@ -40,7 +40,7 @@ export class TypeheadComponent implements OnInit {
 
   ngOnInit(): void {
     
-
+    
     let campoRequerido = this.hasRequiredField(this.parentForm.get(this.campoFormulario))
     
     
