@@ -506,17 +506,21 @@ export class NuevopresupuestoComponent implements OnInit {
     this._nuevoPedidoService.GraboPresupuesto(this.budget).subscribe(
       (resp:any) =>{
           Swal.fire({
-            allowOutsideClick: false,
-            title: 'Presupuesto generado',
-            text: `Se ha generado exitosamente el presupuesto número #${resp.id}`,
-            icon: 'success',
-            confirmButtonText: 'OK'
-          }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-              this.recargoNuevoPedido();
-            } 
-          })
+              allowOutsideClick: false,
+              title: 'Presupuesto generado',
+              html: `
+                <p>Se ha generado exitosamente el presupuesto número #${resp.id}</p>
+                <div style="margin-top: 20px; padding: 10px; background-color: #fff3cd; border-left: 4px solid #ffc107; text-align: left;">
+                  <strong>📋 Vigencia:</strong> El presente presupuesto tiene una vigencia de 7 días hábiles.
+                </div>
+              `,
+              icon: 'success',
+              confirmButtonText: 'OK'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.recargoNuevoPedido();
+              } 
+            })
 
         this.guardandoPedido = false;
       },err=>{
